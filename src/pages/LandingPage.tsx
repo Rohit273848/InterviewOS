@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { 
-  Sparkles, 
-  Zap, 
-  Target, 
-  Users, 
+import {
+  Sparkles,
+  Zap,
+  Target,
+  Users,
   ArrowRight,
   Github,
   Linkedin,
@@ -61,7 +61,7 @@ const LandingPage = () => {
       </div>
 
       {/* Navigation */}
-      <motion.nav 
+      <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className="relative z-10 px-6 py-6"
@@ -102,15 +102,15 @@ const LandingPage = () => {
               <Zap className="w-4 h-4 text-accent-yellow" />
               <span className="text-sm text-text-secondary">Your AI Placement Co-Pilot</span>
             </div>
-            
+
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
               Ace Your Dream Job
               <br />
               <span className="gradient-text">With AI Power</span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto mb-12">
-              Built by a final-year student, for every final-year student. 
+              Built by a final-year student, for every final-year student.
               Get personalized interview prep, AI-powered insights, and land your dream placement.
             </p>
 
@@ -122,7 +122,7 @@ const LandingPage = () => {
                 Start Free Trial
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/signin')}
                 className="px-8 py-4 bg-bg-secondary border border-border-subtle text-text-primary font-semibold rounded-xl hover:border-border-accent transition-all"
               >
@@ -179,14 +179,14 @@ const LandingPage = () => {
                 className="group relative p-8 bg-bg-secondary rounded-2xl border border-border-subtle hover:border-border-accent transition-all cursor-pointer overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
-                
+
                 <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                   {feature.icon}
                 </div>
-                
+
                 <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
                 <p className="text-text-secondary text-lg">{feature.description}</p>
-                
+
                 <ArrowRight className="absolute bottom-8 right-8 w-6 h-6 text-text-muted group-hover:text-accent-cyan group-hover:translate-x-2 transition-all" />
               </motion.div>
             ))}
@@ -204,7 +204,7 @@ const LandingPage = () => {
             className="relative p-12 bg-gradient-to-br from-accent-cyan/20 to-accent-purple/20 rounded-3xl border border-border-accent overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan/10 to-accent-purple/10 animate-pulse" />
-            
+
             <div className="relative z-10 text-center">
               <h2 className="text-5xl font-black mb-6">
                 Ready to Land Your <span className="gradient-text">Dream Job?</span>
@@ -233,7 +233,7 @@ const LandingPage = () => {
               </div>
               <span className="text-xl font-bold">InterviewOS</span>
             </div>
-            
+
             <div className="flex items-center gap-6">
               <a href="#" className="text-text-secondary hover:text-accent-cyan transition-colors">
                 <Github className="w-5 h-5" />
@@ -245,7 +245,7 @@ const LandingPage = () => {
                 <Twitter className="w-5 h-5" />
               </a>
             </div>
-            
+
             <p className="text-text-muted text-sm">
               © 2026 InterviewOS. Built with ❤️ for students.
             </p>
