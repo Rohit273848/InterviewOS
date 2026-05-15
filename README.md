@@ -426,5 +426,8 @@ Built with ❤️ by students, for students.
 
 Made with 🔥 for placement success
 
+![GitHub Stars](https://img.shields.io/github/stars/yourusername/interviewos?style=social)
+![GitHub Forks](https://img.shields.io/github/forks/yourusername/interviewos?style=social)
+![GitHub Follow](https://img.shields.io/github/followers/yourusername?style=social)
 
 </div>
