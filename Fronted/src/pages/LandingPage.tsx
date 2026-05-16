@@ -20,6 +20,7 @@ import {
   Menu,
   X,
 } from 'lucide-react'
+import bg from '../Img/bg.png'
 
 /* ─── tiny helpers ─── */
 const Badge = ({ children }: { children: React.ReactNode }) => (
@@ -232,48 +233,153 @@ const LandingPage = () => {
       </motion.header>
 
       {/* ── Hero ── */}
-      <section className="lp-hero" id="hero">
-        <div className="lp-container">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="lp-hero-inner"
-          >
-            <Badge>AI-Powered Placement Co-Pilot</Badge>
+      {/* ── Hero ── */}
+      <section
+        id="hero"
+        className="relative w-full min-h-screen flex items-center justify-center overflow-hidden"
+      >
+        {/* Background */}
+        <div className="absolute inset-0">
+          <img
+            src={bg}
+            alt="Fitness Hero"
+            className="w-full h-full object-cover"
+          />
 
-            <h1 className="lp-hero-h1">
-              Land your dream job —<br />
-              <span className="lp-hero-h1-accent">not just any job.</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-10 items-center pt-24">
+
+          {/* Left Content */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="max-w-xl"
+          >
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-md rounded-full px-4 py-2 text-sm text-white mb-6">
+              <Sparkles className="w-4 h-4 text-[#B1F82A]" />
+              AI Powered Placement Preparation
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-tight">
+              Crack Your
+              <span className="text-[#B1F82A]"> Dream Job</span>
+              <br />
+              With AI Guidance
             </h1>
 
-            <p className="lp-hero-sub">
-              InterviewOS combines resume intelligence, company-specific prep, and real-time AI mock
-              interviews into one focused workflow. Built for final-year students who are serious.
+            <p className="mt-6 text-lg text-gray-300 max-w-lg">
+              InterviewOS helps students prepare smarter with AI resume reviews,
+              company-specific questions, mock interviews, and personalized learning paths.
             </p>
 
-            <div className="lp-hero-actions">
+            {/* Buttons */}
+            <div className="mt-8 flex flex-wrap gap-4">
               <button
-                id="hero-signup-btn"
                 onClick={() => navigate('/signup')}
-                className="lp-btn-primary lp-btn-lg"
+                className="px-8 py-4 rounded-full bg-[#B1F82A] text-black font-semibold text-lg hover:scale-105 transition-all duration-300 shadow-lg"
               >
-                Start Free — No Card Needed
-                <ArrowRight className="w-5 h-5" />
+                Get Started
               </button>
+
               <button
-                id="hero-signin-btn"
                 onClick={() => navigate('/signin')}
-                className="lp-btn-outline lp-btn-lg"
+                className="px-8 py-4 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white font-semibold text-lg hover:bg-white/20 transition-all duration-300"
               >
                 Sign In
               </button>
             </div>
 
-            <div className="lp-hero-trust">
-              {['No credit card', 'Free tier forever', 'Cancel anytime'].map(t => (
-                <Chip key={t} icon={<CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />} label={t} />
-              ))}
+            {/* Users */}
+            <div className="mt-10 flex items-center gap-4">
+              <div className="flex -space-x-4">
+                <img
+                  className="w-12 h-12 rounded-full border-2 border-yellow-400 object-cover"
+                  src="https://images.unsplash.com/photo-1554324178-c81140f30897"
+                  alt="User"
+                />
+
+                <img
+                  className="w-12 h-12 rounded-full border-2 border-blue-400 object-cover"
+                  src="https://images.unsplash.com/photo-1694858532747-c6ab526ea760"
+                  alt="User"
+                />
+
+                <img
+                  className="w-12 h-12 rounded-full border-2 border-purple-400 object-cover"
+                  src="https://images.unsplash.com/photo-1488475105717-be5a9aa6ad97"
+                  alt="User"
+                />
+
+                <img
+                  className="w-12 h-12 rounded-full border-2 border-red-400 object-cover"
+                  src="https://images.unsplash.com/photo-1539345834552-944c6df41392"
+                  alt="User"
+                />
+              </div>
+
+              <div>
+                <p className="font-bold text-white text-lg">10K+</p>
+                <p className="text-sm text-gray-300">
+                  Students preparing daily
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Cards */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            className="flex flex-col gap-4"
+          >
+            {/* Card 1 */}
+            <div className="cursor-pointer bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-start gap-4 hover:bg-white/15 transition-all duration-300">
+              <FileSearch className="w-10 h-10 text-[#B1F82A] flex-shrink-0" />
+
+              <div>
+                <h3 className="text-xl font-bold text-white">
+                  Resume Analysis
+                </h3>
+
+                <p className="text-gray-300 text-sm mt-1">
+                  AI scans your resume and improves ATS score instantly.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="cursor-pointer bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-start gap-4 hover:bg-white/15 transition-all duration-300">
+              <Target className="w-10 h-10 text-[#B1F82A] flex-shrink-0" />
+
+              <div>
+                <h3 className="text-xl font-bold text-white">
+                  Company Questions
+                </h3>
+
+                <p className="text-gray-300 text-sm mt-1">
+                  Practice real interview questions asked by top companies.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="cursor-pointer bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 flex items-start gap-4 hover:bg-white/15 transition-all duration-300">
+              <Mic className="w-10 h-10 text-[#B1F82A] flex-shrink-0" />
+
+              <div>
+                <h3 className="text-xl font-bold text-white">
+                  AI Mock Interviews
+                </h3>
+
+                <p className="text-gray-300 text-sm mt-1">
+                  Simulate real interviews with adaptive AI feedback.
+                </p>
+              </div>
             </div>
           </motion.div>
         </div>
