@@ -448,7 +448,7 @@ const LandingPage = () => {
             <p className="lp-footer-copy">© 2026 InterviewOS. Built for students, by a student.</p>
 
             <div className="lp-footer-social">
-              <a href="#" aria-label="GitHub" className="lp-social-link"><Github className="w-4 h-4" /></a>
+              <a href="https://github.com/Rohit273848/InterviewOS" aria-label="GitHub" className="lp-social-link"><Github className="w-4 h-4" /></a>
               <a href="#" aria-label="LinkedIn" className="lp-social-link"><Linkedin className="w-4 h-4" /></a>
               <a href="#" aria-label="Twitter" className="lp-social-link"><Twitter className="w-4 h-4" /></a>
             </div>
