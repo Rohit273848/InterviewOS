@@ -10,7 +10,9 @@ import {
   Users,
   Bell,
   Settings,
-  LogOut
+  LogOut,
+  Brain,
+  Search
 } from 'lucide-react'
 import { logout } from '../store/slices/userSlice'
 import { RootState } from '../store'
@@ -37,96 +39,115 @@ const Layout = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-bg-primary flex">
+    <div className="min-h-screen bg-[#0B0F19] text-white flex font-sans selection:bg-[#B1F82A]/30 selection:text-[#B1F82A] relative overflow-hidden">
+      {/* ── Dot Grid background ── */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-0" 
+        style={{ 
+          backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px)', 
+          backgroundSize: '32px 32px' 
+        }} 
+        aria-hidden="true" 
+      />
+
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -300 }}
         animate={{ x: 0 }}
-        className="w-72 bg-bg-secondary border-r border-border-subtle flex flex-col"
+        className="w-72 bg-white/[0.02] backdrop-blur-xl border-r border-white/10 flex flex-col relative z-10"
       >
         {/* Logo */}
-        <div className="p-6 border-b border-border-subtle">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-cyan to-accent-purple flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/dashboard')}>
+            <div className="w-10 h-10 rounded-xl bg-[#B1F82A] flex items-center justify-center shadow-[0_0_15px_rgba(177,248,42,0.3)] group-hover:scale-105 transition-transform duration-300">
+              <Brain className="w-6 h-6 text-black" />
             </div>
-            <span className="text-xl font-bold gradient-text">InterviewOS</span>
+            <span className="text-2xl font-bold text-white tracking-tight">InterviewOS</span>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                `flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group ${
                   isActive
-                    ? 'bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/30'
-                    : 'text-text-secondary hover:bg-bg-tertiary hover:text-text-primary'
+                    ? 'bg-[#B1F82A]/10 text-[#B1F82A] border border-[#B1F82A]/30 shadow-[0_0_15px_rgba(177,248,42,0.05)]'
+                    : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
                 }`
               }
             >
-              {item.icon}
-              <span className="font-medium">{item.label}</span>
+              {({ isActive }) => (
+                <>
+                  <div className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                    {item.icon}
+                  </div>
+                  <span className="font-medium tracking-wide">{item.label}</span>
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
 
         {/* User Profile */}
-        <div className="p-4 border-t border-border-subtle">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-bg-tertiary mb-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-purple to-accent-pink flex items-center justify-center text-white font-bold">
+        <div className="p-4 border-t border-white/10 bg-black/20">
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 mb-3 hover:bg-white/10 hover:border-white/10 transition-colors cursor-pointer group">
+            <div className="w-10 h-10 rounded-full bg-[#B1F82A]/20 border border-[#B1F82A]/30 flex items-center justify-center text-[#B1F82A] font-bold shadow-[0_0_10px_rgba(177,248,42,0.1)] group-hover:bg-[#B1F82A] group-hover:text-black transition-colors duration-300">
               {name ? name.charAt(0).toUpperCase() : 'S'}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-semibold text-sm truncate">{name || 'Student'}</div>
-              <div className="text-xs text-text-muted truncate">{email || 'Free Plan'}</div>
+              <div className="font-bold text-sm text-white truncate">{name || 'Student'}</div>
+              <div className="text-xs text-gray-400 font-medium truncate">{email || 'Free Plan'}</div>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-accent-pink/10 text-accent-pink rounded-lg hover:bg-accent-pink/20 transition-all"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/5 text-gray-400 font-semibold rounded-xl hover:bg-red-500/10 hover:text-red-400 border border-transparent hover:border-red-500/20 transition-all duration-300 group"
           >
-            <LogOut className="w-4 h-4" />
-            <span className="font-semibold text-sm">Logout</span>
+            <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span>Logout</span>
           </button>
         </div>
       </motion.aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative z-10 h-screen overflow-hidden">
         {/* Header */}
-        <header className="h-16 bg-bg-secondary border-b border-border-subtle flex items-center justify-between px-8">
+        <header className="h-20 bg-white/[0.02] backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-8 sticky top-0 z-20">
           <div className="flex items-center gap-4">
-            <input
-              type="search"
-              placeholder="Search..."
-              className="w-80 px-4 py-2 bg-bg-tertiary border border-border-subtle rounded-xl text-sm focus:outline-none focus:border-accent-cyan transition-colors"
-            />
+            <div className="relative group">
+              <input
+                type="search"
+                placeholder="Search resources..."
+                className="w-80 pl-11 pr-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#B1F82A]/50 focus:bg-black/60 transition-all duration-300"
+              />
+              <Search className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-[#B1F82A] transition-colors" />
+            </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            <button className="relative p-2 hover:bg-bg-tertiary rounded-lg transition-colors">
-              <Bell className="w-5 h-5 text-text-secondary" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-accent-pink rounded-full" />
+          <div className="flex items-center gap-3">
+            <button className="relative p-2.5 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-[#B1F82A]">
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#B1F82A] rounded-full shadow-[0_0_8px_rgba(177,248,42,0.8)]" />
             </button>
-            <button className="p-2 hover:bg-bg-tertiary rounded-lg transition-colors">
-              <Settings className="w-5 h-5 text-text-secondary" />
+            <button className="p-2.5 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-[#B1F82A]">
+              <Settings className="w-5 h-5" />
             </button>
             <button 
               onClick={handleLogout}
-              className="p-2 hover:bg-bg-tertiary rounded-lg transition-colors group"
+              className="p-2.5 hover:bg-red-500/10 rounded-xl transition-all duration-300 group ml-2 border border-transparent hover:border-red-500/20"
               title="Logout"
             >
-              <LogOut className="w-5 h-5 text-text-secondary group-hover:text-accent-pink transition-colors" />
+              <LogOut className="w-5 h-5 text-gray-400 group-hover:text-red-400 transition-colors" />
             </button>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto p-8">
           <Outlet />
         </main>
       </div>
