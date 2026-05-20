@@ -15,7 +15,8 @@ import {
   Brain,
   Search,
   Menu,
-  X
+  X,
+  BarChart3
 } from 'lucide-react'
 import { logout } from '../store/slices/userSlice'
 import { RootState } from '../store'
@@ -24,7 +25,7 @@ import toast from 'react-hot-toast'
 const Layout = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { name, email } = useSelector((state: RootState) => state.user)
+  const { name } = useSelector((state: RootState) => state.user)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleLogout = () => {
@@ -36,80 +37,71 @@ const Layout = () => {
   const navItems = [
     { path: '/dashboard', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
     { path: '/resume-xray', icon: <Sparkles className="w-5 h-5" />, label: 'Resume X-Ray' },
+    { path: '/mock-interview', icon: <Video className="w-5 h-5" />, label: 'AI Mock Interview' },
     { path: '/question-bank', icon: <Database className="w-5 h-5" />, label: 'Question Bank' },
     { path: '/project-prep', icon: <FolderGit2 className="w-5 h-5" />, label: 'Project Prep' },
-    { path: '/mock-interview', icon: <Video className="w-5 h-5" />, label: 'Mock Interview' },
     { path: '/peer-review', icon: <Users className="w-5 h-5" />, label: 'Peer Review' },
+    { path: '/analytics', icon: <BarChart3 className="w-5 h-5" />, label: 'Analytics' },
+    { path: '/settings', icon: <Settings className="w-5 h-5" />, label: 'Settings' },
   ]
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-white flex font-sans selection:bg-[#B1F82A]/30 selection:text-[#B1F82A] relative overflow-hidden">
-      {/* ── Dot Grid background ── */}
-      <div 
-        className="fixed inset-0 pointer-events-none z-0" 
-        style={{ 
-          backgroundImage: 'radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px)', 
-          backgroundSize: '32px 32px' 
-        }} 
-        aria-hidden="true" 
-      />
+    <div className="min-h-screen font-sans text-slate-800 flex relative overflow-hidden bg-gradient-to-br from-[#E0F7FA] via-[#E8F5E9] to-[#E3F2FD]">
+      {/* Soft gradient background */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-teal-200/40 blur-[100px]" />
+        <div className="absolute top-[20%] right-[-10%] w-[30%] h-[50%] rounded-full bg-cyan-200/40 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[20%] w-[50%] h-[40%] rounded-full bg-blue-200/30 blur-[100px]" />
+      </div>
 
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -300 }}
         animate={{ x: 0 }}
-        className="hidden lg:flex w-72 bg-white/[0.02] backdrop-blur-xl border-r border-white/10 flex-col relative z-10"
+        className="hidden lg:flex w-[240px] m-4 mr-0 bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm rounded-[24px] flex-col relative z-10"
       >
         {/* Logo */}
-        <div className="p-6 border-b border-white/10">
+        <div className="p-6 pb-2">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/dashboard')}>
-            <div className="w-10 h-10 rounded-xl bg-[#B1F82A] flex items-center justify-center shadow-[0_0_15px_rgba(177,248,42,0.3)] group-hover:scale-105 transition-transform duration-300">
-              <Brain className="w-6 h-6 text-black" />
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+              <Brain className="w-5 h-5 text-white" />
             </div>
-            <span className="text-2xl font-bold text-white tracking-tight">InterviewOS</span>
+            <span className="text-lg font-bold text-slate-800 tracking-tight">InterviewOS</span>
           </div>
+          <p className="text-[10px] uppercase font-bold text-teal-600 mt-1 ml-11 tracking-wider">AI Co-Pilot</p>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group ${
+                `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 group ${
                   isActive
-                    ? 'bg-[#B1F82A]/10 text-[#B1F82A] border border-[#B1F82A]/30 shadow-[0_0_15px_rgba(177,248,42,0.05)]'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
+                    ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 text-teal-700 font-semibold'
+                    : 'text-slate-500 hover:bg-white/50 hover:text-slate-800 font-medium'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <div className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                  <div className={`transition-transform duration-300 ${isActive ? 'text-teal-600' : 'group-hover:scale-110'}`}>
                     {item.icon}
                   </div>
-                  <span className="font-medium tracking-wide">{item.label}</span>
+                  <span className="text-sm">{item.label}</span>
                 </>
               )}
             </NavLink>
           ))}
         </nav>
 
-        {/* User Profile */}
-        <div className="p-4 border-t border-white/10 bg-black/20">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 mb-3 hover:bg-white/10 hover:border-white/10 transition-colors cursor-pointer group">
-            <div className="w-10 h-10 rounded-full bg-[#B1F82A]/20 border border-[#B1F82A]/30 flex items-center justify-center text-[#B1F82A] font-bold shadow-[0_0_10px_rgba(177,248,42,0.1)] group-hover:bg-[#B1F82A] group-hover:text-black transition-colors duration-300">
-              {name ? name.charAt(0).toUpperCase() : 'S'}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm text-white truncate">{name || 'Student'}</div>
-              <div className="text-xs text-gray-400 font-medium truncate">{email || 'Free Plan'}</div>
-            </div>
-          </div>
+        {/* User Profile / Logout */}
+        <div className="p-4 mb-2">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/5 text-gray-400 font-semibold rounded-xl hover:bg-red-500/10 hover:text-red-400 border border-transparent hover:border-red-500/20 transition-all duration-300 group"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/40 text-slate-600 text-sm font-medium rounded-full hover:bg-white hover:text-red-500 hover:shadow-sm border border-white/50 transition-all duration-300 group"
           >
             <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>Logout</span>
@@ -125,7 +117,7 @@ const Layout = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-30 lg:hidden"
           />
         )}
       </AnimatePresence>
@@ -138,64 +130,52 @@ const Layout = () => {
             animate={{ x: 0 }}
             exit={{ x: -300 }}
             transition={{ type: 'spring', damping: 20 }}
-            className="fixed left-0 top-0 h-screen w-72 bg-white/[0.02] backdrop-blur-xl border-r border-white/10 flex flex-col relative z-40 lg:hidden"
+            className="fixed left-0 top-0 h-screen w-[240px] bg-white/80 backdrop-blur-xl border-r border-white/50 shadow-2xl flex flex-col relative z-40 lg:hidden"
           >
-            {/* Logo */}
-            <div className="p-6 border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { navigate('/dashboard'); setMobileMenuOpen(false); }}>
-                <div className="w-10 h-10 rounded-xl bg-[#B1F82A] flex items-center justify-center shadow-[0_0_15px_rgba(177,248,42,0.3)] group-hover:scale-105 transition-transform duration-300">
-                  <Brain className="w-6 h-6 text-black" />
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-3 cursor-pointer" onClick={() => { navigate('/dashboard'); setMobileMenuOpen(false); }}>
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+                  <Brain className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-2xl font-bold text-white tracking-tight">InterviewOS</span>
+                <span className="text-lg font-bold text-slate-800">InterviewOS</span>
               </div>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-                <X className="w-5 h-5 text-gray-400" />
+              <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
 
-            {/* Navigation */}
-            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+            <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
               {navItems.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group ${
+                    `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${
                       isActive
-                        ? 'bg-[#B1F82A]/10 text-[#B1F82A] border border-[#B1F82A]/30 shadow-[0_0_15px_rgba(177,248,42,0.05)]'
-                        : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
+                        ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 text-teal-700 font-semibold'
+                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800 font-medium'
                     }`
                   }
                 >
                   {({ isActive }) => (
                     <>
-                      <div className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                      <div className={`${isActive ? 'text-teal-600' : ''}`}>
                         {item.icon}
                       </div>
-                      <span className="font-medium tracking-wide">{item.label}</span>
+                      <span className="text-sm">{item.label}</span>
                     </>
                   )}
                 </NavLink>
               ))}
             </nav>
 
-            {/* User Profile */}
-            <div className="p-4 border-t border-white/10 bg-black/20">
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 mb-3 hover:bg-white/10 hover:border-white/10 transition-colors cursor-pointer group">
-                <div className="w-10 h-10 rounded-full bg-[#B1F82A]/20 border border-[#B1F82A]/30 flex items-center justify-center text-[#B1F82A] font-bold shadow-[0_0_10px_rgba(177,248,42,0.1)] group-hover:bg-[#B1F82A] group-hover:text-black transition-colors duration-300">
-                  {name ? name.charAt(0).toUpperCase() : 'S'}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-sm text-white truncate">{name || 'Student'}</div>
-                  <div className="text-xs text-gray-400 font-medium truncate">{email || 'Free Plan'}</div>
-                </div>
-              </div>
+            <div className="p-4">
               <button
                 onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/5 text-gray-400 font-semibold rounded-xl hover:bg-red-500/10 hover:text-red-400 border border-transparent hover:border-red-500/20 transition-all duration-300 group"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 text-slate-600 text-sm font-medium rounded-full hover:bg-red-50 hover:text-red-500 transition-all duration-300"
               >
-                <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                <LogOut className="w-4 h-4" />
                 <span>Logout</span>
               </button>
             </div>
@@ -203,50 +183,54 @@ const Layout = () => {
         )}
       </AnimatePresence>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col relative z-10 h-screen overflow-hidden">
-        {/* Header */}
-        <header className="h-20 bg-white/[0.02] backdrop-blur-xl border-b border-white/10 flex items-center justify-between px-4 md:px-8 sticky top-0 z-20">
-          <div className="flex items-center gap-4 flex-1 min-w-0">
-            {/* Mobile Menu Button */}
+        {/* Top Navbar */}
+        <header className="h-20 flex items-center justify-between px-6 lg:px-10 z-20">
+          <div className="flex items-center gap-4 flex-1">
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2.5 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-[#B1F82A] flex-shrink-0"
+              className="lg:hidden p-2 hover:bg-white/50 rounded-xl transition-all text-slate-600 flex-shrink-0"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Menu className="w-5 h-5" />
             </button>
 
-            {/* Search Bar */}
-            <div className="relative group hidden sm:block flex-1 max-w-md">
+            {/* Search */}
+            <div className="hidden sm:flex relative group max-w-xs w-full">
+              <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-teal-500 transition-colors" />
               <input
                 type="search"
-                placeholder="Search resources..."
-                className="w-full pl-11 pr-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#B1F82A]/50 focus:bg-black/60 transition-all duration-300"
+                placeholder="Search..."
+                className="w-full pl-10 pr-4 py-2 bg-white/40 backdrop-blur-md border border-white/50 rounded-full text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:bg-white/60 transition-all shadow-sm"
               />
-              <Search className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within:text-[#B1F82A] transition-colors" />
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <button className="relative p-2.5 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-[#B1F82A]">
+          <div className="flex items-center gap-3 lg:gap-5">
+            <button className="relative p-2 hover:bg-white/50 rounded-full transition-all text-slate-500 hover:text-slate-800">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#B1F82A] rounded-full shadow-[0_0_8px_rgba(177,248,42,0.8)]" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-400 border-2 border-[#E3F2FD] rounded-full" />
             </button>
-            <button className="p-2.5 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-[#B1F82A]">
-              <Settings className="w-5 h-5" />
-            </button>
-            <button 
-              onClick={handleLogout}
-              className="p-2.5 hover:bg-red-500/10 rounded-xl transition-all duration-300 group ml-2 border border-transparent hover:border-red-500/20"
-              title="Logout"
-            >
-              <LogOut className="w-5 h-5 text-gray-400 group-hover:text-red-400 transition-colors" />
-            </button>
+            
+            <div className="flex items-center gap-3 pl-2 lg:pl-4 border-l border-slate-300/40">
+              <div className="hidden md:block text-right">
+                <div className="text-sm font-semibold text-slate-800">{name || 'Rohit'}</div>
+                <div className="text-[11px] text-slate-500 font-medium">Pro Plan</div>
+              </div>
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-teal-400 to-blue-500 p-[2px] shadow-sm cursor-pointer hover:scale-105 transition-transform">
+                  <div className="w-full h-full rounded-full border-2 border-white bg-white overflow-hidden flex items-center justify-center text-teal-600 font-bold text-sm">
+                    {name ? name.charAt(0).toUpperCase() : 'R'}
+                  </div>
+                </div>
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></div>
+              </div>
+            </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-4 md:p-8">
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 pb-8 custom-scrollbar">
           <Outlet />
         </main>
       </div>
