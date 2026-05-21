@@ -3,7 +3,8 @@ import { motion } from 'framer-motion'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Mail, Lock, User, Eye, EyeOff, Github, Linkedin, Target, FileText, Brain, Sparkles } from 'lucide-react'
-import { setUser } from '../store/slices/userSlice'
+import { setUser } from '../context/slices/userSlice'
+import { register } from '../services/authService'
 import toast from 'react-hot-toast'
 
 // Google icon component
@@ -44,19 +45,22 @@ const SignUp = () => {
 
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const data: any = await register({ name: formData.name, email: formData.email, password: formData.password })
       dispatch(setUser({
-        name: formData.name,
-        email: formData.email,
+        name: data.user.name,
+        email: data.user.email,
         avatar: '',
         isAuthenticated: true
       }))
       
       toast.success('Account created successfully!')
-      setIsLoading(false)
       navigate('/dashboard')
-    }, 1500)
+    } catch (error) {
+      toast.error('Registration failed')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSocialSignup = (provider: string) => {

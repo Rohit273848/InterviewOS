@@ -17,7 +17,7 @@ import {
   Menu,
   X,
 } from 'lucide-react'
-import bg from "../Img/bg.png"
+import bg from "../assets/bg.png"
 
 /* ─── data ─── */
 const features = [

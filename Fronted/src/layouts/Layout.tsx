@@ -20,8 +20,8 @@ import {
   Sun,
   Moon
 } from 'lucide-react'
-import { logout } from '../store/slices/userSlice'
-import { RootState } from '../store'
+import { logout } from '../context/slices/userSlice'
+import { RootState } from '../context'
 import toast from 'react-hot-toast'
 
 const Layout = () => {

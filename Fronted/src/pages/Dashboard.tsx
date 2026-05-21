@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useSelector } from 'react-redux'
-import { RootState } from '../store'
+import { RootState } from '../context'
 import { 
   Sparkles, 
   Target, 

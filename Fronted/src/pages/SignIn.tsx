@@ -3,7 +3,8 @@ import { motion } from 'framer-motion'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Mail, Lock, Eye, EyeOff, Github, Linkedin, Target, FileText, Brain, Sparkles } from 'lucide-react'
-import { setUser } from '../store/slices/userSlice'
+import { setUser } from '../context/slices/userSlice'
+import { login } from '../services/authService'
 import toast from 'react-hot-toast'
 
 // Google icon component
@@ -38,19 +39,22 @@ const SignIn = () => {
 
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const data: any = await login({ email: formData.email, password: formData.password })
       dispatch(setUser({
-        name: formData.email.split('@')[0],
-        email: formData.email,
-        avatar: '',
+        name: data.user.name,
+        email: data.user.email,
+        avatar: data.user.avatar || '',
         isAuthenticated: true
       }))
       
       toast.success('Welcome back!')
-      setIsLoading(false)
       navigate('/dashboard')
-    }, 1500)
+    } catch (error) {
+      toast.error('Login failed')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSocialLogin = (provider: string) => {

@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, Sparkles, CheckCircle2, AlertCircle, TrendingUp, FileText } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../store'
-import { setAnalysis, startAnalyzing } from '../store/slices/resumeSlice'
+import { RootState } from '../context'
+import { setAnalysis, startAnalyzing } from '../context/slices/resumeSlice'
+import { analyzeResumeService } from '../services/resumeService'
 import toast from 'react-hot-toast'
 
 const ResumeXRay = () => {
@@ -27,30 +28,17 @@ const ResumeXRay = () => {
 
     dispatch(startAnalyzing())
     
-    // Simulate AI analysis
-    setTimeout(() => {
-      dispatch(setAnalysis({
-        score: 85,
-        strengths: [
-          'Strong technical skills section',
-          'Quantified achievements',
-          'Relevant project experience',
-          'Clean formatting and structure'
-        ],
-        weaknesses: [
-          'Missing action verbs in some descriptions',
-          'Could add more metrics to projects',
-          'Summary section needs improvement'
-        ],
-        suggestions: [
-          'Add specific metrics to your achievements (e.g., "Improved performance by 40%")',
-          'Start bullet points with strong action verbs',
-          'Include links to GitHub and LinkedIn',
-          'Add a compelling professional summary at the top'
-        ]
-      }))
-      toast.success('Analysis complete!')
-    }, 2000)
+    const fetchAnalysis = async () => {
+      try {
+        const data: any = await analyzeResumeService(file)
+        dispatch(setAnalysis(data))
+        toast.success('Analysis complete!')
+      } catch (error) {
+        toast.error('Failed to analyze resume')
+      }
+    }
+    
+    fetchAnalysis()
   }
 
   return (
