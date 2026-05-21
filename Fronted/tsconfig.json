@@ -22,12 +22,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "Fronted/src/*"
+        "src/*"
       ]
     }
   },
   "include": [
-    "Fronted/src"
+    "src"
   ],
   "references": [
     {
