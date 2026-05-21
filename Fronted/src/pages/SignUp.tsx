@@ -46,18 +46,21 @@ const SignUp = () => {
     setIsLoading(true)
 
     try {
-      const data: any = await register({ name: formData.name, email: formData.email, password: formData.password })
-      dispatch(setUser({
-        name: data.user.name,
-        email: data.user.email,
-        avatar: '',
-        isAuthenticated: true
-      }))
-      
-      toast.success('Account created successfully!')
-      navigate('/dashboard')
-    } catch (error) {
-      toast.error('Registration failed')
+      const response: any = await register({ name: formData.name, email: formData.email, password: formData.password })
+      if (response && response.success && response.data) {
+        dispatch(setUser({
+          name: response.data.name,
+          email: response.data.email,
+          avatar: response.data.avatar || '',
+          isAuthenticated: true
+        }))
+        toast.success('Account created successfully!')
+        navigate('/dashboard')
+      } else {
+        toast.error(response.message || 'Registration failed')
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Registration failed')
     } finally {
       setIsLoading(false)
     }

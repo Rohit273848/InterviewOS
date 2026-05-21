@@ -17,18 +17,29 @@ import PeerReview from '../pages/PeerReview'
 import Admin from '../pages/Admin'
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useSelector((state: RootState) => state.user)
+  const { isAuthenticated, isCheckingAuth } = useSelector((state: RootState) => state.user)
+
+  const renderPublicRoute = (Component: React.ReactNode) => {
+    if (isCheckingAuth) {
+      return (
+        <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-[#B1F82A] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )
+    }
+    return isAuthenticated ? <Navigate to="/dashboard" replace /> : Component
+  }
 
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route 
         path="/signin" 
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignIn />} 
+        element={renderPublicRoute(<SignIn />)} 
       />
       <Route 
         path="/signup" 
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignUp />} 
+        element={renderPublicRoute(<SignUp />)} 
       />
       <Route element={
         <ProtectedRoute>

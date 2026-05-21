@@ -5,42 +5,35 @@ interface UserState {
   email: string
   avatar: string
   isAuthenticated: boolean
+  isCheckingAuth: boolean
 }
 
-// Load persisted auth state from localStorage
-const loadState = (): UserState => {
-  try {
-    const serialized = localStorage.getItem('interviewos_user')
-    if (serialized) return JSON.parse(serialized)
-  } catch (_) { /* ignore */ }
-  return {
-    name: 'Student',
-    email: 'student@example.com',
-    avatar: '',
-    isAuthenticated: false,
-  }
+const initialState: UserState = {
+  name: '',
+  email: '',
+  avatar: '',
+  isAuthenticated: false,
+  isCheckingAuth: true,
 }
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: loadState(),
+  initialState,
   reducers: {
     setUser: (state, action: PayloadAction<Partial<UserState>>) => {
-      const newState = { ...state, ...action.payload }
-      localStorage.setItem('interviewos_user', JSON.stringify(newState))
-      return newState
+      return { ...state, ...action.payload }
     },
     logout: () => {
-      localStorage.removeItem('interviewos_user')
       return {
-        name: 'Student',
-        email: 'student@example.com',
-        avatar: '',
-        isAuthenticated: false,
+        ...initialState,
+        isCheckingAuth: false,
       }
+    },
+    setCheckingAuth: (state, action: PayloadAction<boolean>) => {
+      state.isCheckingAuth = action.payload
     },
   },
 })
 
-export const { setUser, logout } = userSlice.actions
+export const { setUser, logout, setCheckingAuth } = userSlice.actions
 export default userSlice.reducer

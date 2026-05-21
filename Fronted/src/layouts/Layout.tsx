@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { logout } from '../context/slices/userSlice'
 import { RootState } from '../context'
+import { logoutUser } from '../services/authService'
 import toast from 'react-hot-toast'
 
 const Layout = () => {
@@ -54,7 +55,12 @@ const Layout = () => {
     }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await logoutUser()
+    } catch (e) {
+      console.error(e)
+    }
     dispatch(logout())
     toast.success('Logged out successfully')
     navigate('/signin')

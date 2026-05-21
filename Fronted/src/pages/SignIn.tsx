@@ -40,18 +40,21 @@ const SignIn = () => {
     setIsLoading(true)
 
     try {
-      const data: any = await login({ email: formData.email, password: formData.password })
-      dispatch(setUser({
-        name: data.user.name,
-        email: data.user.email,
-        avatar: data.user.avatar || '',
-        isAuthenticated: true
-      }))
-      
-      toast.success('Welcome back!')
-      navigate('/dashboard')
-    } catch (error) {
-      toast.error('Login failed')
+      const response: any = await login({ email: formData.email, password: formData.password })
+      if (response && response.success && response.data) {
+        dispatch(setUser({
+          name: response.data.name,
+          email: response.data.email,
+          avatar: response.data.avatar || '',
+          isAuthenticated: true
+        }))
+        toast.success('Welcome back!')
+        navigate('/dashboard')
+      } else {
+        toast.error(response.message || 'Login failed')
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Login failed')
     } finally {
       setIsLoading(false)
     }
