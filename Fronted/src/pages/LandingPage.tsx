@@ -83,12 +83,7 @@ const testimonials = [
   },
 ]
 
-const stats = [
-  { value: '10K+', label: 'Students Placed' },
-  { value: '500+', label: 'Companies Covered' },
-  { value: '95%', label: 'Offer Rate' },
-  { value: '60s', label: 'Resume Analysis' },
-]
+
 
 const steps = [
   {

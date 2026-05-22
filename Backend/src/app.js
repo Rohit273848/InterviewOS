@@ -10,7 +10,6 @@ const app = express();
 app.use(morgan("dev"));
 
 // Middleware4
-console.log(" process.env.CLIENT_URL", process.env.CLIENT_URL);
 app.use(
     cors({
         origin: process.env.CLIENT_URL,
@@ -25,6 +24,7 @@ app.use(cookieParser());
 // Routes
 import authRoutes from "./routes/auth.routes.js";
 app.use("/api/auth", authRoutes);
+
 
 // Centralized Error Handling Middleware
 app.use((err, req, res, next) => {
