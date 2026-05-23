@@ -23,8 +23,10 @@ app.use(cookieParser());
 
 // Routes
 import authRoutes from "./routes/auth.routes.js";
-app.use("/api/auth", authRoutes);
+import interviewRoutes from "./routes/interview.routes.js";
 
+app.use("/api/auth", authRoutes);
+app.use("/api/interview", interviewRoutes);
 
 // Centralized Error Handling Middleware
 app.use((err, req, res, next) => {

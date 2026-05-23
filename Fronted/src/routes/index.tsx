@@ -16,6 +16,8 @@ import MockInterview from '../pages/MockInterview'
 import PeerReview from '../pages/PeerReview'
 import Admin from '../pages/Admin'
 
+import InterviewResult from '../pages/InterviewResult'
+
 const AppRoutes = () => {
   const { isAuthenticated, isCheckingAuth } = useSelector((state: RootState) => state.user)
 
@@ -48,6 +50,7 @@ const AppRoutes = () => {
       }>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/resume-xray" element={<ResumeXRay />} />
+        <Route path="/interview/:id" element={<InterviewResult />} />
         <Route path="/question-bank" element={<QuestionBank />} />
         <Route path="/project-prep" element={<ProjectPrep />} />
         <Route path="/mock-interview" element={<MockInterview />} />

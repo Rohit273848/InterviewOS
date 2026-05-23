@@ -1,37 +1,34 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Sparkles, CheckCircle2, AlertCircle, TrendingUp, Target, User, Star } from 'lucide-react'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../context'
-import { setAnalysis, startAnalyzing } from '../context/slices/resumeSlice'
-import { analyzeResumeService } from '../services/resumeService'
+import { Upload, Sparkles, AlertCircle, Target, User, Star } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+import { useInterview } from '../hooks/useInterview'
 
 const ResumeXRay = () => {
   const [file, setFile] = useState<File | null>(null)
   const [jobDescription, setJobDescription] = useState('')
   const [selfDescription, setSelfDescription] = useState('')
-  const dispatch = useDispatch()
-  const { analysis, isAnalyzing } = useSelector((state: RootState) => state.resume)
-  const resultsRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (analysis && resultsRef.current) {
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
-    }
-  }, [analysis])
+  const navigate = useNavigate()
+  const { generateStrategy, loading: isAnalyzing } = useInterview()
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = e.target.files?.[0]
     if (uploadedFile) {
+      if (uploadedFile.type !== 'application/pdf') {
+        toast.error('Only PDF files are allowed')
+        return
+      }
+      if (uploadedFile.size > 5 * 1024 * 1024) {
+        toast.error('File size should not exceed 5MB')
+        return
+      }
       setFile(uploadedFile)
       toast.success('Resume uploaded successfully!')
     }
   }
 
-  const analyzeResume = () => {
+  const analyzeResume = async () => {
     if (!jobDescription.trim()) {
       toast.error('Please provide a target job description')
       return
@@ -42,19 +39,17 @@ const ResumeXRay = () => {
       return
     }
 
-    dispatch(startAnalyzing())
-
-    const fetchAnalysis = async () => {
-      try {
-        const data: any = await analyzeResumeService(file as any)
-        dispatch(setAnalysis(data))
-        toast.success('Strategy generation complete!')
-      } catch (error) {
-        toast.error('Failed to generate strategy')
-      }
+    if (!file) {
+      toast.error('Please upload a resume PDF file')
+      return
     }
 
-    fetchAnalysis()
+    try {
+      const data = await generateStrategy(jobDescription, selfDescription, file)
+      navigate(`/interview/${data._id}`)
+    } catch (error) {
+      // Error is handled in the hook
+    }
   }
 
   return (
@@ -179,82 +174,6 @@ const ResumeXRay = () => {
         </div>
       </motion.div>
 
-      {/* Analysis Results */}
-      {analysis && (
-        <motion.div
-          ref={resultsRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-12 space-y-6"
-        >
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="col-span-1">
-              <div className="p-8 bg-white dark:bg-bg-secondary rounded-3xl border border-gray-200 dark:border-border-subtle shadow-sm text-center h-full flex flex-col justify-center transition-colors">
-                <div className="text-7xl font-black text-gray-900 dark:text-white mb-2">
-                  {analysis.score}
-                </div>
-                <p className="text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider text-sm">Match Score</p>
-              </div>
-            </div>
-
-            <div className="col-span-2 space-y-6">
-              {/* Strengths */}
-              <div className="p-6 bg-white dark:bg-bg-secondary rounded-3xl border border-gray-200 dark:border-border-subtle shadow-sm transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-green-50 dark:bg-accent-green/10 flex items-center justify-center transition-colors">
-                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-accent-green" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Strengths</h3>
-                </div>
-                <ul className="space-y-3">
-                  {analysis.strengths.map((strength: string, index: number) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 dark:bg-accent-green mt-2.5 flex-shrink-0 transition-colors" />
-                      <span className="text-gray-600 dark:text-gray-300 leading-relaxed">{strength}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Weaknesses */}
-              <div className="p-6 bg-white dark:bg-bg-secondary rounded-3xl border border-gray-200 dark:border-border-subtle shadow-sm transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-500/10 flex items-center justify-center transition-colors">
-                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Areas to Improve</h3>
-                </div>
-                <ul className="space-y-3">
-                  {analysis.weaknesses.map((weakness: string, index: number) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-red-500 dark:bg-red-400 mt-2.5 flex-shrink-0 transition-colors" />
-                      <span className="text-gray-600 dark:text-gray-300 leading-relaxed">{weakness}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Suggestions */}
-              <div className="p-6 bg-white dark:bg-bg-secondary rounded-3xl border border-gray-200 dark:border-border-subtle shadow-sm transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-accent-cyan/10 flex items-center justify-center transition-colors">
-                    <TrendingUp className="w-5 h-5 text-blue-600 dark:text-accent-cyan" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">AI Suggestions</h3>
-                </div>
-                <ul className="space-y-3">
-                  {analysis.suggestions.map((suggestion: string, index: number) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-accent-cyan mt-2.5 flex-shrink-0 transition-colors" />
-                      <span className="text-gray-600 dark:text-gray-300 leading-relaxed">{suggestion}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
     </div>
   )
 }
