@@ -60,7 +60,7 @@ export const generateInterviewStrategy = async (jobDescription, resumeText, self
             };
         }
         const model = new ChatGoogleGenerativeAI({
-            model: "gemini-2.5-flash",
+            modelName: "gemini-2.5-flash",
             apiKey: process.env.GOOGLE_API_KEY,
             temperature: 0.3,
         });
