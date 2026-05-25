@@ -59,12 +59,17 @@ export const generateInterviewStrategy = async (jobDescription, resumeText, self
                 ]
             };
         }
-        const model = new ChatGoogleGenerativeAI({
-            modelName: "gemini-2.5-flash",
-            apiKey: process.env.GOOGLE_API_KEY,
-            temperature: 0.3,
-        });
+       const apiKey = process.env.GOOGLE_API_KEY?.trim();
 
+if (!apiKey) {
+    throw new Error("GOOGLE_API_KEY is missing");
+}
+
+const model = new ChatGoogleGenerativeAI({
+    model: "gemini-2.5-flash",
+    apiKey,
+    temperature: 0.3,
+});
         const prompt = new PromptTemplate({
             template: interviewStrategyPromptTemplate,
             inputVariables: ["jobDescription", "resumeText", "selfDescription"],
