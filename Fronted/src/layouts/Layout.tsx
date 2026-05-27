@@ -2,12 +2,12 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
-import { 
-  LayoutDashboard, 
-  Sparkles, 
-  Database, 
-  FolderGit2, 
-  Video, 
+import {
+  LayoutDashboard,
+  Sparkles,
+  Database,
+  FolderGit2,
+  Video,
   Users,
   Bell,
   Settings,
@@ -73,8 +73,6 @@ const Layout = () => {
     { path: '/question-bank', icon: <Database className="w-5 h-5" />, label: 'Question Bank' },
     { path: '/project-prep', icon: <FolderGit2 className="w-5 h-5" />, label: 'Project Prep' },
     { path: '/peer-review', icon: <Users className="w-5 h-5" />, label: 'Peer Review' },
-    { path: '/analytics', icon: <BarChart3 className="w-5 h-5" />, label: 'Analytics' },
-    { path: '/settings', icon: <Settings className="w-5 h-5" />, label: 'Settings' },
   ]
 
   return (
@@ -110,10 +108,9 @@ const Layout = () => {
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 group ${
-                  isActive
-                    ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 dark:from-teal-500/20 dark:to-cyan-500/20 text-teal-700 dark:text-teal-400 font-semibold'
-                    : 'text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
+                `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 group ${isActive
+                  ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 dark:from-teal-500/20 dark:to-cyan-500/20 text-teal-700 dark:text-teal-400 font-semibold'
+                  : 'text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
                 }`
               }
             >
@@ -183,10 +180,9 @@ const Layout = () => {
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${
-                      isActive
-                        ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 dark:from-teal-500/20 dark:to-cyan-500/20 text-teal-700 dark:text-teal-400 font-semibold'
-                        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
+                    `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ${isActive
+                      ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 dark:from-teal-500/20 dark:to-cyan-500/20 text-teal-700 dark:text-teal-400 font-semibold'
+                      : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
                     }`
                   }
                 >
@@ -220,7 +216,7 @@ const Layout = () => {
         {/* Top Navbar */}
         <header className="h-20 flex items-center justify-between px-6 lg:px-10 z-20">
           <div className="flex items-center gap-4 flex-1">
-            <button 
+            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 hover:bg-white/50 rounded-xl transition-all text-slate-600 flex-shrink-0"
             >
@@ -237,10 +233,10 @@ const Layout = () => {
               />
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3 lg:gap-5">
             {/* Theme Toggle Button */}
-            <button 
+            <button
               onClick={toggleTheme}
               className="relative p-2 hover:bg-white/50 dark:hover:bg-slate-700/50 rounded-full transition-all text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 overflow-hidden"
               aria-label="Toggle theme"
@@ -262,7 +258,7 @@ const Layout = () => {
               <Bell className="w-5 h-5" />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-400 border-2 border-[#E3F2FD] dark:border-slate-800 rounded-full" />
             </button>
-            
+
             <div className="flex items-center gap-3 pl-2 lg:pl-4 border-l border-slate-300/40 dark:border-slate-700/50">
               <div className="hidden md:block text-right">
                 <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-500">{name || 'Rohit'}</div>
