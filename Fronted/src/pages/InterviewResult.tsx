@@ -28,16 +28,16 @@ const getScoreDetails = (score: number) => {
   if (score >= 80) {
     return {
       label: 'Excellent Profile Match',
-      color: 'text-emerald-500 dark:text-emerald-400',
+      color: 'text-emerald-600 dark:text-emerald-400',
       progress: 'stroke-emerald-500',
-      bg: 'bg-emerald-500/10 border-emerald-500/20',
+      bg: 'bg-emerald-500/10 border-emerald-550/20 dark:border-emerald-500/20',
       desc: "Outstanding profile alignment! Minor tweaks will put you in the top tier.",
     };
   }
   if (score >= 60) {
     return {
       label: 'Good Profile Match',
-      color: 'text-teal-500 dark:text-teal-400',
+      color: 'text-teal-600 dark:text-teal-400',
       progress: 'stroke-teal-500',
       bg: 'bg-teal-500/10 border-teal-500/20',
       desc: 'Solid alignment. Address the missing skills and keywords to boost visibility.',
@@ -46,7 +46,7 @@ const getScoreDetails = (score: number) => {
   if (score >= 40) {
     return {
       label: 'Fair Profile Match',
-      color: 'text-amber-500 dark:text-amber-400',
+      color: 'text-amber-600 dark:text-amber-400',
       progress: 'stroke-amber-500',
       bg: 'bg-amber-500/10 border-amber-500/20',
       desc: 'Moderate alignment. Resume requires optimization and projects target to this role.',
@@ -54,7 +54,7 @@ const getScoreDetails = (score: number) => {
   }
   return {
     label: 'Needs Significant Optimization',
-    color: 'text-rose-500 dark:text-rose-400',
+    color: 'text-rose-600 dark:text-rose-400',
     progress: 'stroke-rose-500',
     bg: 'bg-rose-500/10 border-rose-500/20',
     desc: 'Low alignment. Follow the step-by-step ATS improvement plan immediately.',
@@ -64,11 +64,11 @@ const getScoreDetails = (score: number) => {
 const getImportanceBadge = (importance: string) => {
   switch (importance.toLowerCase()) {
     case 'high':
-      return 'bg-rose-500/10 border-rose-500/20 text-rose-500';
+      return 'bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-450';
     case 'medium':
-      return 'bg-amber-500/10 border-amber-500/20 text-amber-500';
+      return 'bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-450';
     default:
-      return 'bg-blue-500/10 border-blue-500/20 text-blue-500';
+      return 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-450';
   }
 };
 
@@ -88,9 +88,9 @@ const InterviewResult = () => {
 
   if (loading || !report) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 bg-transparent">
         <Loader2 className="w-10 h-10 text-teal-500 animate-spin" />
-        <p className="text-slate-650 dark:text-slate-400 font-medium text-lg animate-pulse">
+        <p className="text-slate-600 dark:text-slate-400 font-medium text-lg animate-pulse">
           Analyzing resume against target Job Description...
         </p>
       </div>
@@ -105,7 +105,7 @@ const InterviewResult = () => {
   const fitDetails = getScoreDetails(candidateFitScore);
 
   return (
-    <div className="max-w-7xl mx-auto py-6 px-4 space-y-8 text-slate-800 dark:text-slate-200">
+    <div className="max-w-7xl mx-auto py-6 px-4 space-y-8 text-slate-800 dark:text-slate-100">
       
       {/* Title & Action Buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -122,7 +122,7 @@ const InterviewResult = () => {
           {report.resumeUrl && (
             <button
               onClick={() => getResumePdf(id!)}
-              className="flex items-center gap-2 px-5 py-2.5 bg-slate-100 dark:bg-slate-855 border border-slate-200 dark:border-slate-700 text-slate-705 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-250 dark:hover:bg-slate-700 transition-all w-fit shadow-sm"
+              className="flex items-center gap-2 px-5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all w-fit shadow-sm"
             >
               <Download className="w-4 h-4" />
               Download Resume PDF
@@ -144,7 +144,7 @@ const InterviewResult = () => {
 
           <div className="relative flex items-center justify-center w-32 h-32 my-2">
             <svg className="w-full h-full transform -rotate-90">
-              <circle cx="64" cy="64" r="54" className="stroke-slate-100 dark:stroke-slate-750 fill-none" strokeWidth="8" />
+              <circle cx="64" cy="64" r="54" className="stroke-slate-100 dark:stroke-slate-700 fill-none" strokeWidth="8" />
               <circle
                 cx="64"
                 cy="64"
@@ -176,7 +176,7 @@ const InterviewResult = () => {
 
           <div className="relative flex items-center justify-center w-32 h-32 my-2">
             <svg className="w-full h-full transform -rotate-90">
-              <circle cx="64" cy="64" r="54" className="stroke-slate-100 dark:stroke-slate-750 fill-none" strokeWidth="8" />
+              <circle cx="64" cy="64" r="54" className="stroke-slate-100 dark:stroke-slate-700 fill-none" strokeWidth="8" />
               <circle
                 cx="64"
                 cy="64"
@@ -209,7 +209,7 @@ const InterviewResult = () => {
           {report.atsKeywordAnalysis ? (
             <div className="flex-1 flex flex-col justify-center space-y-4">
               <div className="flex justify-between items-end">
-                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Keyword Coverage</span>
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-450">Keyword Coverage</span>
                 <span className="text-2xl font-black text-slate-800 dark:text-white">
                   {report.atsKeywordAnalysis.keywordCoveragePercentage || 0}%
                 </span>
@@ -223,13 +223,13 @@ const InterviewResult = () => {
                 />
               </div>
               <div className="grid grid-cols-2 gap-2 pt-2">
-                <div className="bg-emerald-50 dark:bg-emerald-500/5 border border-emerald-500/10 px-3 py-2 rounded-xl text-center">
-                  <div className="text-lg font-black text-emerald-500">{report.atsKeywordAnalysis.matchedKeywords?.length || 0}</div>
-                  <div className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase">Matched</div>
+                <div className="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-500/20 px-3 py-2 rounded-xl text-center">
+                  <div className="text-lg font-black text-emerald-600 dark:text-emerald-400">{report.atsKeywordAnalysis.matchedKeywords?.length || 0}</div>
+                  <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase">Matched</div>
                 </div>
-                <div className="bg-rose-50 dark:bg-rose-500/5 border border-rose-500/10 px-3 py-2 rounded-xl text-center">
-                  <div className="text-lg font-black text-rose-500">{report.atsKeywordAnalysis.missingKeywords?.length || 0}</div>
-                  <div className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase">Missing</div>
+                <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-500/20 px-3 py-2 rounded-xl text-center">
+                  <div className="text-lg font-black text-rose-600 dark:text-rose-455">{report.atsKeywordAnalysis.missingKeywords?.length || 0}</div>
+                  <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase">Missing</div>
                 </div>
               </div>
             </div>
@@ -258,8 +258,8 @@ const InterviewResult = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap ${
                 isActive
-                  ? 'border-teal-550 text-teal-600 dark:text-teal-400 bg-teal-500/5 rounded-t-xl'
-                  : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                  ? 'border-teal-500 text-teal-600 dark:text-teal-400 bg-teal-500/5 rounded-t-xl'
+                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -290,7 +290,7 @@ const InterviewResult = () => {
               {report.strengths && report.strengths.length > 0 ? (
                 <ul className="space-y-3.5">
                   {report.strengths.map((str: string, idx: number) => (
-                    <li key={idx} className="flex gap-3 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+                    <li key={idx} className="flex gap-3 text-xs leading-relaxed text-slate-600 dark:text-slate-350">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                       <span>{str}</span>
                     </li>
@@ -304,7 +304,7 @@ const InterviewResult = () => {
             {/* Weaknesses Card */}
             <div className="bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-slate-700/50 shadow-sm rounded-3xl p-6">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2.5">
-                <div className="p-1.5 bg-rose-100 dark:bg-rose-500/20 text-rose-500 rounded-lg">
+                <div className="p-1.5 bg-rose-100 dark:bg-rose-500/20 text-rose-550 rounded-lg">
                   <AlertTriangle className="w-4 h-4" />
                 </div>
                 Key Weaknesses & Gaps
@@ -312,7 +312,7 @@ const InterviewResult = () => {
               {report.weaknesses && report.weaknesses.length > 0 ? (
                 <ul className="space-y-3.5">
                   {report.weaknesses.map((weak: string, idx: number) => (
-                    <li key={idx} className="flex gap-3 text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+                    <li key={idx} className="flex gap-3 text-xs leading-relaxed text-slate-600 dark:text-slate-350">
                       <AlertTriangle className="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" />
                       <span>{weak}</span>
                     </li>
@@ -327,7 +327,7 @@ const InterviewResult = () => {
             {report.atsImprovementPlan && report.atsImprovementPlan.length > 0 && (
               <div className="bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-slate-700/50 shadow-sm rounded-3xl p-6 md:col-span-2">
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2.5">
-                  <div className="p-1.5 bg-teal-100 dark:bg-teal-500/20 text-teal-500 rounded-lg">
+                  <div className="p-1.5 bg-teal-100 dark:bg-teal-500/20 text-teal-550 rounded-lg">
                     <TrendingUp className="w-4 h-4" />
                   </div>
                   ATS Optimization Plan
@@ -336,7 +336,7 @@ const InterviewResult = () => {
                   {report.atsImprovementPlan.map((plan: string, idx: number) => (
                     <div
                       key={idx}
-                      className="flex gap-3 p-3.5 border border-slate-100 dark:border-slate-700/60 rounded-xl bg-white/40 dark:bg-slate-850/40 text-xs text-slate-600 dark:text-slate-300 leading-relaxed"
+                      className="flex gap-3 p-3.5 border border-slate-100 dark:border-slate-700/60 rounded-xl bg-white/40 dark:bg-slate-800/40 text-xs text-slate-600 dark:text-slate-300 leading-relaxed"
                     >
                       <div className="w-5 h-5 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-[10px]">
                         {idx + 1}
@@ -423,7 +423,7 @@ const InterviewResult = () => {
                   {report.missingSkills.map((skObj: any, idx: number) => (
                     <div
                       key={idx}
-                      className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-850/40 relative flex flex-col justify-between"
+                      className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 relative flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-center justify-between mb-2">
@@ -448,9 +448,9 @@ const InterviewResult = () => {
                     {report.skillGaps.map((skObj: any, idx: number) => (
                       <div
                         key={idx}
-                        className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-850/40 flex justify-between items-center"
+                        className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 flex justify-between items-center"
                       >
-                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{skObj.skill}</span>
+                        <span className="text-xs font-bold text-slate-800 dark:text-slate-205">{skObj.skill}</span>
                         <span className={`text-[10px] font-extrabold px-2 py-0.5 border rounded-full uppercase tracking-wider ${getImportanceBadge(skObj.severity)}`}>
                           {skObj.severity} severity
                         </span>
@@ -487,7 +487,7 @@ const InterviewResult = () => {
                     return (
                       <div
                         key={idx}
-                        className="border border-slate-100 dark:border-slate-700/60 rounded-2xl bg-white/40 dark:bg-slate-855/40 overflow-hidden"
+                        className="border border-slate-100 dark:border-slate-700/60 rounded-2xl bg-white/40 dark:bg-slate-800/40 overflow-hidden"
                       >
                         <button
                           onClick={() => setExpandedAddition(isExpanded ? null : idx)}
@@ -497,7 +497,7 @@ const InterviewResult = () => {
                             <span className="text-xs uppercase font-extrabold tracking-wider text-emerald-500 block mb-1">
                               Addition Suggestion {idx + 1}
                             </span>
-                            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-500 transition-colors duration-305">
+                            <h4 className="text-sm font-bold text-slate-800 dark:text-slate-205 group-hover:text-emerald-555 dark:group-hover:text-emerald-400 transition-colors duration-300">
                               {addObj.item}
                             </h4>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -513,7 +513,7 @@ const InterviewResult = () => {
                               animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="border-t border-slate-100 dark:border-slate-750 bg-slate-50 dark:bg-slate-900/10 p-4"
+                              className="border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/10 p-4"
                             >
                               <div className="flex gap-2.5 items-start">
                                 <Lightbulb className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
@@ -521,7 +521,7 @@ const InterviewResult = () => {
                                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-450 dark:text-slate-500 block mb-1">
                                     Example Bullet Point / Content:
                                   </span>
-                                  <p className="text-xs font-medium text-slate-705 dark:text-slate-300 bg-white dark:bg-slate-800/80 border border-slate-150 dark:border-slate-700/50 p-3 rounded-xl leading-relaxed italic">
+                                  <p className="text-xs font-medium text-slate-700 dark:text-slate-350 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/50 p-3 rounded-xl leading-relaxed italic">
                                     "{addObj.example}"
                                   </p>
                                 </div>
@@ -578,7 +578,7 @@ const InterviewResult = () => {
                   {report.recommendedProjects.map((projObj: any, idx: number) => (
                     <div
                       key={idx}
-                      className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-850/40 flex flex-col justify-between"
+                      className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex items-center gap-2 mb-2">
@@ -587,19 +587,19 @@ const InterviewResult = () => {
                             {projObj.projectName}
                           </h4>
                         </div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                           {projObj.reason}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wide block mb-1.5">
+                        <span className="text-[10px] font-extrabold text-slate-450 dark:text-slate-500 uppercase tracking-wide block mb-1.5">
                           Skills Covered:
                         </span>
                         <div className="flex flex-wrap gap-1.5">
                           {projObj.skillsCovered.map((sk: string, skIdx: number) => (
                             <span
                               key={skIdx}
-                              className="text-[10px] font-bold px-2 py-0.5 bg-violet-50 dark:bg-violet-500/15 text-violet-600 dark:text-violet-400 rounded-md border border-violet-500/10"
+                              className="text-[10px] font-bold px-2 py-0.5 bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 rounded-md border border-violet-500/10"
                             >
                               {sk}
                             </span>
@@ -641,7 +641,7 @@ const InterviewResult = () => {
                         Phase 1: Immediate Fixes (1 Day)
                       </span>
                       {report.roadmap.immediate && report.roadmap.immediate.length > 0 ? (
-                        <div className="bg-white/40 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
+                        <div className="bg-white/40 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
                           {report.roadmap.immediate.map((item: string, idx: number) => (
                             <div key={idx} className="flex gap-2.5 items-start">
                               <CheckCircle2 className="w-4 h-4 text-rose-500 flex-shrink-0 mt-0.5" />
@@ -663,7 +663,7 @@ const InterviewResult = () => {
                         Phase 2: Short Term (1 Week)
                       </span>
                       {report.roadmap.shortTerm && report.roadmap.shortTerm.length > 0 ? (
-                        <div className="bg-white/40 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
+                        <div className="bg-white/40 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
                           {report.roadmap.shortTerm.map((item: string, idx: number) => (
                             <div key={idx} className="flex gap-2.5 items-start">
                               <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
@@ -685,11 +685,11 @@ const InterviewResult = () => {
                         Phase 3: Medium Term (1 Month)
                       </span>
                       {report.roadmap.mediumTerm && report.roadmap.mediumTerm.length > 0 ? (
-                        <div className="bg-white/40 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
+                        <div className="bg-white/40 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
                           {report.roadmap.mediumTerm.map((item: string, idx: number) => (
                             <div key={idx} className="flex gap-2.5 items-start">
                               <CheckCircle2 className="w-4 h-4 text-teal-500 flex-shrink-0 mt-0.5" />
-                              <p className="text-xs text-slate-650 dark:text-slate-300 leading-normal">{item}</p>
+                              <p className="text-xs text-slate-600 dark:text-slate-300 leading-normal">{item}</p>
                             </div>
                           ))}
                         </div>
@@ -707,11 +707,11 @@ const InterviewResult = () => {
                         Phase 4: Long Term (3 Months)
                       </span>
                       {report.roadmap.longTerm && report.roadmap.longTerm.length > 0 ? (
-                        <div className="bg-white/40 dark:bg-slate-850/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
+                        <div className="bg-white/40 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/60 p-4 rounded-2xl space-y-2">
                           {report.roadmap.longTerm.map((item: string, idx: number) => (
                             <div key={idx} className="flex gap-2.5 items-start">
                               <CheckCircle2 className="w-4 h-4 text-violet-500 flex-shrink-0 mt-0.5" />
-                              <p className="text-xs text-slate-650 dark:text-slate-300 leading-normal">{item}</p>
+                              <p className="text-xs text-slate-600 dark:text-slate-300 leading-normal">{item}</p>
                             </div>
                           ))}
                         </div>
@@ -733,7 +733,7 @@ const InterviewResult = () => {
                   </div>
                   <div className="space-y-4">
                     {report.preparationPlan.map((dayObj: any, idx: number) => (
-                      <div key={idx} className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-850/40">
+                      <div key={idx} className="border border-slate-100 dark:border-slate-700/60 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40">
                         <div className="flex items-center gap-3 mb-2">
                           <div className="px-2.5 py-1 rounded-md bg-teal-500 text-white font-bold text-[10px]">
                             DAY {dayObj.day}
