@@ -10,13 +10,11 @@ import {
   Video,
   Users,
   Bell,
-  Settings,
   LogOut,
   Brain,
   Search,
   Menu,
   X,
-  BarChart3,
   Sun,
   Moon
 } from 'lucide-react'

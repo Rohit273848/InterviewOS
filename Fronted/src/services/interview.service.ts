@@ -1,9 +1,10 @@
 import api from './api';
 
-export const generateInterviewStrategy = async (jobDescription: string, selfDescription: string, resumeFile: File) => {
+export const generateInterviewStrategy = async (jobDescription: string, selfDescription: string, candidateWeaknesses: string, resumeFile: File) => {
   const formData = new FormData();
   formData.append('jobDescription', jobDescription);
   formData.append('selfDescription', selfDescription);
+  formData.append('candidateWeaknesses', candidateWeaknesses);
   formData.append('resume', resumeFile);
 
   const response = await api.post('/interview/generate', formData, {

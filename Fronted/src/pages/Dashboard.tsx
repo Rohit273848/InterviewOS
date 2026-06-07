@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../context'
 import { 
   Sparkles, 
-  Target, 
   Video, 
   Database, 
   FolderGit2, 
@@ -20,7 +19,6 @@ import {
   AreaChart, 
   Area, 
   XAxis, 
-  YAxis, 
   CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
@@ -136,7 +134,7 @@ const Dashboard = () => {
                 <BarChart data={resumeData}>
                   <Tooltip cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                   <Bar dataKey="value" radius={[4, 4, 4, 4]}>
-                    {resumeData.map((entry, index) => (
+                    {resumeData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={index === 0 ? '#14B8A6' : index === 1 ? '#06B6D4' : '#334155'} />
                     ))}
                   </Bar>

@@ -10,10 +10,10 @@ export const useInterview = () => {
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState<any>(null);
 
-  const generateStrategy = async (jobDescription: string, selfDescription: string, file: File) => {
+  const generateStrategy = async (jobDescription: string, selfDescription: string, candidateWeaknesses: string, file: File) => {
     try {
       setLoading(true);
-      const data = await generateInterviewStrategy(jobDescription, selfDescription, file);
+      const data = await generateInterviewStrategy(jobDescription, selfDescription, candidateWeaknesses, file);
       setReport(data);
       toast.success('Interview strategy generated successfully!');
       return data;

@@ -15,6 +15,10 @@ const interviewReportSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        candidateWeaknesses: {
+            type: String,
+            default: "",
+        },
         resumeText: {
             type: String,
             required: true,
@@ -27,6 +31,54 @@ const interviewReportSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        atsScore: {
+            type: Number,
+        },
+        candidateFitScore: {
+            type: Number,
+        },
+        strengths: [String],
+        weaknesses: [String],
+        missingSkills: [
+            {
+                skill: String,
+                importance: String,
+                reason: String,
+            },
+        ],
+        atsKeywordAnalysis: {
+            matchedKeywords: [String],
+            missingKeywords: [String],
+            keywordCoveragePercentage: Number,
+        },
+        additions: [
+            {
+                item: String,
+                reason: String,
+                example: String,
+            },
+        ],
+        removals: [
+            {
+                item: String,
+                reason: String,
+            },
+        ],
+        recommendedProjects: [
+            {
+                projectName: String,
+                reason: String,
+                skillsCovered: [String],
+            },
+        ],
+        atsImprovementPlan: [String],
+        roadmap: {
+            immediate: [String],
+            shortTerm: [String],
+            mediumTerm: [String],
+            longTerm: [String],
+        },
+        // Old fields for backward compatibility
         technicalQuestions: [
             {
                 question: String,

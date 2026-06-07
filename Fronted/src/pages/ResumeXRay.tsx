@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, Sparkles, AlertCircle, Target, User, Star } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -9,6 +9,7 @@ const ResumeXRay = () => {
   const [file, setFile] = useState<File | null>(null)
   const [jobDescription, setJobDescription] = useState('')
   const [selfDescription, setSelfDescription] = useState('')
+  const [candidateWeaknesses, setCandidateWeaknesses] = useState('')
   const navigate = useNavigate()
   const { generateStrategy, loading: isAnalyzing } = useInterview()
 
@@ -45,7 +46,7 @@ const ResumeXRay = () => {
     }
 
     try {
-      const data = await generateStrategy(jobDescription, selfDescription, file)
+      const data = await generateStrategy(jobDescription, selfDescription, candidateWeaknesses, file)
       navigate(`/interview/${data._id}`)
     } catch (error) {
       // Error is handled in the hook
@@ -135,7 +136,17 @@ const ResumeXRay = () => {
               value={selfDescription}
               onChange={(e) => setSelfDescription(e.target.value)}
               placeholder="Briefly describe your experience and skills..."
-              className="w-full h-32 rounded-2xl border border-gray-200 dark:border-border-subtle focus:border-yellow-400 dark:focus:border-accent-yellow focus:ring-4 focus:ring-yellow-400/20 dark:focus:ring-accent-yellow/20 bg-white dark:bg-bg-tertiary p-5 resize-none outline-none transition-all text-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm mb-6"
+              className="w-full h-24 rounded-2xl border border-gray-200 dark:border-border-subtle focus:border-yellow-400 dark:focus:border-accent-yellow focus:ring-4 focus:ring-yellow-400/20 dark:focus:ring-accent-yellow/20 bg-white dark:bg-bg-tertiary p-4 resize-none outline-none transition-all text-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm mb-4"
+            />
+
+            <div className="mb-3">
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Candidate Weaknesses (Optional)</span>
+            </div>
+            <textarea
+              value={candidateWeaknesses}
+              onChange={(e) => setCandidateWeaknesses(e.target.value)}
+              placeholder="List any known weaknesses, gaps, or areas you want to highlight for ATS analysis..."
+              className="w-full h-24 rounded-2xl border border-gray-200 dark:border-border-subtle focus:border-yellow-400 dark:focus:border-accent-yellow focus:ring-4 focus:ring-yellow-400/20 dark:focus:ring-accent-yellow/20 bg-white dark:bg-bg-tertiary p-4 resize-none outline-none transition-all text-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-sm mb-4"
             />
 
             <div className="bg-[#fff9e6] dark:bg-accent-yellow/10 border border-[#ffe082] dark:border-accent-yellow/20 rounded-xl p-4 flex gap-3 text-sm text-[#8c6d1f] dark:text-accent-yellow shadow-sm transition-colors">

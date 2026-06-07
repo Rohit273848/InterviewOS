@@ -1,6 +1,6 @@
 // import api from './api'
 
-export const analyzeResumeService = async (file: File) => {
+export const analyzeResumeService = async (_file: File) => {
   // const formData = new FormData()
   // formData.append('resume', file)
   // const response = await api.post('/resume/analyze', formData, {

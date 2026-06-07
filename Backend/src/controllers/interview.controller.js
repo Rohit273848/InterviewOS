@@ -10,7 +10,7 @@ import { uploadOnCloudinary } from "../config/cloudinary.js";
 // @route   POST /api/interview/generate
 // @access  Private
 export const generateStrategy = asyncHandler(async (req, res) => {
-    const { jobDescription, selfDescription } = req.body;
+    const { jobDescription, selfDescription, candidateWeaknesses } = req.body;
     
     if (!jobDescription || !selfDescription) {
         throw new ApiError(400, "Job description and self description are required");
@@ -32,20 +32,28 @@ export const generateStrategy = asyncHandler(async (req, res) => {
     const resumeUrl = resumeCloudinary ? resumeCloudinary.secure_url : "https://res.cloudinary.com/demo/image/upload/sample.pdf";
 
     // 3. Generate AI Report
-    const aiReport = await generateInterviewStrategy(jobDescription, resumeText, selfDescription);
+    const aiReport = await generateInterviewStrategy(jobDescription, resumeText, selfDescription, candidateWeaknesses || "");
 
     // 4. Save Report in Database
     const report = await InterviewReport.create({
         userId: req.user._id,
         jobDescription,
         selfDescription,
+        candidateWeaknesses: candidateWeaknesses || "",
         resumeText,
         resumeUrl,
-        matchScore: aiReport.matchScore,
-        technicalQuestions: aiReport.technicalQuestions,
-        behavioralQuestions: aiReport.behavioralQuestions,
-        preparationPlan: aiReport.preparationPlan,
-        skillGaps: aiReport.skillGaps,
+        matchScore: aiReport.atsScore, // map to atsScore for compatibility
+        atsScore: aiReport.atsScore,
+        candidateFitScore: aiReport.candidateFitScore,
+        strengths: aiReport.strengths,
+        weaknesses: aiReport.weaknesses,
+        missingSkills: aiReport.missingSkills,
+        atsKeywordAnalysis: aiReport.atsKeywordAnalysis,
+        additions: aiReport.additions,
+        removals: aiReport.removals,
+        recommendedProjects: aiReport.recommendedProjects,
+        atsImprovementPlan: aiReport.atsImprovementPlan,
+        roadmap: aiReport.roadmap,
     });
 
     return res.status(201).json(
