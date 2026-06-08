@@ -25,10 +25,12 @@ app.use(cookieParser());
 import authRoutes from "./routes/auth.routes.js";
 import interviewRoutes from "./routes/interview.routes.js";
 import mockInterviewRoutes from "./routes/mockInterview.routes.js";
+import projectPrepRoutes from "./routes/projectPrep.routes.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/interview", interviewRoutes);
 app.use("/api/mock-interview", mockInterviewRoutes);
+app.use("/api/project-prep", projectPrepRoutes);
 
 // Centralized Error Handling Middleware
 app.use((err, req, res, next) => {
