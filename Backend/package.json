@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@langchain/core": "^1.1.48",
     "@langchain/google-genai": "^2.1.31",
     "bcryptjs": "^2.4.3",

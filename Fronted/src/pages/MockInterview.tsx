@@ -1,453 +1,823 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Play, Square, Send, Clock, CheckCircle2, MessageSquare, Sparkles, Settings as SettingsIcon } from 'lucide-react'
-import toast from 'react-hot-toast'
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Play, 
+  Square, 
+  Send, 
+  Clock, 
+  CheckCircle2, 
+  MessageSquare, 
+  Sparkles, 
+  Settings as SettingsIcon,
+  AlertTriangle,
+  TrendingUp,
+  Award,
+  ChevronDown,
+  BookOpen,
+  Code2,
+  XCircle,
+  History,
+  FileText
+} from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useMockInterview } from '../hooks/useMockInterview';
+import { SessionReportResponse } from '../services/mockInterview.service';
 
 const MockInterview = () => {
-  const [isInterviewActive, setIsInterviewActive] = useState(false)
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [userAnswer, setUserAnswer] = useState('')
-  const [answers, setAnswers] = useState<string[]>([])
-  const [isTyping, setIsTyping] = useState(false)
+  const navigate = useNavigate();
+  const {
+    loading,
+    submittingAnswer,
+    completingSession,
+    activeSession,
+    history,
+    analytics,
+    startNewSession,
+    submitResponse,
+    finishSession,
+    cancelActiveSession,
+    loadHistory,
+    loadAnalytics
+  } = useMockInterview();
+
+  // Mode state: 'setup', 'interview', 'report', 'history'
+  const [viewMode, setViewMode] = useState<'setup' | 'interview' | 'report' | 'history'>('setup');
   
-  // Settings
-  const [interviewType, setInterviewType] = useState('behavioral')
-  const [difficulty, setDifficulty] = useState('medium')
-  const [questionCount, setQuestionCount] = useState(5)
-  const [questions, setQuestions] = useState<Array<{ id: number; question: string; hint: string }>>([])
+  // Setup form states
+  const [jobDescription, setJobDescription] = useState('');
+  const [resumeText, setResumeText] = useState('');
+  const [selfDescription, setSelfDescription] = useState('');
+  const [candidateWeaknesses, setCandidateWeaknesses] = useState('');
+  
+  // Parameter settings
+  const [interviewType, setInterviewType] = useState('behavioral');
+  const [difficulty, setDifficulty] = useState('medium');
+  const [questionCount, setQuestionCount] = useState(5);
 
-  // Question banks by type and difficulty
-  const questionBanks = {
-    behavioral: {
-      easy: [
-        { question: 'Tell me about yourself.', hint: 'Focus on your education, skills, and career goals.' },
-        { question: 'Why do you want to work here?', hint: 'Research the company and align with their values.' },
-        { question: 'What are your strengths?', hint: 'Mention 2-3 key strengths with examples.' },
-        { question: 'What are your weaknesses?', hint: 'Show self-awareness and how you\'re improving.' },
-        { question: 'Where do you see yourself in 5 years?', hint: 'Show ambition while being realistic.' },
-        { question: 'Why should we hire you?', hint: 'Highlight unique value you bring.' },
-        { question: 'What motivates you?', hint: 'Connect motivation to the role.' },
-        { question: 'Describe your ideal work environment.', hint: 'Align with company culture.' },
-        { question: 'How do you handle stress?', hint: 'Give specific coping strategies.' },
-        { question: 'What are your salary expectations?', hint: 'Research market rates first.' },
-        { question: 'Do you prefer working alone or in a team?', hint: 'Show flexibility.' },
-        { question: 'What is your greatest achievement?', hint: 'Use STAR method.' },
-        { question: 'Why did you choose your major?', hint: 'Show passion and relevance.' },
-        { question: 'What do you know about our company?', hint: 'Show you did research.' },
-        { question: 'How do you prioritize tasks?', hint: 'Explain your system.' }
-      ],
-      medium: [
-        { question: 'Describe a challenging project you worked on.', hint: 'Use STAR method: Situation, Task, Action, Result.' },
-        { question: 'Tell me about a time you failed.', hint: 'Focus on what you learned.' },
-        { question: 'How do you handle conflicts with team members?', hint: 'Show emotional intelligence.' },
-        { question: 'Describe a time you showed leadership.', hint: 'Leadership isn\'t just about titles.' },
-        { question: 'How do you handle criticism?', hint: 'Show you\'re open to feedback.' },
-        { question: 'Tell me about a time you went above and beyond.', hint: 'Show initiative and dedication.' },
-        { question: 'Describe a situation where you had to learn something quickly.', hint: 'Show adaptability.' },
-        { question: 'How do you handle multiple deadlines?', hint: 'Explain prioritization strategy.' },
-        { question: 'Tell me about a time you disagreed with your manager.', hint: 'Show respect while being honest.' },
-        { question: 'Describe a time you had to work with a difficult person.', hint: 'Focus on resolution.' },
-        { question: 'How do you stay updated with technology trends?', hint: 'Show continuous learning.' },
-        { question: 'Tell me about a time you made a mistake.', hint: 'Show accountability and learning.' },
-        { question: 'Describe your problem-solving process.', hint: 'Give a structured approach.' },
-        { question: 'How do you handle ambiguity?', hint: 'Show you can work with incomplete info.' },
-        { question: 'Tell me about a time you improved a process.', hint: 'Show initiative and impact.' }
-      ],
-      hard: [
-        { question: 'Describe a time when you had to make a difficult decision with limited information.', hint: 'Show decision-making framework and risk assessment.' },
-        { question: 'Tell me about a project that failed despite your best efforts.', hint: 'Show resilience and learning from failure.' },
-        { question: 'How would you handle a situation where your team disagrees with your technical approach?', hint: 'Balance leadership with collaboration.' },
-        { question: 'Describe a time you had to convince stakeholders to change direction.', hint: 'Show influence and communication skills.' },
-        { question: 'Tell me about the most complex problem you\'ve solved.', hint: 'Break down complexity clearly.' },
-        { question: 'How do you balance technical debt with feature development?', hint: 'Show strategic thinking.' },
-        { question: 'Describe a time you had to deliver bad news to stakeholders.', hint: 'Show communication and accountability.' },
-        { question: 'How would you handle a situation where you disagree with company direction?', hint: 'Show integrity and professionalism.' },
-        { question: 'Tell me about a time you had to fire or let someone go.', hint: 'Show empathy and professionalism.' },
-        { question: 'Describe your biggest professional regret.', hint: 'Show self-reflection and growth.' },
-        { question: 'How do you handle ethical dilemmas at work?', hint: 'Show strong values.' },
-        { question: 'Tell me about a time you had to choose between two important priorities.', hint: 'Show decision-making process.' },
-        { question: 'Describe a situation where you had to influence without authority.', hint: 'Show leadership skills.' },
-        { question: 'How do you handle burnout in yourself and your team?', hint: 'Show awareness and strategies.' },
-        { question: 'Tell me about a time you had to adapt to major organizational change.', hint: 'Show flexibility and resilience.' }
-      ]
-    },
-    technical: {
-      easy: [
-        { question: 'Explain the difference between var, let, and const in JavaScript.', hint: 'Focus on scope and mutability.' },
-        { question: 'What is the difference between == and === in JavaScript?', hint: 'Explain type coercion.' },
-        { question: 'Explain what REST API is.', hint: 'Cover HTTP methods and statelessness.' },
-        { question: 'What is the difference between SQL and NoSQL?', hint: 'Compare structure and use cases.' },
-        { question: 'Explain what Git is and why it\'s useful.', hint: 'Cover version control benefits.' },
-        { question: 'What is the difference between frontend and backend?', hint: 'Explain client-server architecture.' },
-        { question: 'Explain what an array is.', hint: 'Cover basic operations.' },
-        { question: 'What is object-oriented programming?', hint: 'Explain key concepts: encapsulation, inheritance, polymorphism.' },
-        { question: 'Explain what a function is.', hint: 'Cover parameters and return values.' },
-        { question: 'What is the difference between HTTP and HTTPS?', hint: 'Focus on security.' },
-        { question: 'Explain what a database is.', hint: 'Cover data storage and retrieval.' },
-        { question: 'What is an API?', hint: 'Explain interface between systems.' },
-        { question: 'Explain what debugging is.', hint: 'Cover common techniques.' },
-        { question: 'What is the difference between a compiler and interpreter?', hint: 'Explain execution process.' },
-        { question: 'Explain what a loop is.', hint: 'Give examples of different types.' }
-      ],
-      medium: [
-        { question: 'Explain how closures work in JavaScript.', hint: 'Use examples with scope.' },
-        { question: 'What is the event loop in JavaScript?', hint: 'Explain asynchronous execution.' },
-        { question: 'Explain the difference between synchronous and asynchronous code.', hint: 'Use callbacks, promises, async/await.' },
-        { question: 'What are the SOLID principles?', hint: 'Explain each principle with examples.' },
-        { question: 'Explain how authentication differs from authorization.', hint: 'Use real-world examples.' },
-        { question: 'What is middleware in Express.js?', hint: 'Explain request-response cycle.' },
-        { question: 'Explain database indexing and why it\'s important.', hint: 'Cover performance implications.' },
-        { question: 'What is the difference between PUT and PATCH in REST?', hint: 'Explain idempotency.' },
-        { question: 'Explain how React hooks work.', hint: 'Cover useState and useEffect.' },
-        { question: 'What is the difference between cookies and local storage?', hint: 'Compare security and use cases.' },
-        { question: 'Explain what a promise is in JavaScript.', hint: 'Cover then, catch, finally.' },
-        { question: 'What is the virtual DOM in React?', hint: 'Explain reconciliation.' },
-        { question: 'Explain what dependency injection is.', hint: 'Show benefits for testing.' },
-        { question: 'What is the difference between TCP and UDP?', hint: 'Compare reliability and speed.' },
-        { question: 'Explain what a hash table is.', hint: 'Cover time complexity.' }
-      ],
-      hard: [
-        { question: 'Design a URL shortening service like bit.ly.', hint: 'Cover database design, hashing, and scalability.' },
-        { question: 'Explain how you would implement a rate limiter.', hint: 'Discuss algorithms like token bucket or sliding window.' },
-        { question: 'How would you design a real-time chat application?', hint: 'Cover WebSockets, message queues, and scaling.' },
-        { question: 'Explain database sharding and when you would use it.', hint: 'Discuss horizontal scaling and trade-offs.' },
-        { question: 'How would you implement a caching strategy for a high-traffic API?', hint: 'Cover cache invalidation and consistency.' },
-        { question: 'Design a notification system for millions of users.', hint: 'Discuss push notifications, queues, and reliability.' },
-        { question: 'Explain how you would optimize a slow database query.', hint: 'Cover indexing, query optimization, and profiling.' },
-        { question: 'How would you implement authentication in a microservices architecture?', hint: 'Discuss JWT, OAuth, and service-to-service auth.' },
-        { question: 'Design a distributed file storage system.', hint: 'Cover replication, consistency, and fault tolerance.' },
-        { question: 'Explain how you would handle race conditions in a distributed system.', hint: 'Discuss locks, transactions, and eventual consistency.' },
-        { question: 'How would you design a search engine?', hint: 'Cover indexing, ranking, and distributed processing.' },
-        { question: 'Explain how you would implement a recommendation system.', hint: 'Discuss collaborative filtering and machine learning.' },
-        { question: 'Design a payment processing system.', hint: 'Cover security, transactions, and idempotency.' },
-        { question: 'How would you implement a distributed lock?', hint: 'Discuss consensus algorithms.' },
-        { question: 'Explain how you would design a video streaming service.', hint: 'Cover CDN, adaptive bitrate, and storage.' }
-      ]
-    },
-    'system-design': {
-      easy: [
-        { question: 'Design a basic URL shortener.', hint: 'Focus on core functionality first.' },
-        { question: 'Design a simple todo list application.', hint: 'Cover CRUD operations.' },
-        { question: 'Design a basic blog platform.', hint: 'Think about posts, comments, users.' },
-        { question: 'Design a contact management system.', hint: 'Cover data model and operations.' },
-        { question: 'Design a simple voting system.', hint: 'Prevent duplicate votes.' },
-        { question: 'Design a basic e-commerce cart.', hint: 'Handle add, remove, update.' },
-        { question: 'Design a simple notification system.', hint: 'Cover different notification types.' },
-        { question: 'Design a basic file upload service.', hint: 'Handle file storage and retrieval.' },
-        { question: 'Design a simple authentication system.', hint: 'Cover login, logout, sessions.' },
-        { question: 'Design a basic search functionality.', hint: 'Think about indexing.' },
-        { question: 'Design a simple calendar application.', hint: 'Handle events and reminders.' },
-        { question: 'Design a basic messaging system.', hint: 'One-to-one messaging.' },
-        { question: 'Design a simple rating system.', hint: 'Calculate averages.' },
-        { question: 'Design a basic booking system.', hint: 'Handle availability.' },
-        { question: 'Design a simple analytics dashboard.', hint: 'Display key metrics.' }
-      ],
-      medium: [
-        { question: 'Design Instagram.', hint: 'Cover feed, posts, likes, comments, and followers.' },
-        { question: 'Design Twitter.', hint: 'Focus on tweets, timeline, and following.' },
-        { question: 'Design a parking lot system.', hint: 'Handle different vehicle types and availability.' },
-        { question: 'Design an online bookstore.', hint: 'Cover inventory, orders, and payments.' },
-        { question: 'Design a ride-sharing service like Uber.', hint: 'Match drivers with riders efficiently.' },
-        { question: 'Design a food delivery app.', hint: 'Handle restaurants, orders, and delivery.' },
-        { question: 'Design a hotel booking system.', hint: 'Manage rooms, reservations, and availability.' },
-        { question: 'Design a movie ticket booking system.', hint: 'Handle seats, shows, and payments.' },
-        { question: 'Design a library management system.', hint: 'Track books, members, and loans.' },
-        { question: 'Design a job portal.', hint: 'Match candidates with jobs.' },
-        { question: 'Design an online learning platform.', hint: 'Handle courses, videos, and progress.' },
-        { question: 'Design a music streaming service.', hint: 'Cover playlists, recommendations, and streaming.' },
-        { question: 'Design a social media feed.', hint: 'Rank and display posts efficiently.' },
-        { question: 'Design a collaborative document editor.', hint: 'Handle real-time collaboration.' },
-        { question: 'Design a video conferencing system.', hint: 'Handle multiple participants and quality.' }
-      ],
-      hard: [
-        { question: 'Design YouTube.', hint: 'Cover video upload, processing, streaming, recommendations, and scale.' },
-        { question: 'Design Netflix.', hint: 'Focus on video streaming, CDN, recommendations, and global scale.' },
-        { question: 'Design WhatsApp.', hint: 'Handle billions of messages, end-to-end encryption, and real-time delivery.' },
-        { question: 'Design Google Search.', hint: 'Cover crawling, indexing, ranking, and distributed processing.' },
-        { question: 'Design Amazon.', hint: 'Handle inventory, orders, payments, recommendations at massive scale.' },
-        { question: 'Design Facebook News Feed.', hint: 'Rank billions of posts, handle real-time updates, and personalization.' },
-        { question: 'Design Dropbox.', hint: 'Handle file sync, conflict resolution, and storage at scale.' },
-        { question: 'Design a distributed cache like Redis.', hint: 'Cover consistency, replication, and fault tolerance.' },
-        { question: 'Design a rate limiting system for APIs.', hint: 'Handle millions of requests per second.' },
-        { question: 'Design a global payment system.', hint: 'Handle transactions, fraud detection, and compliance.' },
-        { question: 'Design a stock trading platform.', hint: 'Handle real-time data, low latency, and high throughput.' },
-        { question: 'Design a distributed database.', hint: 'Cover sharding, replication, and consistency.' },
-        { question: 'Design a recommendation engine.', hint: 'Handle personalization at scale with ML.' },
-        { question: 'Design a distributed message queue.', hint: 'Ensure reliability, ordering, and scalability.' },
-        { question: 'Design a monitoring and alerting system.', hint: 'Handle metrics from millions of servers.' }
-      ]
-    }
-  }
+  // Chat interface answer state
+  const [userAnswer, setUserAnswer] = useState('');
 
-  // Generate questions based on settings
-  const generateQuestions = () => {
-    const bank = questionBanks[interviewType as keyof typeof questionBanks][difficulty as keyof typeof questionBanks.behavioral]
-    const shuffled = [...bank].sort(() => Math.random() - 0.5)
-    const selected = shuffled.slice(0, questionCount).map((q, index) => ({
-      id: index + 1,
-      question: q.question,
-      hint: q.hint
-    }))
-    setQuestions(selected)
-  }
+  // Finished report state
+  const [reportData] = useState<SessionReportResponse | null>(null);
+  const [fetchingReport] = useState(false);
+  const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null);
 
+  // Load history and analytics on mount
   useEffect(() => {
-    generateQuestions()
-  }, [interviewType, difficulty, questionCount])
+    loadHistory();
+    loadAnalytics();
+  }, []);
 
-  const startInterview = () => {
-    generateQuestions()
-    setIsInterviewActive(true)
-    setCurrentQuestion(0)
-    setAnswers([])
-    toast.success(`Interview started! ${questionCount} questions to answer.`)
-  }
-
-  const endInterview = () => {
-    setIsInterviewActive(false)
-    toast.success(`Interview completed! You answered ${answers.length} questions.`)
-  }
-
-  const submitAnswer = () => {
-    if (!userAnswer.trim()) {
-      toast.error('Please provide an answer')
-      return
-    }
-
-    setIsTyping(true)
-    
-    setTimeout(() => {
-      setAnswers([...answers, userAnswer])
-      setUserAnswer('')
-      setIsTyping(false)
-      
-      if (currentQuestion < questions.length - 1) {
-        toast.success('Answer submitted! Next question...')
-        setTimeout(() => {
-          setCurrentQuestion(currentQuestion + 1)
-        }, 1000)
-      } else {
-        toast.success('All questions answered!')
-        setTimeout(() => {
-          endInterview()
-        }, 1500)
+  const triggerEvaluation = async () => {
+    if (completingSession) return;
+    try {
+      const result = await finishSession();
+      if (result) {
+        navigate(`/mock-interview/report/${result.sessionId}`);
       }
-    }, 1500)
-  }
-
-  const skipQuestion = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-      setUserAnswer('')
-      toast('Question skipped')
+    } catch (error) {
+      // Handled in custom hook
     }
-  }
+  };
+
+  const handleEndInterview = async () => {
+    if (window.confirm('Are you sure you want to end the interview now? Your answers so far will be evaluated.')) {
+      triggerEvaluation();
+    }
+  };
+
+  // Monitor active session status and transition view modes
+  useEffect(() => {
+    if (activeSession) {
+      setViewMode('interview');
+      // Automatically trigger evaluation if session is complete (all questions answered)
+      if (activeSession.currentQuestionIndex >= activeSession.questionCount && !completingSession) {
+        triggerEvaluation();
+      }
+    } else {
+      setViewMode('setup');
+    }
+  }, [activeSession, completingSession]);
+
+  const handleStartInterview = async () => {
+    if (!jobDescription.trim()) {
+      toast.error('Please provide the target Job Description');
+      return;
+    }
+    if (!resumeText.trim()) {
+      toast.error('Please paste your Resume content');
+      return;
+    }
+
+    try {
+      await startNewSession({
+        jobDescription,
+        resumeText,
+        selfDescription,
+        candidateWeaknesses,
+        interviewType,
+        difficulty,
+        questionCount
+      });
+      setUserAnswer('');
+    } catch (error) {
+      // Handled in custom hook
+    }
+  };
+
+  const handleSubmitAnswer = async () => {
+    if (!userAnswer.trim()) {
+      toast.error('Please enter your response');
+      return;
+    }
+
+    if (userAnswer.trim().length < 20) {
+      toast.error('Answer is too short. Please provide a more detailed answer.');
+      return;
+    }
+
+    try {
+      await submitResponse(userAnswer, false);
+      setUserAnswer('');
+    } catch (error) {
+      // Handled in custom hook
+    }
+  };
+
+  const handleSkipQuestion = async () => {
+    try {
+      await submitResponse('', true);
+      setUserAnswer('');
+    } catch (error) {
+      // Handled in custom hook
+    }
+  };
+
+  const viewPastReport = (sessionId: string) => {
+    navigate(`/mock-interview/report/${sessionId}`);
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return 'text-accent-green border-accent-green/20 bg-accent-green/10';
+    if (score >= 60) return 'text-accent-cyan border-accent-cyan/20 bg-accent-cyan/10';
+    if (score >= 40) return 'text-accent-yellow border-accent-yellow/20 bg-accent-yellow/10';
+    return 'text-accent-pink border-accent-pink/20 bg-accent-pink/10';
+  };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen text-slate-800 dark:text-slate-100 transition-colors">
+      
+      {/* Title Header */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <MessageSquare className="w-8 h-8 text-accent-green" />
-          <h1 className="text-4xl font-black">Mock Interview</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <MessageSquare className="w-8 h-8 text-accent-green" />
+              <h1 className="text-4xl font-black bg-gradient-to-r from-accent-green to-accent-cyan bg-clip-text text-transparent">
+                AI Mock Interview
+              </h1>
+            </div>
+            <p className="text-text-secondary text-sm dark:text-slate-400">
+              Interactive, profile-aware mock interviews with instant evaluation scorecard reports.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                if (activeSession) {
+                  if (window.confirm('You have an active interview session. Are you sure you want to abandon it and start a new one?')) {
+                    cancelActiveSession();
+                    setViewMode('setup');
+                    navigate('/mock-interview');
+                  }
+                } else {
+                  setViewMode('setup');
+                  navigate('/mock-interview');
+                }
+              }}
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border ${viewMode === 'setup' ? 'bg-accent-green/10 border-accent-green/30 text-accent-green' : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'}`}
+              disabled={loading}
+            >
+              Start New
+            </button>
+            <button
+              onClick={() => navigate('/mock-interview/history')}
+              className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+              disabled={!!activeSession}
+            >
+              <History className="w-4 h-4 inline mr-1" />
+              History
+            </button>
+            <button
+              onClick={() => navigate('/mock-interview/analytics')}
+              className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+              disabled={!!activeSession}
+            >
+              <TrendingUp className="w-4 h-4 inline mr-1" />
+              Analytics
+            </button>
+          </div>
         </div>
-        <p className="text-text-secondary text-lg mb-8">
-          Practice with AI interviewer - Text-based simulation
-        </p>
       </motion.div>
 
+      {/* Main Container Grid */}
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Main Interview Area */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Interview Status Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative p-8 bg-gradient-to-br from-accent-green/20 to-accent-cyan/20 rounded-2xl border border-accent-green/30 overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-accent-green/10 to-accent-cyan/10 animate-pulse" />
-            
-            <div className="relative z-10">
-              {!isInterviewActive ? (
-                <div className="text-center py-12">
-                  <div className="w-24 h-24 rounded-full bg-accent-green/20 flex items-center justify-center mx-auto mb-6">
-                    <Sparkles className="w-12 h-12 text-accent-green" />
-                  </div>
-                  <h2 className="text-3xl font-bold mb-4">Ready to Start?</h2>
-                  <p className="text-text-secondary mb-8 max-w-md mx-auto">
-                    This is a text-based AI interview simulation. Answer questions thoughtfully and get instant feedback.
-                  </p>
-                  <button
-                    onClick={startInterview}
-                    className="px-8 py-4 bg-accent-green text-white font-bold rounded-xl hover:bg-accent-green/90 transition-all hover:scale-105 flex items-center gap-2 mx-auto"
-                  >
-                    <Play className="w-5 h-5" />
-                    Start Interview
-                  </button>
-                </div>
-              ) : (
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse" />
-                      <span className="font-semibold">Interview in Progress</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-text-muted">
-                      <Clock className="w-4 h-4" />
-                      <span>Question {currentQuestion + 1} of {questions.length}</span>
-                    </div>
-                  </div>
+        
+        {/* ======================================================== */}
+        {/* SETUP SCREEN */}
+        {/* ======================================================== */}
+        {viewMode === 'setup' && (
+          <div className="lg:col-span-2 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="p-6 md:p-8 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-850 rounded-3xl space-y-6 shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <Sparkles className="w-6 h-6 text-accent-green" />
+                <h2 className="text-2xl font-bold">Configure Your Profile Context</h2>
+              </div>
 
-                  {/* Progress Bar */}
-                  <div className="w-full h-2 bg-bg-tertiary rounded-full mb-6 overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-                      className="h-full bg-gradient-to-r from-accent-green to-accent-cyan"
-                      transition={{ duration: 0.5 }}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-1 flex items-center justify-between">
+                    <span>Target Job Description *</span>
+                    <span className="text-xs text-slate-400 font-normal">Details of the target role</span>
+                  </label>
+                  <textarea
+                    value={jobDescription}
+                    onChange={(e) => setJobDescription(e.target.value)}
+                    placeholder="Paste the target job description details here..."
+                    rows={5}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-accent-green focus:ring-2 focus:ring-accent-green/20 transition-all text-sm resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-1 flex items-center justify-between">
+                    <span>Resume Content *</span>
+                    <span className="text-xs text-slate-400 font-normal">Paste your raw resume text</span>
+                  </label>
+                  <textarea
+                    value={resumeText}
+                    onChange={(e) => setResumeText(e.target.value)}
+                    placeholder="Paste your resume content, projects, achievements, and work experience here..."
+                    rows={5}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-accent-green focus:ring-2 focus:ring-accent-green/20 transition-all text-sm resize-none"
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-1">Self Description (Optional)</label>
+                    <textarea
+                      value={selfDescription}
+                      onChange={(e) => setSelfDescription(e.target.value)}
+                      placeholder="e.g. 3 years exp, looking to switch to React frameworks..."
+                      rows={3}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-accent-green focus:ring-2 focus:ring-accent-green/20 transition-all text-sm resize-none"
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold mb-1">Stated Weaknesses (Optional)</label>
+                    <textarea
+                      value={candidateWeaknesses}
+                      onChange={(e) => setCandidateWeaknesses(e.target.value)}
+                      placeholder="e.g. Weak in testing, lack of AWS sharding knowledge..."
+                      rows={3}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-accent-green focus:ring-2 focus:ring-accent-green/20 transition-all text-sm resize-none"
+                    />
+                  </div>
+                </div>
+              </div>
 
-                  {/* AI Question */}
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentQuestion}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      className="mb-6"
-                    >
-                      <div className="flex items-start gap-4 p-6 bg-bg-secondary rounded-xl border border-border-subtle">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-cyan to-accent-purple flex items-center justify-center flex-shrink-0">
-                          <Sparkles className="w-5 h-5 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-sm text-accent-cyan font-semibold mb-2">AI Interviewer</div>
-                          <p className="text-lg mb-3">{questions[currentQuestion].question}</p>
-                          <div className="flex items-start gap-2 text-sm text-text-muted">
-                            <span className="text-accent-yellow">💡</span>
-                            <span>{questions[currentQuestion].hint}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
+              <button
+                onClick={handleStartInterview}
+                disabled={loading || !jobDescription.trim() || !resumeText.trim()}
+                className="w-full py-4 bg-gradient-to-r from-accent-green to-accent-cyan text-white font-bold rounded-2xl shadow-lg shadow-accent-green/10 hover:shadow-accent-green/20 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    AI Generating Custom Interview questions...
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-5 h-5" />
+                    Generate Session & Start Interview
+                  </>
+                )}
+              </button>
+            </motion.div>
+          </div>
+        )}
 
-                  {/* Answer Input */}
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Your Answer</label>
-                      <textarea
-                        value={userAnswer}
-                        onChange={(e) => setUserAnswer(e.target.value)}
-                        placeholder="Type your answer here... Be specific and use examples."
-                        rows={6}
-                        className="w-full px-4 py-3 bg-bg-tertiary border border-border-subtle rounded-xl focus:outline-none focus:border-accent-cyan transition-colors resize-none"
-                        disabled={isTyping}
-                      />
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="text-sm text-text-muted">
-                          {userAnswer.length} characters
-                        </span>
-                        <span className="text-sm text-text-muted">
-                          Aim for 100-300 words
-                        </span>
-                      </div>
+        {/* ======================================================== */}
+        {/* INTERVIEW CHAT SCREEN */}
+        {/* ======================================================== */}
+        {viewMode === 'interview' && activeSession && (
+          <div className="lg:col-span-2 space-y-6">
+            {completingSession || activeSession.currentQuestionIndex >= activeSession.questionCount ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-8 md:p-12 text-center bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-850 rounded-3xl flex flex-col items-center justify-center gap-6 shadow-sm min-h-[400px]"
+              >
+                {completingSession ? (
+                  <>
+                    <div className="relative">
+                      <div className="w-16 h-16 border-4 border-accent-green border-t-transparent rounded-full animate-spin" />
+                      <Sparkles className="w-6 h-6 text-accent-cyan absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" />
                     </div>
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-bold bg-gradient-to-r from-accent-green to-accent-cyan bg-clip-text text-transparent animate-pulse">
+                        Evaluating Your Performance
+                      </h3>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md mx-auto">
+                        Our AI interviewer is grading your responses, building category matrices, and compiling your action roadmap. This will only take a moment...
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="w-12 h-12 text-accent-pink animate-bounce" />
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+                        Evaluation Failed / Interrupted
+                      </h3>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md mx-auto">
+                        All questions have been answered, but the evaluation report generation was interrupted or failed.
+                      </p>
+                    </div>
+                    <button
+                      onClick={triggerEvaluation}
+                      className="px-6 py-3 bg-accent-green hover:bg-accent-green/90 text-white font-bold rounded-xl shadow-lg transition-all"
+                    >
+                      Retry Report Generation
+                    </button>
+                  </>
+                )}
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-6 md:p-8 bg-gradient-to-br from-accent-green/10 to-accent-cyan/10 dark:from-slate-900 dark:to-slate-950 border border-accent-green/20 dark:border-slate-850 rounded-3xl relative overflow-hidden shadow-sm"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-3 h-3 rounded-full bg-accent-green animate-pulse" />
+                    <span className="font-bold text-sm text-accent-green uppercase tracking-wide">Live Mock Interview</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Question {activeSession.currentQuestionIndex + 1} of {activeSession.questionCount}</span>
+                  </div>
+                </div>
 
-                    <div className="flex items-center gap-3">
+                {/* Progress bar */}
+                <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-8 overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${((activeSession.currentQuestionIndex + 1) / activeSession.questionCount) * 100}%` }}
+                    className="h-full bg-gradient-to-r from-accent-green to-accent-cyan"
+                    transition={{ duration: 0.4 }}
+                  />
+                </div>
+
+                {/* Question Panel */}
+                <div className="mb-6 p-5 bg-white/80 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl flex gap-4 shadow-sm">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-cyan to-accent-green flex items-center justify-center flex-shrink-0 text-white font-bold shadow-md">
+                    AI
+                  </div>
+                  <div className="space-y-3">
+                    <div className="text-xs font-bold uppercase text-accent-cyan tracking-wider">Interviewer Prompt</div>
+                    <p className="text-base md:text-lg leading-relaxed font-semibold">
+                      {activeSession.currentQuestion.questionText}
+                    </p>
+                    {activeSession.currentQuestion.hint && (
+                      <div className="p-3 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-xl text-xs text-slate-500 dark:text-slate-400 flex items-start gap-2">
+                        <span className="text-accent-yellow">💡</span>
+                        <span>{activeSession.currentQuestion.hint}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Input Area */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Write Your Answer</label>
+                    <textarea
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      placeholder="Provide a detailed answer. Incorporate specific projects, metrics, or technologies where appropriate..."
+                      rows={6}
+                      disabled={submittingAnswer || completingSession}
+                      className="w-full px-4 py-3 bg-white/80 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-accent-cyan focus:ring-2 focus:ring-accent-cyan/20 transition-all text-sm resize-none"
+                    />
+                    <div className="flex items-center justify-between mt-2 text-xs text-slate-400 font-medium">
+                      <span>{userAnswer.length} characters</span>
+                      <span>Aim for 200+ characters for accurate evaluation</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    {activeSession.currentQuestionIndex < activeSession.questionCount - 1 ? (
+                      <>
+                        <button
+                          onClick={handleSubmitAnswer}
+                          disabled={submittingAnswer || !userAnswer.trim()}
+                          className="flex-1 py-3 px-6 bg-accent-cyan text-slate-950 font-bold rounded-xl shadow-lg shadow-accent-cyan/10 hover:shadow-accent-cyan/20 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        >
+                          {submittingAnswer ? (
+                            <>
+                              <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                              Submitting...
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-4 h-4" />
+                              Submit Answer
+                            </>
+                          )}
+                        </button>
+                        
+                        <button
+                          onClick={handleSkipQuestion}
+                          disabled={submittingAnswer}
+                          className="py-3 px-6 border border-slate-200 dark:border-slate-800 hover:border-slate-350 dark:hover:border-slate-700 text-slate-500 dark:text-slate-400 font-semibold rounded-xl transition-all"
+                        >
+                          Skip Question
+                        </button>
+                      </>
+                    ) : (
                       <button
-                        onClick={submitAnswer}
-                        disabled={isTyping || !userAnswer.trim()}
-                        className="flex-1 px-6 py-3 bg-accent-cyan text-bg-primary font-bold rounded-xl hover:bg-accent-cyan/90 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+                        onClick={handleSubmitAnswer}
+                        disabled={submittingAnswer || completingSession || !userAnswer.trim()}
+                        className="flex-1 py-3 px-6 bg-accent-green text-white font-bold rounded-xl shadow-lg shadow-accent-green/10 hover:shadow-accent-green/20 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {isTyping ? (
+                        {submittingAnswer ? (
                           <>
-                            <div className="w-5 h-5 border-2 border-bg-primary border-t-transparent rounded-full animate-spin" />
-                            Processing...
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Submitting...
                           </>
                         ) : (
                           <>
-                            <Send className="w-5 h-5" />
-                            Submit Answer
+                            <CheckCircle2 className="w-4 h-4" />
+                            Submit Final Answer & Grade
                           </>
                         )}
                       </button>
-                      
-                      {currentQuestion < questions.length - 1 && (
-                        <button
-                          onClick={skipQuestion}
-                          disabled={isTyping}
-                          className="px-6 py-3 bg-bg-tertiary border border-border-subtle text-text-secondary font-semibold rounded-xl hover:border-border-accent transition-all disabled:opacity-50"
-                        >
-                          Skip
-                        </button>
-                      )}
+                    )}
 
-                      <button
-                        onClick={endInterview}
-                        disabled={isTyping}
-                        className="px-6 py-3 bg-accent-pink/10 text-accent-pink font-semibold rounded-xl hover:bg-accent-pink/20 transition-all disabled:opacity-50 flex items-center gap-2"
-                      >
-                        <Square className="w-4 h-4" />
-                        End
-                      </button>
+                    <button
+                      onClick={handleEndInterview}
+                      disabled={completingSession || submittingAnswer}
+                      className="py-3 px-6 bg-accent-pink/15 text-accent-pink border border-accent-pink/20 hover:bg-accent-pink/20 font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+                    >
+                      <Square className="w-4 h-4 fill-current" />
+                      End Session
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* REPORT SCREEN */}
+        {/* ======================================================== */}
+        {viewMode === 'report' && (
+          <div className="lg:col-span-2 space-y-6">
+            {fetchingReport ? (
+              <div className="p-12 text-center bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-3xl flex flex-col items-center gap-4">
+                <div className="w-10 h-10 border-4 border-accent-green border-t-transparent rounded-full animate-spin" />
+                <p className="text-slate-500 font-medium">Fetching evaluation scorecard from server...</p>
+              </div>
+            ) : reportData ? (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="space-y-6"
+              >
+                {/* Score Summary */}
+                <div className="grid md:grid-cols-3 gap-6">
+                  {/* Circle Score */}
+                  <div className="p-6 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-3xl flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-accent-green/5 rounded-full blur-2xl" />
+                    <div className="flex items-center gap-1.5 self-start text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
+                      <Award className="w-4 h-4 text-accent-green" />
+                      <span>Mock Interview Score</span>
+                    </div>
+
+                    <div className="relative flex items-center justify-center w-28 h-28 my-2">
+                      <svg className="w-full h-full transform -rotate-90">
+                        <circle cx="56" cy="56" r="46" className="stroke-slate-100 dark:stroke-slate-800 fill-none" strokeWidth="6" />
+                        <circle
+                          cx="56"
+                          cy="56"
+                          r="46"
+                          className="stroke-accent-green fill-none transition-all duration-1000"
+                          strokeWidth="6"
+                          strokeDasharray="289"
+                          strokeDashoffset={289 - (289 * reportData.overallScore) / 100}
+                        />
+                      </svg>
+                      <span className="absolute text-2xl font-black">{reportData.overallScore}%</span>
+                    </div>
+
+                    <div className="mt-4">
+                      <h3 className="text-sm font-bold">
+                        {reportData.overallScore >= 80 ? 'Excellent Prep Match!' : reportData.overallScore >= 60 ? 'Good Match, minor gaps' : 'Requires optimization'}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Dimensions scores */}
+                  <div className="p-6 md:col-span-2 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-3xl shadow-sm space-y-4">
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <TrendingUp className="w-4 h-4 text-accent-cyan" />
+                      <span>Competency Matrix Breakdowns</span>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-2 gap-3 text-xs">
+                      {Object.entries(reportData.categoryScores).map(([key, val]) => (
+                        <div key={key} className="space-y-1">
+                          <div className="flex justify-between font-semibold">
+                            <span className="capitalize text-slate-500">{key.replace(/([A-Z])/g, ' $1')}</span>
+                            <span className="font-bold">{val}%</span>
+                          </div>
+                          <div className="h-2 bg-slate-100 dark:bg-slate-850 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-accent-cyan" 
+                              style={{ width: `${val}%` }} 
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-          </motion.div>
 
-          {/* Answered Questions */}
-          {answers.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="p-6 bg-bg-secondary rounded-2xl border border-border-subtle"
-            >
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-accent-green" />
-                Answered Questions ({answers.length})
-              </h3>
-              <div className="space-y-3">
-                {answers.map((answer, index) => (
-                  <div key={index} className="p-4 bg-bg-tertiary rounded-xl">
-                    <div className="text-sm text-text-muted mb-2">
-                      Q{index + 1}: {questions[index].question}
-                    </div>
-                    <div className="text-sm text-text-secondary line-clamp-2">
-                      {answer}
+                {/* Improvements and Actions Plan */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Improvements Areas */}
+                  <div className="p-6 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-3xl shadow-sm space-y-4">
+                    <h3 className="text-lg font-bold text-accent-pink flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4" />
+                      Key Improvement Areas
+                    </h3>
+                    {reportData.keyImprovementAreas.length > 0 ? (
+                      <ul className="space-y-2.5 text-xs md:text-sm text-slate-500 dark:text-slate-450 leading-relaxed">
+                        {reportData.keyImprovementAreas.map((item, idx) => (
+                          <li key={idx} className="flex gap-2 items-start">
+                            <span className="text-accent-pink font-bold">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-slate-400">Excellent responses! No major weaknesses flagged.</p>
+                    )}
+                  </div>
+
+                  {/* Actions Timeline */}
+                  <div className="p-6 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-3xl shadow-sm space-y-4">
+                    <h3 className="text-lg font-bold text-accent-green flex items-center gap-2">
+                      <BookOpen className="w-4 h-4" />
+                      Action Preparation Plan
+                    </h3>
+                    <div className="space-y-3.5">
+                      {reportData.actionPlan.map((action, idx) => (
+                        <div key={idx} className="flex gap-3 text-xs">
+                          <div className="w-5 h-5 rounded-full bg-accent-green/10 border border-accent-green/20 text-accent-green flex items-center justify-center font-bold flex-shrink-0">
+                            {action.step}
+                          </div>
+                          <div className="space-y-1">
+                            <h4 className="font-bold text-slate-800 dark:text-slate-200">{action.topic}</h4>
+                            <p className="text-slate-500 leading-normal">{action.details}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+
+                {/* Q&A Accordion Reviews */}
+                <div className="bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-3xl p-6 shadow-sm space-y-4">
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-accent-cyan" />
+                    Question-by-Question Evaluation Logs
+                  </h3>
+
+                  <div className="space-y-4">
+                    {reportData.questionsAndAnswers.map((qa, idx) => {
+                      const isExpanded = expandedQuestion === idx;
+                      return (
+                        <div key={idx} className="border border-slate-150 dark:border-slate-850 rounded-2xl bg-white/40 dark:bg-slate-950/20 overflow-hidden">
+                          <button
+                            onClick={() => setExpandedQuestion(isExpanded ? null : idx)}
+                            className="w-full flex items-center justify-between p-4 text-left group"
+                          >
+                            <div className="flex-1 pr-4">
+                              <div className="flex items-center gap-3 mb-1.5">
+                                <span className="text-xs font-bold text-accent-cyan uppercase">Question {qa.questionNumber}</span>
+                                <span className={`text-[10px] font-bold px-2 py-0.5 border rounded-full ${getScoreColor(qa.score)}`}>
+                                  Score: {qa.score}%
+                                </span>
+                                <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded-full capitalize">
+                                  {qa.source.replace(/([A-Z])/g, ' $1')}
+                                </span>
+                              </div>
+                              <h4 className="text-sm md:text-base font-bold text-slate-800 dark:text-slate-200 group-hover:text-accent-cyan transition-colors">
+                                {qa.questionText}
+                              </h4>
+                            </div>
+                            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                          </button>
+
+                          <AnimatePresence>
+                            {isExpanded && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="border-t border-slate-150 dark:border-slate-850 p-4 bg-slate-50/50 dark:bg-slate-950/40 text-xs md:text-sm space-y-4"
+                              >
+                                {/* Response Text */}
+                                <div>
+                                  <div className="font-bold text-slate-500 uppercase tracking-wider text-[10px] mb-1">Your Answer:</div>
+                                  <p className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl leading-relaxed italic">
+                                    {qa.isSkipped ? '[No Answer Submitted / Skipped]' : `"${qa.answerText}"`}
+                                  </p>
+                                </div>
+
+                                {/* Strengths / Weaknesses list */}
+                                <div className="grid md:grid-cols-2 gap-4">
+                                  <div className="space-y-1.5">
+                                    <div className="font-bold text-accent-green uppercase tracking-wider text-[10px]">Strengths:</div>
+                                    {qa.strengths.length > 0 ? (
+                                      <ul className="list-disc pl-4 space-y-1 text-slate-500 leading-normal">
+                                        {qa.strengths.map((s, sIdx) => <li key={sIdx}>{s}</li>)}
+                                      </ul>
+                                    ) : <p className="text-slate-400 italic">No specific strengths listed.</p>}
+                                  </div>
+                                  <div className="space-y-1.5">
+                                    <div className="font-bold text-accent-pink uppercase tracking-wider text-[10px]">Weaknesses:</div>
+                                    {qa.weaknesses.length > 0 ? (
+                                      <ul className="list-disc pl-4 space-y-1 text-slate-500 leading-normal">
+                                        {qa.weaknesses.map((w, wIdx) => <li key={wIdx}>{w}</li>)}
+                                      </ul>
+                                    ) : <p className="text-slate-400 italic">No weaknesses found.</p>}
+                                  </div>
+                                </div>
+
+                                {/* Better answer suggestions */}
+                                {qa.betterAnswer && (
+                                  <div className="space-y-1.5 pt-2 border-t border-slate-150 dark:border-slate-850">
+                                    <div className="font-bold text-accent-cyan uppercase tracking-wider text-[10px] flex items-center gap-1">
+                                      <Code2 className="w-3.5 h-3.5" />
+                                      AI Model Answer Suggestion:
+                                    </div>
+                                    <p className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl leading-relaxed text-slate-600 dark:text-slate-350">
+                                      {qa.betterAnswer}
+                                    </p>
+                                  </div>
+                                )}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <div className="p-8 text-center text-slate-400">Report details missing. Try refreshing the session.</div>
+            )}
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* HISTORY SCREEN */}
+        {/* ======================================================== */}
+        {viewMode === 'history' && (
+          <div className="lg:col-span-2 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="p-6 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-3xl shadow-sm space-y-6"
+            >
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <History className="w-6 h-6 text-accent-cyan" />
+                Mock Interview Logs
+              </h2>
+
+              {loading ? (
+                <div className="py-12 text-center text-slate-400">Loading history logs...</div>
+              ) : history.length === 0 ? (
+                <div className="py-12 text-center text-slate-400 flex flex-col items-center gap-3">
+                  <XCircle className="w-8 h-8 text-slate-350" />
+                  <p>No completed interviews found. Start your first session to receive evaluations.</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-slate-100 dark:divide-slate-800 space-y-1">
+                  {history.map((item) => (
+                    <div 
+                      key={item._id || item.sessionId} 
+                      className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4 group hover:bg-slate-50/50 dark:hover:bg-slate-950/20 px-2 rounded-xl transition-all"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="font-bold text-accent-cyan uppercase">{item.interviewType}</span>
+                          <span className="text-slate-400">•</span>
+                          <span className="capitalize text-slate-400">{item.difficulty}</span>
+                        </div>
+                        <h4 className="text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">
+                          {item.questionCount} Questions Mock Prep
+                        </h4>
+                        <p className="text-xs text-slate-400">
+                          {new Date(item.createdAt).toLocaleDateString(undefined, {
+                            dateStyle: 'medium'
+                          })}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className={`text-sm font-extrabold px-3 py-1 border rounded-lg ${getScoreColor(item.overallScore)}`}>
+                          {item.overallScore}%
+                        </div>
+                        <button
+                          onClick={() => viewPastReport(item._id || item.sessionId)}
+                          className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition-all"
+                        >
+                          View Report
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* SIDEBAR */}
+        {/* ======================================================== */}
+        <div className="space-y-6">
+          
+          {/* Active session cancel indicator */}
+          {activeSession && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="p-5 bg-accent-pink/10 border border-accent-pink/20 rounded-2xl space-y-3"
+            >
+              <h3 className="font-bold text-sm text-accent-pink flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4 animate-pulse" />
+                Active Session Detected
+              </h3>
+              <p className="text-xs text-slate-500 leading-normal">
+                You are currently in an active mock interview. Exiting or reloading does not lose your state, but to start a new configuration, you must abandon this.
+              </p>
+              <button
+                onClick={cancelActiveSession}
+                className="w-full py-2 bg-accent-pink text-white font-bold text-xs rounded-lg shadow-md hover:bg-accent-pink/90 transition-all"
+              >
+                Abandon Active Session
+              </button>
             </motion.div>
           )}
-        </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
+          {/* Configuration Settings Panel */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="p-6 bg-bg-secondary rounded-2xl border border-border-subtle"
+            className="p-6 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-2xl shadow-sm space-y-4"
           >
-            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <SettingsIcon className="w-5 h-5" />
-              Interview Settings
+            <h3 className="text-lg font-bold flex items-center gap-2">
+              <SettingsIcon className="w-4 h-4 text-slate-400" />
+              Session Settings
             </h3>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold mb-2">Interview Type</label>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1.5">Interview Type</label>
                 <select 
                   value={interviewType}
                   onChange={(e) => setInterviewType(e.target.value)}
-                  disabled={isInterviewActive}
-                  className="w-full px-4 py-2 bg-bg-tertiary border border-border-subtle rounded-lg focus:outline-none focus:border-accent-cyan disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={!!activeSession}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:border-accent-green disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="behavioral">Behavioral</option>
                   <option value="technical">Technical</option>
@@ -456,12 +826,12 @@ const MockInterview = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-2">Difficulty</label>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1.5">Difficulty</label>
                 <select 
                   value={difficulty}
                   onChange={(e) => setDifficulty(e.target.value)}
-                  disabled={isInterviewActive}
-                  className="w-full px-4 py-2 bg-bg-tertiary border border-border-subtle rounded-lg focus:outline-none focus:border-accent-cyan disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={!!activeSession}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:border-accent-green disabled:opacity-50"
                 >
                   <option value="easy">Easy</option>
                   <option value="medium">Medium</option>
@@ -470,89 +840,68 @@ const MockInterview = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-2">Number of Questions</label>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide mb-1.5">Question Count</label>
                 <select 
                   value={questionCount}
                   onChange={(e) => setQuestionCount(Number(e.target.value))}
-                  disabled={isInterviewActive}
-                  className="w-full px-4 py-2 bg-bg-tertiary border border-border-subtle rounded-lg focus:outline-none focus:border-accent-cyan disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={!!activeSession}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg focus:outline-none focus:border-accent-green disabled:opacity-50"
                 >
-                  <option value={5}>5 questions</option>
-                  <option value={10}>10 questions</option>
-                  <option value={15}>15 questions</option>
+                  <option value={5}>5 Questions</option>
+                  <option value={10}>10 Questions</option>
+                  <option value={15}>15 Questions</option>
                 </select>
               </div>
+            </div>
+          </motion.div>
 
-              {!isInterviewActive && (
-                <div className="p-3 bg-accent-cyan/10 border border-accent-cyan/30 rounded-lg">
-                  <p className="text-sm text-accent-cyan">
-                    <strong>Selected:</strong> {questionCount} {interviewType} questions ({difficulty})
-                  </p>
+          {/* Quick Analytics Summary Panel */}
+          {analytics && analytics.totalInterviews > 0 && !activeSession && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+              className="p-6 bg-white/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850 rounded-2xl shadow-sm space-y-4"
+            >
+              <h3 className="font-bold flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-accent-cyan" />
+                Aggregated Stats
+              </h3>
+              <div className="space-y-3 text-xs md:text-sm">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Total Interviews</span>
+                  <span className="font-bold">{analytics.totalInterviews}</span>
                 </div>
-              )}
-            </div>
-          </motion.div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Average Score</span>
+                  <span className="font-bold text-accent-green">{analytics.averageOverallScore}%</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400 font-normal">Type Breakdown:</span>
+                </div>
+                <div className="pl-3 space-y-1.5 text-xs text-slate-450">
+                  <div className="flex justify-between">
+                    <span>Technical</span>
+                    <span>{analytics.typeDistribution.technical} sessions</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Behavioral</span>
+                    <span>{analytics.typeDistribution.behavioral} sessions</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>System Design</span>
+                    <span>{analytics.typeDistribution['system-design']} sessions</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="p-6 bg-gradient-to-br from-accent-green/20 to-accent-cyan/20 rounded-2xl border border-accent-green/30"
-          >
-            <h3 className="font-bold mb-3 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-accent-cyan" />
-              Interview Tips
-            </h3>
-            <ul className="space-y-2 text-sm text-text-secondary">
-              <li className="flex items-start gap-2">
-                <span className="text-accent-green mt-1">✓</span>
-                <span>Use the STAR method for behavioral questions</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-accent-green mt-1">✓</span>
-                <span>Be specific and use real examples</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-accent-green mt-1">✓</span>
-                <span>Take your time to think before answering</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-accent-green mt-1">✓</span>
-                <span>Aim for 100-300 words per answer</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-accent-green mt-1">✓</span>
-                <span>Show enthusiasm and confidence</span>
-              </li>
-            </ul>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="p-6 bg-bg-secondary rounded-2xl border border-border-subtle"
-          >
-            <h3 className="font-bold mb-3">Your Progress</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-text-muted">Interviews Completed</span>
-                <span className="font-semibold">12</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-text-muted">Average Score</span>
-                <span className="font-semibold text-accent-green">85%</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-text-muted">Total Questions</span>
-                <span className="font-semibold">60</span>
-              </div>
-            </div>
-          </motion.div>
         </div>
+
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MockInterview
+export default MockInterview;

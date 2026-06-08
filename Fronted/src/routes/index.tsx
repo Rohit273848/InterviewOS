@@ -13,6 +13,9 @@ import ResumeXRay from '../pages/ResumeXRay'
 import QuestionBank from '../pages/QuestionBank'
 import ProjectPrep from '../pages/ProjectPrep'
 import MockInterview from '../pages/MockInterview'
+import MockInterviewReport from '../pages/MockInterviewReport'
+import InterviewHistory from '../pages/InterviewHistory'
+import InterviewAnalytics from '../pages/InterviewAnalytics'
 import PeerReview from '../pages/PeerReview'
 import Admin from '../pages/Admin'
 
@@ -54,6 +57,9 @@ const AppRoutes = () => {
         <Route path="/question-bank" element={<QuestionBank />} />
         <Route path="/project-prep" element={<ProjectPrep />} />
         <Route path="/mock-interview" element={<MockInterview />} />
+        <Route path="/mock-interview/report/:id" element={<MockInterviewReport />} />
+        <Route path="/mock-interview/history" element={<InterviewHistory />} />
+        <Route path="/mock-interview/analytics" element={<InterviewAnalytics />} />
         <Route path="/peer-review" element={<PeerReview />} />
         <Route path="/admin" element={<Admin />} />
       </Route>

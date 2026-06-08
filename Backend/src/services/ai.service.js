@@ -157,6 +157,10 @@ export const generateInterviewStrategy = async (jobDescription, resumeText, self
             return mockResponse;
         }
 
+        if (apiKey.startsWith("AQ.")) {
+            console.warn("⚠️ WARNING: GOOGLE_API_KEY starts with 'AQ.'. This represents a Google Cloud OAuth Access Token, NOT a standard Google AI Studio developer key. Standard AI Studio APIs do not support OAuth tokens in the apiKey field and will fail with 401 Unauthorized [ACCESS_TOKEN_TYPE_UNSUPPORTED]. Please replace this with a standard AI Studio key starting with 'AIzaSy' in your Backend/.env file.");
+        }
+
         const model = new ChatGoogleGenerativeAI({
             model: "gemini-2.5-flash",
             apiKey,
