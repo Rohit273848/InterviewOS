@@ -68,8 +68,8 @@ const Layout = () => {
     { path: '/dashboard', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard' },
     { path: '/resume-xray', icon: <Sparkles className="w-5 h-5" />, label: 'Resume X-Ray' },
     { path: '/mock-interview', icon: <Video className="w-5 h-5" />, label: 'AI Mock Interview' },
-    { path: '/question-bank', icon: <Database className="w-5 h-5" />, label: 'Question Bank' },
     { path: '/project-prep', icon: <FolderGit2 className="w-5 h-5" />, label: 'Project Prep' },
+    { path: '/question-bank', icon: <Database className="w-5 h-5" />, label: 'Question Bank' },
     { path: '/peer-review', icon: <Users className="w-5 h-5" />, label: 'Peer Review' },
   ]
 

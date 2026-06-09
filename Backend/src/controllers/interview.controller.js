@@ -96,3 +96,17 @@ export const getResumePdf = asyncHandler(async (req, res) => {
         new ApiResponse(200, { resumeUrl: report.resumeUrl }, "Resume URL retrieved successfully")
     );
 });
+
+// @desc    Get Latest Interview Report for current user
+// @route   GET /api/interview/latest
+// @access  Private
+export const getLatestReport = asyncHandler(async (req, res) => {
+    const report = await InterviewReport.findOne({
+        userId: req.user._id,
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).json(
+        new ApiResponse(200, report, "Latest interview report retrieved successfully")
+    );
+});
+
