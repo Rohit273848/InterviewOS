@@ -76,7 +76,7 @@ const InterviewResult = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { report, fetchReportById, loading, getResumePdf } = useInterview();
-  
+
   const [expandedAddition, setExpandedAddition] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'keywords' | 'suggestions' | 'roadmap'>('overview');
 
@@ -100,13 +100,13 @@ const InterviewResult = () => {
   // Handle fallback for older reports
   const atsScore = report.atsScore !== undefined ? report.atsScore : (report.matchScore || 0);
   const candidateFitScore = report.candidateFitScore !== undefined ? report.candidateFitScore : (report.matchScore || 0);
-  
+
   const scoreDetails = getScoreDetails(atsScore);
   const fitDetails = getScoreDetails(candidateFitScore);
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 space-y-8 text-slate-800 dark:text-slate-100">
-      
+
       {/* Title & Action Buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -118,22 +118,12 @@ const InterviewResult = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          {report.resumeUrl && (
-            <button
-              onClick={() => getResumePdf(id!)}
-              className="flex items-center gap-2 px-5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-all w-fit shadow-sm"
-            >
-              <Download className="w-4 h-4" />
-              Download Resume PDF
-            </button>
-          )}
-        </div>
+
       </div>
 
       {/* Main Double Dashboard Layout */}
       <div className="grid lg:grid-cols-3 gap-6">
-        
+
         {/* Score Card 1: ATS MATCH SCORE */}
         <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-md border border-white/40 dark:border-slate-700/50 shadow-sm rounded-3xl p-6 flex flex-col items-center justify-between text-center relative overflow-hidden transition-all duration-300 hover:shadow-md">
           <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/5 rounded-full blur-2xl" />
@@ -256,11 +246,10 @@ const InterviewResult = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap ${
-                isActive
+              className={`flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap ${isActive
                   ? 'border-teal-500 text-teal-600 dark:text-teal-400 bg-teal-500/5 rounded-t-xl'
                   : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-              }`}
+                }`}
             >
               <Icon className="w-4 h-4" />
               {tab.name}
@@ -271,7 +260,7 @@ const InterviewResult = () => {
 
       {/* Tab Panels */}
       <div className="space-y-6">
-        
+
         {/* PANEL 1: OVERVIEW */}
         {activeTab === 'overview' && (
           <motion.div
@@ -631,7 +620,7 @@ const InterviewResult = () => {
                 </div>
 
                 <div className="relative pl-6 md:pl-8 border-l border-slate-200 dark:border-slate-700 space-y-8">
-                  
+
                   {/* Timeline Item 1: Immediate */}
                   <div className="relative">
                     {/* Circle Node */}

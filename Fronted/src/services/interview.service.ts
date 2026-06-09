@@ -25,3 +25,8 @@ export const getResumePdfUrl = async (id: string) => {
   const response = await api.get(`/interview/${id}/resume`);
   return response.data.data.resumeUrl;
 };
+
+export const getLatestInterviewReport = async () => {
+  const response = await api.get('/interview/latest');
+  return response.data.data;
+};

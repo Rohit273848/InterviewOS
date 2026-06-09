@@ -4,17 +4,21 @@ import {
   generateInterviewStrategy,
   getInterviewById,
   getResumePdfUrl,
+  getLatestInterviewReport,
 } from '../services/interview.service';
 
 export const useInterview = () => {
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState<any>(null);
+  const [latestReport, setLatestReport] = useState<any>(null);
+  const [fetchingLatest, setFetchingLatest] = useState(false);
 
   const generateStrategy = async (jobDescription: string, selfDescription: string, candidateWeaknesses: string, file: File) => {
     try {
       setLoading(true);
       const data = await generateInterviewStrategy(jobDescription, selfDescription, candidateWeaknesses, file);
       setReport(data);
+      setLatestReport(data); // update latest report in hook state as well
       toast.success('Interview strategy generated successfully!');
       return data;
     } catch (error: any) {
@@ -38,6 +42,20 @@ export const useInterview = () => {
     }
   };
 
+  const fetchLatestReport = async () => {
+    try {
+      setFetchingLatest(true);
+      const data = await getLatestInterviewReport();
+      setLatestReport(data);
+      return data;
+    } catch (error: any) {
+      // Don't toast error here since returning null on first load is normal behaviour
+      console.error('Failed to fetch latest report:', error);
+    } finally {
+      setFetchingLatest(false);
+    }
+  };
+
   const getResumePdf = async (id: string) => {
     try {
       const url = await getResumePdfUrl(id);
@@ -52,8 +70,11 @@ export const useInterview = () => {
   return {
     loading,
     report,
+    latestReport,
+    fetchingLatest,
     generateStrategy,
     fetchReportById,
+    fetchLatestReport,
     getResumePdf,
   };
 };

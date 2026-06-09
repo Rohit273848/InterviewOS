@@ -5,6 +5,7 @@ import {
     generateStrategy,
     getReportById,
     getResumePdf,
+    getLatestReport,
 } from "../controllers/interview.controller.js";
 
 const router = Router();
@@ -14,6 +15,9 @@ router.use(protectRoute);
 
 // Generate Strategy
 router.post("/generate", upload.single("resume"), generateStrategy);
+
+// Get Latest Report
+router.get("/latest", getLatestReport);
 
 // Get Report by ID
 router.get("/:id", getReportById);
