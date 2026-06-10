@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState } from '../context'
 import {
   Sparkles,
   Target,
@@ -113,6 +115,7 @@ const navLinks = ['Features', 'How It Works', 'Testimonials']
 /* ─── main component ─── */
 const LandingPage = () => {
   const navigate = useNavigate()
+  const { isAuthenticated } = useSelector((state: RootState) => state.user)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -171,12 +174,20 @@ const LandingPage = () => {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-4">
-              <button id="nav-signin-btn" onClick={() => navigate('/signin')} className="text-sm font-medium text-white hover:text-[#B1F82A] transition-colors">
-                Sign In
-              </button>
-              <button id="nav-signup-btn" onClick={() => navigate('/signup')} className="px-5 py-2.5 rounded-full bg-[#B1F82A] text-black text-sm font-bold hover:scale-105 transition-transform duration-300 flex items-center gap-1">
-                Get Started <ChevronRight className="w-4 h-4" />
-              </button>
+              {isAuthenticated ? (
+                <button id="nav-dashboard-btn" onClick={() => navigate('/dashboard')} className="px-5 py-2.5 rounded-full bg-[#B1F82A] text-black text-sm font-bold hover:scale-105 transition-transform duration-300 flex items-center gap-1">
+                  Dashboard <ChevronRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <>
+                  <button id="nav-signin-btn" onClick={() => navigate('/signin')} className="text-sm font-medium text-white hover:text-[#B1F82A] transition-colors">
+                    Sign In
+                  </button>
+                  <button id="nav-signup-btn" onClick={() => navigate('/signup')} className="px-5 py-2.5 rounded-full bg-[#B1F82A] text-black text-sm font-bold hover:scale-105 transition-transform duration-300 flex items-center gap-1">
+                    Get Started <ChevronRight className="w-4 h-4" />
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Mobile hamburger */}
@@ -211,8 +222,14 @@ const LandingPage = () => {
                   </a>
                 ))}
                 <div className="flex flex-col gap-3 mt-4">
-                  <button onClick={() => navigate('/signin')} className="w-full py-3 rounded-xl border border-white/20 text-white font-medium hover:bg-white/5 transition-colors">Sign In</button>
-                  <button onClick={() => navigate('/signup')} className="w-full py-3 rounded-xl bg-[#B1F82A] text-black font-bold hover:bg-[#9DE024] transition-colors">Get Started</button>
+                  {isAuthenticated ? (
+                    <button onClick={() => { setMenuOpen(false); navigate('/dashboard'); }} className="w-full py-3 rounded-xl bg-[#B1F82A] text-black font-bold hover:bg-[#9DE024] transition-colors">Dashboard</button>
+                  ) : (
+                    <>
+                      <button onClick={() => navigate('/signin')} className="w-full py-3 rounded-xl border border-white/20 text-white font-medium hover:bg-white/5 transition-colors">Sign In</button>
+                      <button onClick={() => navigate('/signup')} className="w-full py-3 rounded-xl bg-[#B1F82A] text-black font-bold hover:bg-[#9DE024] transition-colors">Get Started</button>
+                    </>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -264,20 +281,32 @@ const LandingPage = () => {
 
             {/* Buttons */}
             <div className="mt-10 flex flex-wrap gap-4">
-              <button
-                onClick={() => navigate('/signup')}
-                className="px-8 py-4 rounded-full bg-[#B1F82A] text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(177,248,42,0.3)] flex items-center gap-2"
-              >
-                Get Started
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              {isAuthenticated ? (
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="px-8 py-4 rounded-full bg-[#B1F82A] text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(177,248,42,0.3)] flex items-center gap-2"
+                >
+                  Go to Dashboard
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate('/signup')}
+                    className="px-8 py-4 rounded-full bg-[#B1F82A] text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(177,248,42,0.3)] flex items-center gap-2"
+                  >
+                    Get Started
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
 
-              <button
-                onClick={() => navigate('/signin')}
-                className="px-8 py-4 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold text-lg hover:bg-white/10 hover:border-white/30 transition-all duration-300"
-              >
-                Sign In
-              </button>
+                  <button
+                    onClick={() => navigate('/signin')}
+                    className="px-8 py-4 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold text-lg hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+                  >
+                    Sign In
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Users */}
@@ -509,14 +538,25 @@ const LandingPage = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                id="cta-signup-btn"
-                onClick={() => navigate('/signup')}
-                className="px-10 py-5 rounded-full bg-[#B1F82A] text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(177,248,42,0.3)] flex items-center gap-2 w-full sm:w-auto justify-center"
-              >
-                Create Free Account
-                <ArrowRight className="w-6 h-6" />
-              </button>
+              {isAuthenticated ? (
+                <button
+                  id="cta-dashboard-btn"
+                  onClick={() => navigate('/dashboard')}
+                  className="px-10 py-5 rounded-full bg-[#B1F82A] text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(177,248,42,0.3)] flex items-center gap-2 w-full sm:w-auto justify-center"
+                >
+                  Go to Dashboard
+                  <ArrowRight className="w-6 h-6" />
+                </button>
+              ) : (
+                <button
+                  id="cta-signup-btn"
+                  onClick={() => navigate('/signup')}
+                  className="px-10 py-5 rounded-full bg-[#B1F82A] text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(177,248,42,0.3)] flex items-center gap-2 w-full sm:w-auto justify-center"
+                >
+                  Create Free Account
+                  <ArrowRight className="w-6 h-6" />
+                </button>
+              )}
             </div>
             <p className="text-sm text-gray-500 mt-8 font-medium">No credit card required. Free tier forever.</p>
           </motion.div>

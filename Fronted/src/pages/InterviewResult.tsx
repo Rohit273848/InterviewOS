@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Download,
   Loader2,
   ChevronDown,
   Brain,
@@ -75,7 +74,7 @@ const getImportanceBadge = (importance: string) => {
 const InterviewResult = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { report, fetchReportById, loading, getResumePdf } = useInterview();
+  const { report, fetchReportById, loading } = useInterview();
 
   const [expandedAddition, setExpandedAddition] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'keywords' | 'suggestions' | 'roadmap'>('overview');
