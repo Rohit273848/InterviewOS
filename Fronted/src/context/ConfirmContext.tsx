@@ -19,7 +19,7 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState('')
   const [options, setOptions] = useState<ConfirmOptions>({})
-  
+
   const resolveRef = useRef<(value: boolean) => void>()
   const confirmButtonRef = useRef<HTMLButtonElement>(null)
 
