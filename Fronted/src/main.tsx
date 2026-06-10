@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { store } from './context'
+import { ConfirmProvider } from './context/ConfirmContext'
 import './styles/index.css'
 
 const queryClient = new QueryClient({
@@ -22,7 +23,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <ConfirmProvider>
+            <App />
+          </ConfirmProvider>
           <Toaster
             position="top-right"
             toastOptions={{

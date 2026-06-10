@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useMockInterview } from '../hooks/useMockInterview';
+import { useConfirm } from '../context/ConfirmContext';
+
 
 interface ChatMessage {
   type: 'ai' | 'user';
@@ -32,6 +34,8 @@ interface ChatMessage {
 
 const MockInterview = () => {
   const navigate = useNavigate();
+  const confirm = useConfirm();
+
   const {
     loading,
     submittingAnswer,
@@ -125,10 +129,16 @@ const MockInterview = () => {
   };
 
   const handleEndInterview = async () => {
-    if (window.confirm('Are you sure you want to end the interview now? Your answers so far will be evaluated.')) {
+    const isConfirmed = await confirm('Are you sure you want to end the interview now? Your answers so far will be evaluated.', {
+      title: 'End Interview',
+      confirmText: 'End & Evaluate',
+      variant: 'warning'
+    });
+    if (isConfirmed) {
       triggerEvaluation();
     }
   };
+
 
   const handleStartInterview = async () => {
     if (!jobDescription.trim()) {
@@ -211,8 +221,13 @@ const MockInterview = () => {
     }
   };
 
-  const handleCancelSession = () => {
-    if (window.confirm('Are you sure you want to abandon this session? All progress will be lost.')) {
+  const handleCancelSession = async () => {
+    const isConfirmed = await confirm('Are you sure you want to abandon this session? All progress will be lost.', {
+      title: 'Abandon Session',
+      confirmText: 'Abandon',
+      variant: 'danger'
+    });
+    if (isConfirmed) {
       if (activeSession) {
         sessionStorage.removeItem(`interviewos_chat_history_${activeSession.sessionId}`);
       }
@@ -295,9 +310,14 @@ Software Engineer at DevTech Solutions (2023 - Present)
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (activeSession) {
-                  if (window.confirm('You have an active interview session. Are you sure you want to abandon it and start a new one?')) {
+                  const isConfirmed = await confirm('You have an active interview session. Are you sure you want to abandon it and start a new one?', {
+                    title: 'Abandon Session',
+                    confirmText: 'Abandon & Start New',
+                    variant: 'danger'
+                  });
+                  if (isConfirmed) {
                     sessionStorage.removeItem(`interviewos_chat_history_${activeSession.sessionId}`);
                     cancelActiveSession();
                     setViewMode('setup');

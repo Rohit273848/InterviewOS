@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Shield, Users, FileText, MessageSquare, TrendingUp, Activity, UserCheck, UserX, Trash2, Eye, Search } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useConfirm } from '../context/ConfirmContext'
+
 
 interface User {
   id: number
@@ -29,6 +31,7 @@ interface Session {
 }
 
 const Admin = () => {
+  const confirm = useConfirm()
   const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'sessions' | 'content'>('dashboard')
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all')
@@ -140,8 +143,13 @@ const Admin = () => {
     toast.success('User status updated')
   }
 
-  const handleDeleteUser = (userId: number) => {
-    if (confirm('Are you sure you want to delete this user?')) {
+  const handleDeleteUser = async (userId: number) => {
+    const isConfirmed = await confirm('Are you sure you want to delete this user?', {
+      title: 'Delete User',
+      confirmText: 'Delete',
+      variant: 'danger'
+    })
+    if (isConfirmed) {
       setUsers(users.filter(u => u.id !== userId))
       toast.success('User deleted')
     }

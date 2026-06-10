@@ -22,10 +22,13 @@ import { logout } from '../context/slices/userSlice'
 import { RootState } from '../context'
 import { logoutUser } from '../services/authService'
 import toast from 'react-hot-toast'
+import { useConfirm } from '../context/ConfirmContext'
+
 
 const Layout = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const confirm = useConfirm()
   const { name } = useSelector((state: RootState) => state.user)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -54,6 +57,13 @@ const Layout = () => {
   }
 
   const handleLogout = async () => {
+    const isConfirmed = await confirm('Are you sure you want to log out of your session?', {
+      title: 'Logout',
+      confirmText: 'Logout',
+      variant: 'danger'
+    })
+    if (!isConfirmed) return
+
     try {
       await logoutUser()
     } catch (e) {

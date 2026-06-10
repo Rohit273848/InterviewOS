@@ -25,6 +25,8 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useProjectPrep } from '../hooks/useProjectPrep'
+import { useConfirm } from '../context/ConfirmContext'
+
 
 const CATEGORIES = [
   'All',
@@ -71,7 +73,9 @@ const AnswerNotes = ({ sessionId, questionIdx }: { sessionId: string; questionId
 }
 
 const ProjectPrep = () => {
+  const confirm = useConfirm()
   const [githubUrl, setGithubUrl] = useState('')
+
   const [token, setToken] = useState('')
   const [showTokenInput, setShowTokenInput] = useState(false)
   const [selectedSessionId, setSelectedSessionId] = useState<string | undefined>(undefined)
@@ -241,7 +245,12 @@ const ProjectPrep = () => {
   // Handle history item deletion
   const handleDeleteHistory = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation()
-    if (confirm('Are you sure you want to delete this session?')) {
+    const isConfirmed = await confirm('Are you sure you want to delete this session?', {
+      title: 'Delete Session',
+      confirmText: 'Delete',
+      variant: 'danger'
+    })
+    if (isConfirmed) {
       try {
         await deleteSessionRecord(id)
         if (selectedSessionId === id) {
