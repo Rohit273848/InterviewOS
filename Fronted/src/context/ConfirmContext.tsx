@@ -77,28 +77,28 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
     switch (variant) {
       case 'danger':
         return {
-          icon: <AlertTriangle className="w-6 h-6 text-pink-500" />,
-          accentClass: 'border-pink-500/30 bg-pink-500/10',
-          confirmBtnClass: 'bg-pink-500 hover:bg-pink-600 text-white shadow-pink-500/20 focus:ring-pink-500/50',
-          cancelBtnClass: 'border-slate-800 text-slate-400 hover:bg-slate-850 hover:text-white',
-          glowClass: 'shadow-[0_0_30px_rgba(244,114,182,0.15)] border-pink-500/20'
+          icon: <AlertTriangle className="w-5 h-5 text-accent-pink" />,
+          accentClass: 'bg-accent-pink/10 border-accent-pink/20 shadow-[0_0_15px_rgba(244,114,182,0.08)]',
+          confirmBtnClass: 'bg-gradient-to-r from-accent-pink to-rose-600 hover:from-pink-400 hover:to-rose-500 text-bg-primary shadow-lg shadow-accent-pink/10 hover:shadow-accent-pink/20 focus:ring-accent-pink',
+          glowClass: 'shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7),_0_0_40px_-5px_rgba(244,114,182,0.15)] border-accent-pink/20',
+          topBarClass: 'bg-gradient-to-r from-accent-pink to-rose-600'
         }
       case 'warning':
         return {
-          icon: <AlertTriangle className="w-6 h-6 text-yellow-500" />,
-          accentClass: 'border-yellow-500/30 bg-yellow-500/10',
-          confirmBtnClass: 'bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-extrabold focus:ring-yellow-500/50',
-          cancelBtnClass: 'border-slate-800 text-slate-400 hover:bg-slate-850 hover:text-white',
-          glowClass: 'shadow-[0_0_30px_rgba(250,204,21,0.15)] border-yellow-500/20'
+          icon: <AlertTriangle className="w-5 h-5 text-accent-yellow" />,
+          accentClass: 'bg-accent-yellow/10 border-accent-yellow/20 shadow-[0_0_15px_rgba(250,204,21,0.08)]',
+          confirmBtnClass: 'bg-gradient-to-r from-accent-yellow to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-bg-primary shadow-lg shadow-accent-yellow/10 hover:shadow-accent-yellow/20 focus:ring-accent-yellow',
+          glowClass: 'shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7),_0_0_40px_-5px_rgba(250,204,21,0.12)] border-accent-yellow/20',
+          topBarClass: 'bg-gradient-to-r from-accent-yellow to-amber-500'
         }
       case 'info':
       default:
         return {
-          icon: <Info className="w-6 h-6 text-cyan-400" />,
-          accentClass: 'border-cyan-400/30 bg-cyan-400/10',
-          confirmBtnClass: 'bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-extrabold focus:ring-cyan-500/50',
-          cancelBtnClass: 'border-slate-800 text-slate-400 hover:bg-slate-850 hover:text-white',
-          glowClass: 'shadow-[0_0_30px_rgba(34,211,238,0.15)] border-cyan-500/20'
+          icon: <Info className="w-5 h-5 text-accent-cyan" />,
+          accentClass: 'bg-accent-cyan/10 border-accent-cyan/20 shadow-[0_0_15px_rgba(34,211,238,0.08)]',
+          confirmBtnClass: 'bg-gradient-to-r from-accent-cyan to-blue-500 hover:from-cyan-400 hover:to-blue-500 text-bg-primary shadow-lg shadow-accent-cyan/10 hover:shadow-accent-cyan/20 focus:ring-accent-cyan',
+          glowClass: 'shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7),_0_0_40px_-5px_rgba(34,211,238,0.12)] border-accent-cyan/20',
+          topBarClass: 'bg-gradient-to-r from-accent-cyan to-blue-500'
         }
     }
   }
@@ -111,13 +111,13 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
       <AnimatePresence>
         {isOpen && (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-            {/* Backdrop */}
+            {/* Backdrop with strong blur and color tint */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={handleCancel}
-              className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"
+              className="fixed inset-0 bg-bg-primary/80 backdrop-blur-md"
             />
 
             {/* Modal Dialog Card */}
@@ -126,31 +126,36 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: 'spring', duration: 0.4 }}
-              className={`relative bg-slate-900 border max-w-md w-full rounded-2xl overflow-hidden shadow-2xl p-6 select-none ${details.glowClass}`}
+              className={`relative bg-bg-secondary/95 border max-w-md w-full rounded-2xl overflow-hidden p-6 pt-7 select-none ${details.glowClass}`}
             >
+              {/* Top Accent Bar */}
+              <div className={`absolute top-0 left-0 right-0 h-1.5 ${details.topBarClass}`} />
+
               {/* Close Button */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleCancel}
-                className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-850 transition-colors"
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-bg-tertiary/50 transition-colors"
                 aria-label="Close dialog"
               >
                 <X className="w-4 h-4" />
-              </button>
+              </motion.button>
 
-              <div className="flex gap-4">
+              <div className="flex gap-4 items-start">
                 {/* Visual Icon Badge */}
-                <div className={`flex-shrink-0 w-12 h-12 rounded-xl border flex items-center justify-center ${details.accentClass}`}>
+                <div className={`flex-shrink-0 w-12 h-12 rounded-xl border flex items-center justify-center transition-all duration-300 ${details.accentClass}`}>
                   {details.icon}
                 </div>
 
                 <div className="flex-1 space-y-2">
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-white leading-snug">
+                  <h3 className="text-lg font-bold text-text-primary leading-snug tracking-tight">
                     {options.title || 'Confirm Action'}
                   </h3>
 
                   {/* Body Message */}
-                  <p className="text-sm text-slate-400 leading-relaxed font-medium">
+                  <p className="text-sm text-text-secondary leading-relaxed font-normal">
                     {message}
                   </p>
                 </div>
@@ -158,19 +163,23 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
               {/* Action Buttons */}
               <div className="flex items-center justify-end gap-3 mt-6">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleCancel}
-                  className={`px-4 py-2 text-xs font-bold rounded-xl border bg-transparent transition-all hover:scale-[1.02] active:scale-[0.98] ${details.cancelBtnClass}`}
+                  className="px-4 py-2.5 text-xs font-bold rounded-xl border border-border-subtle bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-tertiary/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-secondary focus:ring-border-subtle"
                 >
                   {options.cancelText || 'Cancel'}
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   ref={confirmButtonRef}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleConfirm}
-                  className={`px-5 py-2 text-xs font-bold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 ${details.confirmBtnClass}`}
+                  className={`px-5 py-2.5 text-xs font-bold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-bg-secondary ${details.confirmBtnClass}`}
                 >
                   {options.confirmText || 'Confirm'}
-                </button>
+                </motion.button>
               </div>
             </motion.div>
           </div>
