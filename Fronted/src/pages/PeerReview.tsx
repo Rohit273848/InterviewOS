@@ -601,12 +601,18 @@ const PeerReview = () => {
                 className="space-y-4"
               >
                 {mySubmissions.length === 0 ? (
-                  <div className="p-8 sm:p-12 bg-[#111827] rounded-3xl border border-[#334155] text-center shadow-sm">
+                  <div className="p-8 sm:p-12 bg-[#111827] rounded-3xl border border-[#334155] text-center shadow-sm flex flex-col items-center justify-center">
                     <Upload className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 text-[#94A3B8]" />
                     <h3 className="text-lg font-semibold mb-2 text-[#F8FAFC]">No Submissions Yet</h3>
-                    <p className="text-sm text-[#94A3B8]">
+                    <p className="text-sm text-[#94A3B8] mb-5">
                       Upload your resume to get feedback from the community
                     </p>
+                    <button
+                      onClick={() => setActiveTab('browse')}
+                      className="px-4 py-2 bg-[#14B8A6] hover:bg-[#14B8A6]/90 text-[#111827] font-bold rounded-xl active:scale-[0.98] transition-all text-xs"
+                    >
+                      Review Other Resumes
+                    </button>
                   </div>
                 ) : (
                   mySubmissions.map((submission, index) => (
