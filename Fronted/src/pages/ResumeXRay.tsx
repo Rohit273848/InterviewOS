@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Sparkles, AlertCircle, Target, User, Star, FileText, Award, Calendar, ArrowRight, ArrowLeft, Loader2, TrendingUp } from 'lucide-react'
+import { Upload, Sparkles, AlertCircle, Target, User, Star, FileText, Award, Calendar, ArrowRight, ArrowLeft, Loader2, TrendingUp, Trash2, RefreshCw, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useInterview } from '../hooks/useInterview'
+
+const formatFileSize = (bytes: number) => {
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(0)} KB`
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+}
 
 const ResumeXRay = () => {
   const [file, setFile] = useState<File | null>(null)
@@ -344,44 +351,82 @@ Requirements:
               </span>
             </div>
 
-            <label className="block group">
-              <input
-                type="file"
-                accept=".pdf"
-                onChange={handleFileUpload}
-                className="hidden"
-                disabled={isUploading || isAnalyzing}
-              />
-              <div className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
-                isUploading 
-                  ? 'border-yellow-400 dark:border-accent-yellow bg-yellow-50/10 dark:bg-accent-yellow/5 pointer-events-none' 
-                  : file 
-                    ? 'border-yellow-400 dark:border-accent-yellow bg-yellow-50/30 dark:bg-accent-yellow/10' 
-                    : 'border-gray-300 dark:border-border-subtle bg-white dark:bg-bg-tertiary hover:border-yellow-400 dark:hover:border-accent-yellow hover:bg-yellow-50/10 dark:hover:bg-accent-yellow/5'
-              }`}>
-                {isUploading ? (
-                  <div className="flex flex-col items-center justify-center py-2">
-                    <Loader2 className="w-10 h-10 text-yellow-500 dark:text-accent-yellow animate-spin mb-3" />
-                    <p className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                      Uploading resume...
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500 animate-pulse">
-                      Analyzing PDF layout and content
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <Upload className={`w-10 h-10 mx-auto mb-3 transition-colors ${file ? 'text-yellow-500 dark:text-accent-yellow' : 'text-gray-400 dark:text-gray-500 group-hover:text-yellow-500 dark:group-hover:text-accent-yellow'}`} />
-                    <p className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                      {file ? file.name : 'Click to upload or drag and drop'}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500">
-                      PDF (Max 5MB)
-                    </p>
-                  </>
-                )}
+            <input
+              type="file"
+              id="resume-file-input"
+              accept=".pdf"
+              onChange={handleFileUpload}
+              className="hidden"
+              disabled={isUploading || isAnalyzing}
+            />
+
+            {isUploading ? (
+              <div className="border-2 border-dashed border-yellow-400 dark:border-accent-yellow bg-yellow-50/10 dark:bg-accent-yellow/5 rounded-2xl p-8 text-center transition-all">
+                <div className="flex flex-col items-center justify-center py-2">
+                  <Loader2 className="w-10 h-10 text-yellow-500 dark:text-accent-yellow animate-spin mb-3" />
+                  <p className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Uploading resume...
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500 animate-pulse">
+                    Analyzing PDF layout and content
+                  </p>
+                </div>
               </div>
-            </label>
+            ) : file ? (
+              <div className="border border-[#e8e6e1] dark:border-border-subtle bg-white dark:bg-bg-tertiary rounded-2xl p-5 shadow-sm flex items-center justify-between transition-all hover:border-yellow-400 dark:hover:border-accent-yellow">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-12 h-12 rounded-xl bg-yellow-50 dark:bg-accent-yellow/10 border border-yellow-150 dark:border-accent-yellow/20 flex items-center justify-center text-yellow-500 dark:text-accent-yellow shrink-0">
+                    <FileText className="w-6 h-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate pr-2" title={file.name}>
+                      {file.name}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                      <span className="text-xs text-gray-400 dark:text-gray-500 font-semibold">
+                        {formatFileSize(file.size)}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+                      <span className="text-[10px] font-bold text-green-700 dark:text-accent-green bg-green-50 dark:bg-accent-green/10 border border-green-200 dark:border-accent-green/20 px-2 py-0.5 rounded flex items-center gap-1">
+                        <Check className="w-3 h-3" /> Ready
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <label 
+                    htmlFor="resume-file-input" 
+                    className="flex items-center gap-1.5 px-3 py-2 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold text-xs rounded-xl border border-gray-200 dark:border-border-subtle cursor-pointer transition-all active:scale-[0.98]"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    Replace
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setFile(null)}
+                    className="p-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-600 dark:text-rose-455 rounded-xl border border-rose-100 dark:border-rose-500/20 transition-all active:scale-[0.98] shadow-sm"
+                    title="Remove file"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <label 
+                htmlFor="resume-file-input"
+                className="block group"
+              >
+                <div className="border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all border-gray-300 dark:border-border-subtle bg-white dark:bg-bg-tertiary hover:border-yellow-450 dark:hover:border-accent-yellow hover:bg-yellow-50/10 dark:hover:bg-accent-yellow/5">
+                  <Upload className="w-10 h-10 mx-auto mb-3 transition-colors text-gray-400 dark:text-gray-500 group-hover:text-yellow-500 dark:group-hover:text-accent-yellow" />
+                  <p className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Click to upload or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500">
+                    PDF (Max 5MB)
+                  </p>
+                </div>
+              </label>
+            )}
 
             <div className="flex items-center my-6 text-gray-400 dark:text-gray-500 text-xs font-medium uppercase tracking-widest">
               <div className="flex-1 h-px bg-gray-200 dark:bg-border-subtle"></div>

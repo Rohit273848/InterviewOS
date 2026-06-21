@@ -270,7 +270,6 @@ const Layout = () => {
             <div className="flex items-center gap-3 pl-2 lg:pl-4 border-l border-slate-300/40 dark:border-slate-700/50">
               <div className="hidden md:block text-right">
                 <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 transition-colors duration-500">{name || 'Rohit'}</div>
-                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium transition-colors duration-500">Pro Plan</div>
               </div>
               <div className="relative">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-teal-400 to-blue-500 p-[2px] shadow-sm cursor-pointer hover:scale-105 transition-transform">
