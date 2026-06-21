@@ -7,6 +7,7 @@ import { useInterview } from '../hooks/useInterview'
 
 const ResumeXRay = () => {
   const [file, setFile] = useState<File | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const [jobDescription, setJobDescription] = useState('')
   const [selfDescription, setSelfDescription] = useState('')
   const [candidateWeaknesses, setCandidateWeaknesses] = useState('')
@@ -37,8 +38,14 @@ const ResumeXRay = () => {
         toast.error('File size should not exceed 5MB')
         return
       }
-      setFile(uploadedFile)
-      toast.success('Resume uploaded successfully!')
+      
+      setIsUploading(true)
+      // Simulate file upload parsing and loading duration of 1.5 seconds
+      setTimeout(() => {
+        setFile(uploadedFile)
+        setIsUploading(false)
+        toast.success('Resume uploaded successfully!')
+      }, 1500)
     }
   }
 
@@ -87,6 +94,7 @@ Requirements:
     setSelfDescription('')
     setCandidateWeaknesses('')
     setFile(null)
+    setIsUploading(false)
     toast.success('Form cleared!')
   }
 
@@ -342,15 +350,36 @@ Requirements:
                 accept=".pdf"
                 onChange={handleFileUpload}
                 className="hidden"
+                disabled={isUploading || isAnalyzing}
               />
-              <div className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${file ? 'border-yellow-450 dark:border-accent-yellow bg-yellow-50/30 dark:bg-accent-yellow/10' : 'border-gray-300 dark:border-border-subtle bg-white dark:bg-bg-tertiary hover:border-yellow-450 dark:hover:border-accent-yellow hover:bg-yellow-50/10 dark:hover:bg-accent-yellow/5'}`}>
-                <Upload className={`w-10 h-10 mx-auto mb-3 transition-colors ${file ? 'text-yellow-500 dark:text-accent-yellow' : 'text-gray-400 dark:text-gray-500 group-hover:text-yellow-500 dark:group-hover:text-accent-yellow'}`} />
-                <p className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                  {file ? file.name : 'Click to upload or drag and drop'}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">
-                  PDF (Max 5MB)
-                </p>
+              <div className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
+                isUploading 
+                  ? 'border-yellow-400 dark:border-accent-yellow bg-yellow-50/10 dark:bg-accent-yellow/5 pointer-events-none' 
+                  : file 
+                    ? 'border-yellow-400 dark:border-accent-yellow bg-yellow-50/30 dark:bg-accent-yellow/10' 
+                    : 'border-gray-300 dark:border-border-subtle bg-white dark:bg-bg-tertiary hover:border-yellow-400 dark:hover:border-accent-yellow hover:bg-yellow-50/10 dark:hover:bg-accent-yellow/5'
+              }`}>
+                {isUploading ? (
+                  <div className="flex flex-col items-center justify-center py-2">
+                    <Loader2 className="w-10 h-10 text-yellow-500 dark:text-accent-yellow animate-spin mb-3" />
+                    <p className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      Uploading resume...
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 animate-pulse">
+                      Analyzing PDF layout and content
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <Upload className={`w-10 h-10 mx-auto mb-3 transition-colors ${file ? 'text-yellow-500 dark:text-accent-yellow' : 'text-gray-400 dark:text-gray-500 group-hover:text-yellow-500 dark:group-hover:text-accent-yellow'}`} />
+                    <p className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                      {file ? file.name : 'Click to upload or drag and drop'}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500">
+                      PDF (Max 5MB)
+                    </p>
+                  </>
+                )}
               </div>
             </label>
 
@@ -398,7 +427,7 @@ Requirements:
 
           <button
             onClick={analyzeResume}
-            disabled={isAnalyzing || (!file && !selfDescription.trim()) || !jobDescription.trim()}
+            disabled={isAnalyzing || isUploading || (!file && !selfDescription.trim()) || !jobDescription.trim()}
             className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#1a1a1a] dark:bg-white text-white dark:text-black px-8 py-4 rounded-full font-semibold text-base hover:bg-black dark:hover:bg-gray-200 hover:shadow-xl hover:shadow-gray-900/20 dark:hover:shadow-white/10 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             {isAnalyzing ? (
