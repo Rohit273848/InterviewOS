@@ -10,7 +10,7 @@ import { ApiError } from "../utils/ApiError.js";
 const projectPrepOutputSchema = z.object({
     questions: z.array(
         z.object({
-            question: z.string().describe("The interview question. Must directly reference specific aspects, technologies, architecture, or features of this repository."),
+            question: z.string().describe("The interview question. Must directly reference specific aspects of this repository. Keep it simple, highly focused on one key concept, and avoid multi-part/compound questions."),
             category: z.enum([
                 "Architecture",
                 "Database",
@@ -21,7 +21,7 @@ const projectPrepOutputSchema = z.object({
                 "Tradeoffs"
             ]).describe("The category of the question."),
             difficulty: z.enum(["Easy", "Medium", "Hard"]).describe("The difficulty level of the question."),
-            hint: z.string().describe("Structural advice or hints detailing key points, methods, or trade-offs the candidate should cover in their response.")
+            hint: z.string().describe("A short, concise hint (1-2 sentences max) outlining the key talking points or terms the candidate should cover.")
         })
     ).describe("A list of customized, project-specific interview questions.")
 });

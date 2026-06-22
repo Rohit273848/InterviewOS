@@ -1,6 +1,6 @@
 export const projectPrepPromptTemplate = `
 You are a Senior Software Architect and an Expert Technical Recruiter.
-Your task is to analyze a candidate's GitHub repository and generate project-specific, detailed, and challenging interview questions that directly reference the details of this repository.
+Your task is to analyze a candidate's GitHub repository and generate project-specific, concise, and focused interview questions that directly reference the details of this repository.
 
 Here is the input data for the repository:
 ---
@@ -20,11 +20,15 @@ README CONTENT:
 {readmeContent}
 ---
 
-Your goal is to generate interview questions that test the candidate's understanding of their own project, their design choices, trade-offs, security practices, database architectures, performance optimization, scalability, and deployment decisions.
+Your goal is to generate interview questions that test the candidate's understanding of their project, their design choices, database setup, performance, deployment, and tradeoffs.
 
 Follow these strict guidelines when generating the questions:
-1. **Repository Relevance**: Questions MUST directly reference the details of this repository (e.g. specific features, libraries, files, or techniques described in the README, languages list, or description). Avoid generic questions like "What is Docker?" or "What is Node.js?". Instead, ask: "Based on the README of '{repoName}', you deployed the application using Docker. How did you structure your multi-stage build, and what optimization techniques did you apply?".
-2. **Specified Categories**: You must generate questions belonging to the following categories:
+1. **Repository Relevance & Focus**: Questions MUST directly reference specific aspects of the repository (e.g. libraries, features, or techniques mentioned in the README). Avoid generic questions like "What is React?".
+2. **Keep it Simple & Focused**: Each question must target a single key concept. DO NOT ask multi-part, compound, or overly complex questions. The questions must be easy to read and understand, expecting a short and straightforward answer (typically 2-4 sentences or a few key bullet points).
+3. **Example Question Style**:
+   - *Instead of*: "Describe the full end-to-end architecture, API flow, and security implications of your authentication setup." (Too complex)
+   - *Ask*: "Based on your README, what library did you use to secure user passwords in '{repoName}', and why?" (Focused and simple)
+4. **Specified Categories**: You must generate questions belonging to the following categories:
    - Architecture
    - Database
    - Security
@@ -32,8 +36,8 @@ Follow these strict guidelines when generating the questions:
    - Scalability
    - Deployment
    - Tradeoffs
-3. **Structured Hint**: For each question, provide a detailed structural hint for the candidate on how to formulate their answer (e.g., explaining what concepts to highlight, how to structure the response, or what technical tradeoffs to mention).
-4. **Difficulty**: Assign an appropriate difficulty level ('Easy', 'Medium', 'Hard') based on the complexity of the question.
+5. **Concise Hint**: Provide a short, direct hint (1-2 sentences) showing the candidate the main talking points or keywords to include in their answer.
+6. **Difficulty**: Assign an appropriate difficulty level ('Easy', 'Medium', 'Hard') based on the complexity of the question.
 
 Generate a structured JSON response matching the schema details exactly.
 Do not wrap your output in markdown formatting, code blocks, or backticks. Return ONLY a valid, raw JSON object.
@@ -41,3 +45,4 @@ Do not wrap your output in markdown formatting, code blocks, or backticks. Retur
 Format Instructions:
 {format_instructions}
 `;
+
