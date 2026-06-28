@@ -246,8 +246,8 @@ const InterviewResult = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-sm transition-all whitespace-nowrap ${isActive
-                  ? 'border-teal-500 text-teal-600 dark:text-teal-400 bg-teal-500/5 rounded-t-xl'
-                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                ? 'border-teal-500 text-teal-600 dark:text-teal-400 bg-teal-500/5 rounded-t-xl'
+                : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                 }`}
             >
               <Icon className="w-4 h-4" />

@@ -77,11 +77,11 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
     switch (variant) {
       case 'danger':
         return {
-          icon: <AlertTriangle className="w-5 h-5 text-accent-pink" />,
-          accentClass: 'bg-accent-pink/10 border-accent-pink/20 shadow-[0_0_15px_rgba(244,114,182,0.08)]',
-          confirmBtnClass: 'bg-gradient-to-r from-accent-pink to-rose-600 hover:from-pink-400 hover:to-rose-500 text-bg-primary shadow-lg shadow-accent-pink/10 hover:shadow-accent-pink/20 focus:ring-accent-pink',
-          glowClass: 'shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7),_0_0_40px_-5px_rgba(244,114,182,0.15)] border-accent-pink/20',
-          topBarClass: 'bg-gradient-to-r from-accent-pink to-rose-600'
+          icon: <AlertTriangle className="w-5 h-5 text-red-500" />,
+          accentClass: 'bg-red-500/10 border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.08)]',
+          confirmBtnClass: 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white shadow-lg shadow-red-500/10 hover:shadow-red-500/20 focus:ring-red-500',
+          glowClass: 'shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7),_0_0_40px_-5px_rgba(239,68,68,0.15)] border-red-500/20',
+          topBarClass: 'bg-gradient-to-r from-red-500 to-red-600'
         }
       case 'warning':
         return {

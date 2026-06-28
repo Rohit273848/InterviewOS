@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Play, 
-  Square, 
-  Send, 
-  Clock, 
-  CheckCircle2, 
-  MessageSquare, 
-  Sparkles, 
+import {
+  Play,
+  Square,
+  Send,
+  Clock,
+  CheckCircle2,
+  MessageSquare,
+  Sparkles,
   Settings as SettingsIcon,
   AlertTriangle,
   TrendingUp,
@@ -52,13 +52,13 @@ const MockInterview = () => {
 
   // Mode state: 'setup' | 'interview'
   const [viewMode, setViewMode] = useState<'setup' | 'interview'>('setup');
-  
+
   // Setup form states
   const [jobDescription, setJobDescription] = useState('');
   const [resumeText, setResumeText] = useState('');
   const [selfDescription, setSelfDescription] = useState('');
   const [candidateWeaknesses, setCandidateWeaknesses] = useState('');
-  
+
   // Parameter settings
   const [interviewType, setInterviewType] = useState('behavioral');
   const [difficulty, setDifficulty] = useState('medium');
@@ -266,7 +266,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
 
     setSelfDescription(`3.5 years of frontend experience. Strong in React state management but looking to demonstrate system design capability and advance into senior roles.`);
     setCandidateWeaknesses(`Testing complex stateful components; deployment pipelines/Docker.`);
-    
+
     toast.success('Loaded premium demo profile context!');
   };
 
@@ -288,7 +288,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 text-slate-800 dark:text-slate-100 transition-colors">
-      
+
       {/* Title Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -328,43 +328,27 @@ Software Engineer at DevTech Solutions (2023 - Present)
                   navigate('/mock-interview');
                 }
               }}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border ${
-                viewMode === 'setup' 
-                  ? 'bg-teal-500/10 border-teal-500/30 text-teal-600 dark:text-teal-400' 
-                  : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-250'
-              }`}
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border ${viewMode === 'setup'
+                ? 'bg-teal-500/10 border-teal-500/30 text-teal-600 dark:text-teal-400'
+                : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-250'
+                }`}
               disabled={loading}
             >
               Start New
             </button>
-            <button
-              onClick={() => navigate('/mock-interview/history')}
-              className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-250"
-              disabled={!!activeSession}
-            >
-              <History className="w-4 h-4 inline mr-1" />
-              History
-            </button>
-            <button
-              onClick={() => navigate('/mock-interview/analytics')}
-              className="px-4 py-2 rounded-xl text-sm font-bold transition-all border bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-250"
-              disabled={!!activeSession}
-            >
-              <TrendingUp className="w-4 h-4 inline mr-1" />
-              Analytics
-            </button>
+
           </div>
         </div>
       </motion.div>
 
       {/* Main Container Grid */}
       <div className="grid lg:grid-cols-3 gap-8">
-        
+
         {/* ======================================================== */}
         {/* LEFT COLUMN: SETUP OR INTERVIEW CONTAINER */}
         {/* ======================================================== */}
         <div className="lg:col-span-2 space-y-6">
-          
+
           {/* SETUP SCREEN */}
           {viewMode === 'setup' && (
             <motion.div
@@ -377,7 +361,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
                   <Sparkles className="w-6 h-6 text-teal-500" />
                   <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Configure Your Profile Context</h2>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
@@ -553,19 +537,17 @@ Software Engineer at DevTech Solutions (2023 - Present)
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex gap-3 max-w-[85%] ${msg.type === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
                       >
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-sm font-bold text-xs ${
-                          msg.type === 'user'
-                            ? 'bg-gradient-to-br from-teal-500 to-cyan-500'
-                            : 'bg-gradient-to-br from-slate-600 to-slate-700 dark:from-slate-700 dark:to-slate-800'
-                        }`}>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-sm font-bold text-xs ${msg.type === 'user'
+                          ? 'bg-gradient-to-br from-teal-500 to-cyan-500'
+                          : 'bg-gradient-to-br from-slate-600 to-slate-700 dark:from-slate-700 dark:to-slate-800'
+                          }`}>
                           {msg.type === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-teal-400" />}
                         </div>
-                        
-                        <div className={`p-4 rounded-2xl leading-relaxed text-sm ${
-                          msg.type === 'user'
-                            ? 'bg-teal-500 text-white rounded-tr-none shadow-sm shadow-teal-500/10'
-                            : 'bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none shadow-sm'
-                        }`}>
+
+                        <div className={`p-4 rounded-2xl leading-relaxed text-sm ${msg.type === 'user'
+                          ? 'bg-teal-500 text-white rounded-tr-none shadow-sm shadow-teal-500/10'
+                          : 'bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none shadow-sm'
+                          }`}>
                           {msg.isSkipped ? (
                             <span className="italic opacity-85 flex items-center gap-1.5 text-xs font-semibold">
                               <XCircle className="w-3.5 h-3.5 text-rose-300" />
@@ -577,7 +559,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
                         </div>
                       </motion.div>
                     ))}
-                    
+
                     {/* Typing/Thinking indicator */}
                     {submittingAnswer && (
                       <motion.div
@@ -600,7 +582,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
 
                   {/* Hints box if the active question has one */}
                   {activeSession.currentQuestion.hint && !submittingAnswer && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl text-xs text-amber-600 dark:text-amber-400 flex items-start gap-2"
@@ -654,7 +636,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
                               </>
                             )}
                           </button>
-                          
+
                           <button
                             onClick={handleSkipQuestion}
                             disabled={submittingAnswer}
@@ -703,7 +685,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
         {/* RIGHT COLUMN: SIDEBAR */}
         {/* ======================================================== */}
         <div className="space-y-6">
-          
+
           {/* Active session warning card */}
           {activeSession && (
             <motion.div
@@ -738,7 +720,7 @@ Software Engineer at DevTech Solutions (2023 - Present)
               <SettingsIcon className="w-4.5 h-4.5 text-teal-500" />
               <span className="text-slate-800 dark:text-slate-200">Session Settings</span>
             </h3>
-            
+
             <div className="space-y-5">
               <div>
                 <label className="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2.5">Interview Type</label>
@@ -756,11 +738,10 @@ Software Engineer at DevTech Solutions (2023 - Present)
                         type="button"
                         disabled={!!activeSession}
                         onClick={() => setInterviewType(type.id)}
-                        className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all ${
-                          isSelected
-                            ? 'bg-teal-500/10 border-teal-500 text-teal-600 dark:text-teal-400 font-semibold shadow-sm'
-                            : 'border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-950/20 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
-                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                        className={`flex flex-col items-center justify-center p-3 rounded-2xl border text-center transition-all ${isSelected
+                          ? 'bg-teal-500/10 border-teal-500 text-teal-600 dark:text-teal-400 font-semibold shadow-sm'
+                          : 'border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-950/20 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                          } disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
                         <Icon className={`w-5 h-5 mb-1.5 ${isSelected ? 'text-teal-500' : 'text-slate-450'}`} />
                         <span className="text-[10px] md:text-xs leading-none">{type.label}</span>
@@ -785,11 +766,10 @@ Software Engineer at DevTech Solutions (2023 - Present)
                         type="button"
                         disabled={!!activeSession}
                         onClick={() => setDifficulty(lvl.id)}
-                        className={`py-2 rounded-2xl border text-center text-xs transition-all ${
-                          isSelected
-                            ? `${lvl.colorClass} font-bold ring-2 ring-teal-500/15`
-                            : 'border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-950/20 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
-                        } disabled:opacity-50`}
+                        className={`py-2 rounded-2xl border text-center text-xs transition-all ${isSelected
+                          ? `${lvl.colorClass} font-bold ring-2 ring-teal-500/15`
+                          : 'border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-950/20 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                          } disabled:opacity-50`}
                       >
                         {lvl.label}
                       </button>
@@ -809,11 +789,10 @@ Software Engineer at DevTech Solutions (2023 - Present)
                         type="button"
                         disabled={!!activeSession}
                         onClick={() => setQuestionCount(count)}
-                        className={`py-2.5 rounded-2xl border text-center text-xs transition-all ${
-                          isSelected
-                            ? 'bg-teal-500/10 border-teal-500 text-teal-600 dark:text-teal-400 font-bold shadow-sm'
-                            : 'border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-950/20 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
-                        } disabled:opacity-50`}
+                        className={`py-2.5 rounded-2xl border text-center text-xs transition-all ${isSelected
+                          ? 'bg-teal-500/10 border-teal-500 text-teal-600 dark:text-teal-400 font-bold shadow-sm'
+                          : 'border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-950/20 text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+                          } disabled:opacity-50`}
                       >
                         {count} Questions
                       </button>
