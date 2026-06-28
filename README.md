@@ -15,7 +15,6 @@
 
 [🚀 Live Demo](#live-demo) • [📖 Documentation](#documentation) • [🎨 Design System](#design-system) • [⚡ Performance](#performance-optimization)
 
----
 
 ## 📌 About the Project
 
