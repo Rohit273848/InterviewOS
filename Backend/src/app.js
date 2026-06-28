@@ -12,7 +12,11 @@ app.use(morgan("dev"));
 // Middleware4
 app.use(
     cors({
-        origin: process.env.CLIENT_URL,
+        origin: [
+            process.env.CLIENT_URL, 
+            "http://localhost:5173", 
+            "https://interview-os-sage.vercel.app"
+        ],
         credentials: true,
     })
 );
