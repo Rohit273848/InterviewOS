@@ -15,7 +15,6 @@ import {
   BookOpen,
   Code2,
   XCircle,
-  History,
   Bot,
   User,
   CornerDownLeft,
