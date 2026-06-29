@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  FolderGit2, 
-  Github, 
-  Sparkles, 
-  Trash2, 
-  History, 
-  Lock, 
-  ChevronDown, 
-  ChevronUp, 
+import {
+  FolderGit2,
+  Github,
+  Sparkles,
+  Trash2,
+  History,
+  Lock,
+  ChevronDown,
+  ChevronUp,
   Code,
   BookOpen,
   Key,
@@ -178,7 +178,7 @@ const ProjectPrep = () => {
         setProgress((prev) => {
           if (prev >= 95) return 95 // Hold at 95% until query finishes
           const next = prev + Math.floor(Math.random() * 4) + 2
-          
+
           // Print logs matching triggers
           logsSequence.forEach((item) => {
             if (next >= item.trigger) {
@@ -188,7 +188,7 @@ const ProjectPrep = () => {
               })
             }
           })
-          
+
           return next > 95 ? 95 : next
         })
       }, 350)
@@ -201,7 +201,7 @@ const ProjectPrep = () => {
           ...prev,
           { msg: '[DONE] Context parsed! System prep questions synthesized successfully.', type: 'success', timestamp: 'Done' }
         ])
-        
+
         const transition = window.setTimeout(() => {
           setVisualLoading(false)
           setProgress(0)
@@ -222,9 +222,9 @@ const ProjectPrep = () => {
     }
 
     try {
-      const session = await generateQuestions({ 
-        githubUrl: url, 
-        token: token ? token.trim() : null 
+      const session = await generateQuestions({
+        githubUrl: url,
+        token: token ? token.trim() : null
       })
       setSelectedSessionId(session._id)
       setGithubUrl('')
@@ -269,10 +269,10 @@ const ProjectPrep = () => {
 
   // Filter session history
   const filteredHistory = history.filter((item) => {
-    const matchesSearch = item.repoName.toLowerCase().includes(historySearch.toLowerCase()) || 
-                          (item.description || '').toLowerCase().includes(historySearch.toLowerCase())
-    const matchesLang = historyLangFilter === 'All' || 
-                        item.languages.some((lang) => lang.toLowerCase() === historyLangFilter.toLowerCase())
+    const matchesSearch = item.repoName.toLowerCase().includes(historySearch.toLowerCase()) ||
+      (item.description || '').toLowerCase().includes(historySearch.toLowerCase())
+    const matchesLang = historyLangFilter === 'All' ||
+      item.languages.some((lang) => lang.toLowerCase() === historyLangFilter.toLowerCase())
     return matchesSearch && matchesLang
   })
 
@@ -344,7 +344,7 @@ const ProjectPrep = () => {
 
   return (
     <div className="p-1 md:p-4 max-w-7xl mx-auto space-y-6 select-none text-slate-800 dark:text-slate-100">
-      
+
       {/* Header Panel */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -379,10 +379,10 @@ const ProjectPrep = () => {
 
       {/* Main Workspace Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
+
         {/* LEFT COMPONENT (Dashboard & Questions OR Initial landing) */}
         <div className="lg:col-span-8 space-y-6">
-          
+
           {/* SNEAK-PEEK LOADING TERMINAL (WebSocket progress simulator - stays dark for visual contrast) */}
           <AnimatePresence mode="wait">
             {visualLoading && (
@@ -404,7 +404,7 @@ const ProjectPrep = () => {
 
                 {/* Progress bar container */}
                 <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700">
-                  <motion.div 
+                  <motion.div
                     className="h-full bg-gradient-to-r from-accent-cyan via-accent-purple to-accent-pink"
                     style={{ width: `${progress}%` }}
                     transition={{ ease: 'easeOut' }}
@@ -418,9 +418,9 @@ const ProjectPrep = () => {
                       <span className="text-slate-500 select-none">{log.timestamp}</span>
                       <span className={
                         log.type === 'success' ? 'text-accent-green' :
-                        log.type === 'ws' ? 'text-accent-cyan' :
-                        log.type === 'ai' ? 'text-accent-pink' :
-                        'text-slate-350'
+                          log.type === 'ws' ? 'text-accent-cyan' :
+                            log.type === 'ai' ? 'text-accent-pink' :
+                              'text-slate-350'
                       }>
                         {log.msg}
                       </span>
@@ -444,10 +444,10 @@ const ProjectPrep = () => {
               animate={{ opacity: 1 }}
               className="space-y-6"
             >
-              
+
               {/* Premium Dashboard Metrics Panel (Insights & Readiness) */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                
+
                 {/* 1. Readiness Circular Indicator Card */}
                 <div className="p-4 bg-white/60 dark:bg-bg-secondary/40 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-border-subtle/80 flex items-center justify-between gap-4 shadow-sm">
                   <div className="space-y-1">
@@ -459,7 +459,7 @@ const ProjectPrep = () => {
                       {masteredCount} of {totalQuestions} concepts mastered
                     </p>
                   </div>
-                  
+
                   {/* Radial Progress Ring SVG */}
                   <div className="relative w-14 h-14 flex items-center justify-center flex-shrink-0">
                     <svg className="w-full h-full transform -rotate-90">
@@ -511,7 +511,7 @@ const ProjectPrep = () => {
                   <span className="text-[10px] font-bold text-accent-green tracking-wider uppercase flex items-center gap-1">
                     <CheckCircle className="w-3.5 h-3.5" /> Health Snapshot
                   </span>
-                  
+
                   <div className="grid grid-cols-2 gap-y-1.5 gap-x-2 text-[10px] text-slate-600 dark:text-text-secondary font-medium">
                     <div className="flex justify-between border-b border-slate-200/50 dark:border-border-subtle/50 pb-1">
                       <span className="text-slate-400 dark:text-text-muted">Documentation:</span>
@@ -540,8 +540,8 @@ const ProjectPrep = () => {
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(categoryStats).map(([cat, count]) => (
-                    <span 
-                      key={cat} 
+                    <span
+                      key={cat}
                       className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-slate-50 dark:bg-bg-tertiary border border-slate-200 dark:border-border-subtle text-slate-600 dark:text-text-secondary flex items-center gap-1.5"
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan" />
@@ -556,7 +556,7 @@ const ProjectPrep = () => {
 
               {/* Questions List Module Header */}
               <div className="p-6 bg-white/60 dark:bg-bg-secondary rounded-2xl border border-slate-200 dark:border-border-subtle shadow-sm space-y-6">
-                
+
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-0.5">
                     <h2 className="text-xl font-bold text-slate-800 dark:text-text-primary">AI Interview Guide</h2>
@@ -587,11 +587,10 @@ const ProjectPrep = () => {
                           setSelectedCategory(category)
                           setExpandedQuestionIdx(null)
                         }}
-                        className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition-colors whitespace-nowrap border ${
-                          isSelected
+                        className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition-colors whitespace-nowrap border ${isSelected
                             ? 'bg-accent-cyan/10 dark:bg-accent-cyan/15 text-accent-cyan border-accent-cyan/30 dark:border-accent-cyan/35 font-black'
                             : 'bg-slate-100 dark:bg-bg-tertiary/60 border-slate-200 dark:border-border-subtle text-slate-500 dark:text-text-muted hover:text-slate-800 dark:hover:text-text-secondary hover:bg-slate-200 dark:hover:bg-bg-tertiary'
-                        }`}
+                          }`}
                       >
                         {category}
                       </button>
@@ -614,32 +613,29 @@ const ProjectPrep = () => {
                       return (
                         <div
                           key={idx}
-                          className={`bg-slate-50/50 dark:bg-bg-tertiary/40 rounded-xl border transition-all overflow-hidden ${
-                            isMastered 
-                              ? 'border-slate-200/50 dark:border-border-subtle/40 opacity-70 hover:opacity-100' 
+                          className={`bg-slate-50/50 dark:bg-bg-tertiary/40 rounded-xl border transition-all overflow-hidden ${isMastered
+                              ? 'border-slate-200/50 dark:border-border-subtle/40 opacity-70 hover:opacity-100'
                               : 'border-slate-200 dark:border-border-subtle hover:border-accent-cyan/25'
-                          }`}
+                            }`}
                         >
                           <div className="p-4 flex items-start gap-4">
-                            
+
                             {/* Mastery Status Checkbox */}
                             <button
                               onClick={() => toggleMastered(originalIdx)}
                               className="mt-1 flex-shrink-0 p-1 hover:text-accent-green transition-colors"
                               title={isMastered ? 'Mark incomplete' : 'Mark mastered'}
                             >
-                              <CheckCircle className={`w-5 h-5 ${
-                                isMastered ? 'text-accent-green fill-accent-green/10' : 'text-slate-400 dark:text-text-muted'
-                              }`} />
+                              <CheckCircle className={`w-5 h-5 ${isMastered ? 'text-accent-green fill-accent-green/10' : 'text-slate-400 dark:text-text-muted'
+                                }`} />
                             </button>
 
-                            <div 
+                            <div
                               onClick={() => setExpandedQuestionIdx(isExpanded ? null : idx)}
                               className="flex-grow min-w-0 cursor-pointer space-y-2 select-none"
                             >
-                              <p className={`text-sm font-semibold leading-relaxed ${
-                                isMastered ? 'text-slate-400 dark:text-text-muted line-through font-medium' : 'text-slate-700 dark:text-text-secondary'
-                              }`}>
+                              <p className={`text-sm font-semibold leading-relaxed ${isMastered ? 'text-slate-400 dark:text-text-muted line-through font-medium' : 'text-slate-700 dark:text-text-secondary'
+                                }`}>
                                 {q.question}
                               </p>
 
@@ -659,13 +655,12 @@ const ProjectPrep = () => {
                               className="mt-1 p-1 hover:text-accent-yellow transition-colors text-slate-400 dark:text-text-muted"
                               title="Bookmark question"
                             >
-                              <Star className={`w-4 h-4 ${
-                                isBookmarked ? 'text-accent-yellow fill-accent-yellow/20' : 'text-slate-400 dark:text-text-muted'
-                              }`} />
+                              <Star className={`w-4 h-4 ${isBookmarked ? 'text-accent-yellow fill-accent-yellow/20' : 'text-slate-400 dark:text-text-muted'
+                                }`} />
                             </button>
 
                             {/* Accordion toggle button */}
-                            <button 
+                            <button
                               onClick={() => setExpandedQuestionIdx(isExpanded ? null : idx)}
                               className="mt-1 p-1 text-slate-400 dark:text-text-muted hover:text-slate-700 dark:hover:text-text-secondary"
                             >
@@ -684,7 +679,7 @@ const ProjectPrep = () => {
                                 className="border-t border-slate-200 dark:border-border-subtle/50 bg-slate-100/20 dark:bg-bg-primary/20"
                               >
                                 <div className="p-4 space-y-4">
-                                  
+
                                   {/* Answer Guidelines Hint */}
                                   <div className="text-xs text-slate-650 dark:text-text-secondary">
                                     <span className="font-bold text-accent-cyan mb-1 flex items-center gap-1.5 uppercase tracking-wider text-[10px]">
@@ -741,7 +736,7 @@ const ProjectPrep = () => {
               {/* Generation Configuration Input Block */}
               <div className="p-6 bg-slate-50 dark:bg-bg-secondary border border-slate-200 dark:border-border-subtle rounded-2xl space-y-4 shadow-inner">
                 <div className="space-y-4">
-                  
+
                   {/* Repo URL Input */}
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-slate-500 dark:text-text-secondary">
@@ -769,7 +764,7 @@ const ProjectPrep = () => {
                       <Key className="w-3.5 h-3.5" />
                       {showTokenInput ? 'Hide GitHub Access Token' : 'Add GitHub Access Token (for Private Repos)'}
                     </button>
-                    
+
                     <AnimatePresence>
                       {showTokenInput && (
                         <motion.div
@@ -835,7 +830,7 @@ const ProjectPrep = () => {
 
         {/* RIGHT COMPONENT (Sidebar for Active Repository Meta & Session History) */}
         <div className="lg:col-span-4 space-y-6">
-          
+
           {/* Active Repository Preview Card */}
           <AnimatePresence>
             {activeSession && !visualLoading && (
@@ -979,22 +974,21 @@ const ProjectPrep = () => {
                     <div
                       key={item._id}
                       onClick={() => handleSelectHistory(item._id)}
-                      className={`group flex items-center justify-between p-3.5 rounded-xl cursor-pointer transition-all border text-left ${
-                        isActive 
-                          ? 'bg-accent-cyan/5 dark:bg-accent-cyan/5 border-accent-cyan/40 dark:border-accent-cyan/40 text-accent-cyan shadow-[0_0_12px_rgba(34,211,238,0.06)] font-bold' 
+                      className={`group flex items-center justify-between p-3.5 rounded-xl cursor-pointer transition-all border text-left ${isActive
+                          ? 'bg-accent-cyan/5 dark:bg-accent-cyan/5 border-accent-cyan/40 dark:border-accent-cyan/40 text-accent-cyan shadow-[0_0_12px_rgba(34,211,238,0.06)] font-bold'
                           : 'bg-slate-50/50 dark:bg-bg-tertiary/60 border-slate-200 dark:border-border-subtle text-slate-600 dark:text-text-secondary hover:bg-slate-100 dark:hover:bg-bg-tertiary hover:border-slate-350 dark:hover:border-text-muted'
-                      }`}
+                        }`}
                     >
                       <div className="flex flex-col min-w-0 mr-2 space-y-1">
                         <span className="font-bold text-xs truncate text-slate-700 dark:text-text-secondary group-hover:text-slate-900 dark:group-hover:text-text-primary transition-colors">
                           {item.repoName}
                         </span>
-                        
+
                         <div className="flex items-center gap-2">
                           <span className="text-[9px] text-slate-400 dark:text-text-muted font-medium">
                             {new Date(item.createdAt).toLocaleDateString()}
                           </span>
-                          
+
                           {/* Mini language circles */}
                           {item.languages.slice(0, 2).map((lang) => (
                             <span key={lang} className="text-[8px] bg-white dark:bg-bg-primary border border-slate-200 dark:border-border-subtle px-1 rounded text-slate-400 dark:text-text-muted font-semibold">
@@ -1003,7 +997,7 @@ const ProjectPrep = () => {
                           ))}
                         </div>
                       </div>
-                      
+
                       <button
                         onClick={(e) => handleDeleteHistory(e, item._id)}
                         className="p-1.5 rounded-lg text-slate-400 dark:text-text-muted hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
