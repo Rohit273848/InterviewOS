@@ -7,7 +7,11 @@ export const generateInterviewStrategy = async (jobDescription: string, selfDesc
   formData.append('candidateWeaknesses', candidateWeaknesses);
   formData.append('resume', resumeFile);
 
-  const response = await api.post('/interview/generate', formData);
+  const response = await api.post('/interview/generate', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
 
   return response.data.data;
 };
