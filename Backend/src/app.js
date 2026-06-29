@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 
 const app = express();
+app.set("trust proxy", 1); // Trust reverse proxy for secure cookies
 app.use(morgan("dev"));
 
 // Middleware4
