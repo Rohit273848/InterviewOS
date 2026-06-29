@@ -90,7 +90,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
     res.cookie("jwt", "", {
         maxAge: 0,
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
         secure: process.env.NODE_ENV !== "development",
     });
 
