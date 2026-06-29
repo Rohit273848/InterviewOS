@@ -553,7 +553,7 @@ const LandingPage = () => {
                   onClick={() => navigate('/signup')}
                   className="px-10 py-5 rounded-full bg-[#B1F82A] text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(177,248,42,0.3)] flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
-                  Create Free Account
+                  Create Account
                   <ArrowRight className="w-6 h-6" />
                 </button>
               )}

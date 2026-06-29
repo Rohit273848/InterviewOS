@@ -38,6 +38,7 @@ Your generated questions must align with the following guidelines:
    - **medium:** Focus on multi-step problems, debugging real-world systems, trade-offs, standard concurrency or scaling issues.
    - **hard:** Focus on high throughput, ambiguous edge cases, deep system optimization, high-concurrency race conditions, complex organizational behavioral situations.
 4. **Questions Format:**
+   - Make each question short, concise, and to the point (maximum 1-2 sentences). Avoid overly long or verbose scenarios.
    - Make each question direct, engaging, and professional.
    - Provide a helpful "hint" for each question that gives the candidate guidance on key aspects they should cover in their response (e.g. "Use the STAR method..." or "Talk about CAP theorem trade-offs...").
    - Explicitly label the "source" field for each question showing where it was derived from ("jobDescription", "resume", "weaknesses", "selfDescription", or "general").

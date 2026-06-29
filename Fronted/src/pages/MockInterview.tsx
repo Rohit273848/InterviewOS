@@ -236,34 +236,29 @@ const MockInterview = () => {
   };
 
   const fillDemoData = () => {
-    setJobDescription(`Senior Frontend Engineer (React/TypeScript)
-Role Overview:
-We are looking for a Senior Frontend Engineer to join our product team. You will lead the development of modern web applications using React, TypeScript, and Tailwind CSS.
+    setJobDescription(`Software Developer (MERN Stack & GenAI)
 
-Requirements:
-- 5+ years of software development experience.
-- Strong proficiency in React, hooks, state management, and modern Web APIs.
-- Experience with testing libraries (Jest, React Testing Library).
-- Familiarity with CI/CD and cloud deployment.`);
+Self-Driven Projects | 2025 – Present
 
-    setResumeText(`Rohit Kumar
-frontend-engineer-rohit@example.com | Bengaluru, India
+Designed and developed scalable full-stack web applications using React.js, Node.js, Express.js, and MongoDB.
+Built and documented 25+ RESTful APIs with JWT authentication, Role-Based Access Control (RBAC), and secure session management.
+Optimized MongoDB performance through indexing and efficient query design, improving application response times.
+Integrated OpenAI APIs, LangChain, Retrieval-Augmented Generation (RAG), vector embeddings, and AI agents to build intelligent applications.
+Developed responsive user interfaces using React.js, Redux Toolkit, HTML, CSS, and modern JavaScript.
+Implemented secure backend features including authentication, authorization, CORS, encrypted cookies, and input validation.
+Deployed applications on cloud platforms using Git, GitHub, Docker, and Vercel, following modern development workflows.
+Applied Object-Oriented Programming, Data Structures, and Algorithms to write clean, maintainable, and efficient code.
+Collaborated using Git version control, followed modular project architecture, and maintained technical documentation.
+Skills Highlight
+Backend: Node.js, Express.js, REST APIs, JWT, RBAC
+Frontend: React.js, Redux Toolkit, HTML, CSS, JavaScript
+Database: MongoDB, SQL
+AI/GenAI: OpenAI API, LangChain, RAG, Vector Databases, AI Agents
+Tools: Git, GitHub, Docker, Vercel`);
 
-Summary:
-Frontend Engineer with 3.5 years of experience specialized in building responsive, accessible, and high-performance web applications using React, TypeScript, and modern JavaScript.
+    setResumeText(`Passionate Computer Science undergraduate with expertise in Java, JavaScript, the MERN Stack, and Generative AI. Experienced in developing scalable full-stack web applications, secure RESTful APIs, authentication systems, and AI-powered solutions using React.js, Node.js, Express.js, MongoDB, OpenAI APIs, LangChain, and Retrieval-Augmented Generation (RAG). Strong foundation in Data Structures, Algorithms, Object-Oriented Programming, and database optimization. Proven ability to build production-ready applications, solve complex technical problems, and learn new technologies quickly. Seeking a Software Engineer or Full-Stack Developer role where I can contribute to innovative products while continuously expanding my technical expertise.`);
 
-Technical Skills:
-- Languages: JavaScript (ES6+), TypeScript, HTML5, CSS3
-- Frameworks & Libraries: React, Redux Toolkit, Tailwind CSS, Next.js
-- Tools & Testing: Git, Webpack, Jest, React Testing Library, Docker
-
-Work Experience:
-Software Engineer at DevTech Solutions (2023 - Present)
-- Architected and built a new dashboard service using React and Tailwind CSS, improving page load speeds by 25%.
-- Maintained 90%+ test coverage across critical client pathways.
-- Mentored junior engineers on frontend best practices.`);
-
-    setSelfDescription(`3.5 years of frontend experience. Strong in React state management but looking to demonstrate system design capability and advance into senior roles.`);
+    setSelfDescription(`I am a B.Tech Computer Science student with a strong interest in full-stack development and Generative AI. I specialize in building scalable web applications using the MERN stack and have hands-on experience with REST APIs, authentication, MongoDB, React.js, and AI technologies such as OpenAI APIs, LangChain, and RAG. I enjoy solving complex problems, continuously improving my technical skills, and building projects that create real-world impact.`);
     setCandidateWeaknesses(`Testing complex stateful components; deployment pipelines/Docker.`);
 
     toast.success('Loaded premium demo profile context!');

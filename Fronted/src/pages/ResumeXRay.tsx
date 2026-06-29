@@ -45,7 +45,7 @@ const ResumeXRay = () => {
         toast.error('File size should not exceed 5MB')
         return
       }
-      
+
       setIsUploading(true)
       // Simulate file upload parsing and loading duration of 1.5 seconds
       setTimeout(() => {
@@ -81,18 +81,28 @@ const ResumeXRay = () => {
   }
 
   const fillDemoData = () => {
-    setJobDescription(`Senior Frontend Engineer (React/TypeScript)
-Role Overview:
-We are looking for a Senior Frontend Engineer to join our product team. You will lead the development of modern web applications using React, TypeScript, and Tailwind CSS.
+    setJobDescription(`Software Developer (MERN Stack & GenAI)
 
-Requirements:
-- 5+ years of software development experience.
-- Strong proficiency in React, hooks, state management, and modern Web APIs.
-- Experience with testing libraries (Jest, React Testing Library).
-- Familiarity with CI/CD and cloud deployment.`)
+Self-Driven Projects | 2025 – Present
 
-    setSelfDescription(`Frontend Engineer with 3.5 years of experience specialized in building responsive, accessible, and high-performance web applications using React, TypeScript, and modern JavaScript. Strong in React state management, Redux Toolkit, and UI engineering.`)
-    setCandidateWeaknesses(`Unit testing complex stateful hooks, WebGL rendering optimization, basic Docker infrastructure templates.`)
+Designed and developed scalable full-stack web applications using React.js, Node.js, Express.js, and MongoDB.
+Built and documented 25+ RESTful APIs with JWT authentication, Role-Based Access Control (RBAC), and secure session management.
+Optimized MongoDB performance through indexing and efficient query design, improving application response times.
+Integrated OpenAI APIs, LangChain, Retrieval-Augmented Generation (RAG), vector embeddings, and AI agents to build intelligent applications.
+Developed responsive user interfaces using React.js, Redux Toolkit, HTML, CSS, and modern JavaScript.
+Implemented secure backend features including authentication, authorization, CORS, encrypted cookies, and input validation.
+Deployed applications on cloud platforms using Git, GitHub, Docker, and Vercel, following modern development workflows.
+Applied Object-Oriented Programming, Data Structures, and Algorithms to write clean, maintainable, and efficient code.
+Collaborated using Git version control, followed modular project architecture, and maintained technical documentation.
+Skills Highlight
+Backend: Node.js, Express.js, REST APIs, JWT, RBAC
+Frontend: React.js, Redux Toolkit, HTML, CSS, JavaScript
+Database: MongoDB, SQL
+AI/GenAI: OpenAI API, LangChain, RAG, Vector Databases, AI Agents
+Tools: Git, GitHub, Docker, Vercel`)
+
+    setSelfDescription(`I am a B.Tech Computer Science student with a strong interest in full-stack development and Generative AI. I specialize in building scalable web applications using the MERN stack and have hands-on experience with REST APIs, authentication, MongoDB, React.js, and AI technologies such as OpenAI APIs, LangChain, and RAG. I enjoy solving complex problems, continuously improving my technical skills, and building projects that create real-world impact.`)
+    setCandidateWeaknesses(`Testing complex stateful components; deployment pipelines/Docker.`)
     toast.success('Loaded premium demo profile context!')
   }
 
@@ -144,7 +154,7 @@ Requirements:
                 </p>
               </div>
             </div>
-            
+
             <button
               onClick={() => setShowUploadForm(true)}
               className="flex items-center justify-center gap-2 bg-[#1a1a1a] dark:bg-white text-white dark:text-black hover:bg-black dark:hover:bg-gray-200 px-5 py-3 rounded-2xl font-bold text-sm shadow-sm transition-all active:scale-[0.98]"
@@ -156,7 +166,7 @@ Requirements:
 
           {/* Metrics Panel */}
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            
+
             {/* Score 1 */}
             <div className="bg-white dark:bg-bg-tertiary border border-gray-200 dark:border-border-subtle rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-sm">
               <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
@@ -286,7 +296,7 @@ Requirements:
                   REQUIRED
                 </span>
               </div>
-              
+
               {latestReport && (
                 <button
                   type="button"
@@ -394,8 +404,8 @@ Requirements:
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <label 
-                    htmlFor="resume-file-input" 
+                  <label
+                    htmlFor="resume-file-input"
                     className="flex items-center gap-1.5 px-3 py-2 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold text-xs rounded-xl border border-gray-200 dark:border-border-subtle cursor-pointer transition-all active:scale-[0.98]"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
@@ -412,7 +422,7 @@ Requirements:
                 </div>
               </div>
             ) : (
-              <label 
+              <label
                 htmlFor="resume-file-input"
                 className="block group"
               >
