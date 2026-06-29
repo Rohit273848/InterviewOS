@@ -26,7 +26,9 @@ import {
   Menu,
   X,
   Network,
-  Video
+  Video,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useProjectPrep } from '../hooks/useProjectPrep';
@@ -84,6 +86,7 @@ const ProjectPrep = () => {
   // Navigation states
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('dashboard');
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [showDesktopSidebar, setShowDesktopSidebar] = useState(true);
   
   // Ingestion terminal states
   const [progress, setProgress] = useState(0);
@@ -343,6 +346,20 @@ const ProjectPrep = () => {
               >
                 <Menu className="w-5 h-5" />
               </button>
+              
+              {/* Desktop Sidebar Toggle Button */}
+              <button 
+                onClick={() => setShowDesktopSidebar(!showDesktopSidebar)}
+                className="hidden lg:flex p-2 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
+                title={showDesktopSidebar ? "Hide Modules Menu" : "Show Modules Menu"}
+              >
+                {showDesktopSidebar ? (
+                  <ChevronLeft className="w-5 h-5" />
+                ) : (
+                  <ChevronRight className="w-5 h-5" />
+                )}
+              </button>
+
               <div className="w-9 h-9 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-500 font-bold shadow-inner">
                 {activeSession.repoName[0].toUpperCase()}
               </div>
@@ -379,30 +396,32 @@ const ProjectPrep = () => {
           </div>
 
           {/* Left Navigation Sidebar */}
-          <div className="lg:col-span-3 space-y-4 sticky top-24 hidden lg:block">
-            <div className="bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/60 p-4 rounded-[20px] shadow-sm text-left">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block pb-2 border-b border-slate-50 dark:border-slate-750 mb-2">Preparation Modules</span>
-              <div className="space-y-0.5">
-                {sidebarItems.map((item) => {
-                  const isActive = activeTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full px-3 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer ${
-                        isActive 
-                          ? 'bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20' 
-                          : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-900/40 hover:text-slate-850 dark:hover:text-slate-350'
-                      }`}
-                    >
-                      {item.icon}
-                      {item.label}
-                    </button>
-                  );
-                })}
+          {showDesktopSidebar && (
+            <div className="lg:col-span-3 space-y-4 sticky top-24 hidden lg:block">
+              <div className="bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/60 p-4 rounded-[20px] shadow-sm text-left">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block pb-2 border-b border-slate-50 dark:border-slate-750 mb-2">Preparation Modules</span>
+                <div className="space-y-0.5">
+                  {sidebarItems.map((item) => {
+                    const isActive = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveTab(item.id)}
+                        className={`w-full px-3 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2.5 cursor-pointer ${
+                          isActive 
+                            ? 'bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/20' 
+                            : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-900/40 hover:text-slate-850 dark:hover:text-slate-350'
+                        }`}
+                      >
+                        {item.icon}
+                        {item.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Mobile Sidebar drawer */}
           <AnimatePresence>
@@ -447,7 +466,7 @@ const ProjectPrep = () => {
           </AnimatePresence>
 
           {/* Center Main Workspace */}
-          <div className="lg:col-span-6 min-h-[500px]">
+          <div className={`${showDesktopSidebar ? 'lg:col-span-6' : 'lg:col-span-9'} min-h-[500px]`}>
             {activeTab === 'dashboard' && <DashboardView session={activeSession} mastered={mastered} bookmarks={bookmarks} />}
             {activeTab === 'info' && <ProjectInfoView session={activeSession} onAutoSaveStatus={setAutoSaveStatus} />}
             {activeTab === 'summary' && <SummaryView session={activeSession} />}

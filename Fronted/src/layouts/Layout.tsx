@@ -16,7 +16,9 @@ import {
   Menu,
   X,
   Sun,
-  Moon
+  Moon,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import { logout } from '../context/slices/userSlice'
 import { RootState } from '../context'
@@ -32,6 +34,7 @@ const Layout = () => {
   const { name } = useSelector((state: RootState) => state.user)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
@@ -93,58 +96,64 @@ const Layout = () => {
       </div>
 
       {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: 0 }}
-        className="hidden lg:flex w-[240px] m-4 mr-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-white/40 dark:border-slate-700/50 shadow-sm rounded-[24px] flex-col relative z-10 transition-colors duration-500"
-      >
-        {/* Logo */}
-        <div className="p-6 pb-2">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/dashboard')}>
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
-              <Brain className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-lg font-bold text-slate-800 dark:text-white tracking-tight transition-colors duration-500">InterviewOS</span>
-          </div>
-          <p className="text-[10px] uppercase font-bold text-teal-600 mt-1 ml-11 tracking-wider">AI Co-Pilot</p>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 group ${isActive
-                  ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 dark:from-teal-500/20 dark:to-cyan-500/20 text-teal-700 dark:text-teal-400 font-semibold'
-                  : 'text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <div className={`transition-transform duration-300 ${isActive ? 'text-teal-600' : 'group-hover:scale-110'}`}>
-                    {item.icon}
-                  </div>
-                  <span className="text-sm">{item.label}</span>
-                </>
-              )}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* User Profile / Logout */}
-        <div className="p-4 mb-2">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/40 dark:bg-slate-700/40 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-full hover:bg-white dark:hover:bg-slate-600 hover:text-red-500 dark:hover:text-red-400 hover:shadow-sm border border-white/50 dark:border-slate-600/50 transition-all duration-300 group"
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.aside
+            initial={{ x: -260, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -260, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="hidden lg:flex w-[240px] m-4 mr-0 bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-white/40 dark:border-slate-700/50 shadow-sm rounded-[24px] flex-col relative z-10 transition-colors duration-500"
           >
-            <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </motion.aside>
+            {/* Logo */}
+            <div className="p-6 pb-2">
+              <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/dashboard')}>
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
+                  <Brain className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-lg font-bold text-slate-800 dark:text-white tracking-tight transition-colors duration-500">InterviewOS</span>
+              </div>
+              <p className="text-[10px] uppercase font-bold text-teal-600 mt-1 ml-11 tracking-wider">AI Co-Pilot</p>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 group ${isActive
+                      ? 'bg-gradient-to-r from-teal-500/10 to-cyan-500/10 dark:from-teal-500/20 dark:to-cyan-500/20 text-teal-700 dark:text-teal-400 font-semibold'
+                      : 'text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-700/50 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <div className={`transition-transform duration-300 ${isActive ? 'text-teal-600' : 'group-hover:scale-110'}`}>
+                        {item.icon}
+                      </div>
+                      <span className="text-sm">{item.label}</span>
+                    </>
+                  )}
+                </NavLink>
+              ))}
+            </nav>
+
+            {/* User Profile / Logout */}
+            <div className="p-4 mb-2">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/40 dark:bg-slate-700/40 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-full hover:bg-white dark:hover:bg-slate-600 hover:text-red-500 dark:hover:text-red-400 hover:shadow-sm border border-white/50 dark:border-slate-600/50 transition-all duration-300 group"
+              >
+                <LogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                <span>Logout</span>
+              </button>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
@@ -229,6 +238,15 @@ const Layout = () => {
               className="lg:hidden p-2 hover:bg-white/50 rounded-xl transition-all text-slate-600 flex-shrink-0"
             >
               <Menu className="w-5 h-5" />
+            </button>
+
+            {/* Desktop Sidebar Toggle Button */}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="hidden lg:flex p-2 hover:bg-white/50 dark:hover:bg-slate-700/50 rounded-xl transition-all text-slate-600 dark:text-slate-300 flex-shrink-0 cursor-pointer"
+              title={sidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+            >
+              {sidebarOpen ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
             </button>
 
             {/* Search */}
