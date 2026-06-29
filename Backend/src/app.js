@@ -19,6 +19,7 @@ app.use(
             "https://interview-os-sage.vercel.app"
         ],
         credentials: true,
+        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
     })
 );
 
