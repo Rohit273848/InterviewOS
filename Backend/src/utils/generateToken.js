@@ -13,6 +13,8 @@ const generateToken = (userId, res) => {
         sameSite: process.env.NODE_ENV === "development" ? "lax" : "none", // Prevents CSRF attacks (Cross-Site Request Forgery)
         secure: process.env.NODE_ENV !== "development", // Cookie only works on HTTPS in production
     });
+
+    return token;
 };
 
 export default generateToken;

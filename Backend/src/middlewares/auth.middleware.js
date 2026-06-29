@@ -5,8 +5,12 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const protectRoute = asyncHandler(async (req, res, next) => {
     try {
-        // 1. Get token from cookies
-        const token = req.cookies.jwt;
+        // 1. Get token from cookies or authorization header
+        let token = req.cookies.jwt;
+        
+        if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+            token = req.headers.authorization.split(" ")[1];
+        }
 
         if (!token) {
             throw new ApiError(401, "Unauthorized - No token provided");

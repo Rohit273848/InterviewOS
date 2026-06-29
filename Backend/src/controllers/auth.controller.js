@@ -29,7 +29,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
     if (user) {
         // Generate JWT and set cookie
-        generateToken(user._id, res);
+        const token = generateToken(user._id, res);
 
         res.status(201).json({
             success: true,
@@ -39,6 +39,7 @@ export const registerUser = asyncHandler(async (req, res) => {
                 name: user.name,
                 email: user.email,
             },
+            token,
         });
     } else {
         throw new ApiError(500, "Invalid user data received");
@@ -70,7 +71,7 @@ export const loginUser = asyncHandler(async (req, res) => {
     }
 
     // Generate JWT and set cookie
-    generateToken(user._id, res);
+    const token = generateToken(user._id, res);
 
     // Remove password before sending response
     user.password = undefined;
@@ -79,6 +80,7 @@ export const loginUser = asyncHandler(async (req, res) => {
         success: true,
         message: "Logged in successfully",
         data: user,
+        token,
     });
 });
 
