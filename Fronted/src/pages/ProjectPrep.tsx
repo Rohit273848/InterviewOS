@@ -383,7 +383,7 @@ const ProjectPrep = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setSelectedSessionId(undefined)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-bg-secondary border border-slate-200 dark:border-border-subtle rounded-xl hover:border-accent-cyan/30 hover:bg-slate-55 dark:hover:bg-bg-tertiary transition-all text-xs font-bold text-slate-700 dark:text-text-secondary shadow-sm hover:shadow-md cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-bg-secondary border border-slate-200 dark:border-border-subtle rounded-xl hover:border-accent-cyan/30 hover:bg-slate-50 dark:hover:bg-bg-tertiary transition-all text-xs font-bold text-slate-700 dark:text-text-secondary shadow-sm hover:shadow-md cursor-pointer"
           >
             <Sparkles className="w-4 h-4 text-accent-cyan animate-pulse" />
             Analyze New Repository
@@ -404,7 +404,7 @@ const ProjectPrep = () => {
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                className="p-6 bg-slate-955 border border-slate-800 rounded-2xl shadow-xl shadow-accent-cyan/5 space-y-4 text-slate-100 relative overflow-hidden"
+                className="p-6 bg-slate-950 border border-slate-800 rounded-2xl shadow-xl shadow-accent-cyan/5 space-y-4 text-slate-100 relative overflow-hidden"
               >
                 {/* Visual Glassmorphic glow */}
                 <div className="absolute top-0 right-0 w-48 h-48 bg-accent-cyan/5 rounded-full blur-[60px] pointer-events-none" />
@@ -441,10 +441,10 @@ const ProjectPrep = () => {
                 </div>
 
                 {/* Log Output Area */}
-                <div className="bg-black/40 border border-slate-850 rounded-xl p-4 font-mono text-[11px] text-slate-350 h-52 overflow-y-auto space-y-2.5 scrollbar-thin select-text">
+                <div className="bg-black/40 border border-slate-800 rounded-xl p-4 font-mono text-[11px] text-slate-300 h-52 overflow-y-auto space-y-2.5 scrollbar-thin select-text">
                   {progressLogs.map((log, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <span className="text-slate-500 font-bold select-none text-[10px] min-w-[45px] text-right">{log.timestamp}</span>
+                      <span className="text-slate-500 font-bold select-none text-[10px] min-w-[48px] text-right">{log.timestamp}</span>
                       <span className="text-slate-500 select-none">|</span>
                       <span className={`leading-relaxed ${
                         log.type === 'success' ? 'text-accent-green font-semibold' :
@@ -457,7 +457,7 @@ const ProjectPrep = () => {
                       </span>
                     </div>
                   ))}
-                  <div className="flex items-center gap-1.5 pl-[64px]">
+                  <div className="flex items-center gap-1.5 pl-16">
                     <span className="w-2 h-3.5 bg-accent-cyan animate-pulse inline-block" />
                     <span className="text-[10px] text-slate-600 select-none">listening for event stream...</span>
                   </div>
@@ -490,7 +490,7 @@ const ProjectPrep = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                 {/* 1. Readiness Circular Indicator Card */}
-                <div className="p-5 bg-white dark:bg-bg-secondary rounded-2xl border border-slate-200/80 dark:border-border-subtle shadow-sm flex items-center justify-between gap-4 relative overflow-hidden group hover:border-slate-350 dark:hover:border-slate-750 transition-colors">
+                <div className="p-5 bg-white dark:bg-bg-secondary rounded-2xl border border-slate-200/80 dark:border-border-subtle shadow-sm flex items-center justify-between gap-4 relative overflow-hidden group hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                   <div className="space-y-1.5 z-10">
                     <span className="text-[10px] font-bold text-accent-pink tracking-wider uppercase flex items-center gap-1.5">
                       <Trophy className="w-3.5 h-3.5 text-accent-pink" /> Readiness Score
@@ -534,7 +534,7 @@ const ProjectPrep = () => {
                 </div>
 
                 {/* 2. Repository Complexity Card */}
-                <div className="p-5 bg-white dark:bg-bg-secondary rounded-2xl border border-slate-200/80 dark:border-border-subtle shadow-sm space-y-3 hover:border-slate-350 dark:hover:border-slate-750 transition-colors">
+                <div className="p-5 bg-white dark:bg-bg-secondary rounded-2xl border border-slate-200/80 dark:border-border-subtle shadow-sm space-y-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                   <span className="text-[10px] font-bold text-accent-yellow tracking-wider uppercase flex items-center gap-1.5">
                     <Activity className="w-3.5 h-3.5 text-accent-yellow" /> Complexity Tier
                   </span>
@@ -556,12 +556,12 @@ const ProjectPrep = () => {
                 </div>
 
                 {/* 3. Repository Health Snapshot Card */}
-                <div className="p-5 bg-white dark:bg-bg-secondary rounded-2xl border border-slate-200/80 dark:border-border-subtle shadow-sm space-y-3 hover:border-slate-350 dark:hover:border-slate-750 transition-colors">
+                <div className="p-5 bg-white dark:bg-bg-secondary rounded-2xl border border-slate-200/80 dark:border-border-subtle shadow-sm space-y-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                   <span className="text-[10px] font-bold text-accent-green tracking-wider uppercase flex items-center gap-1.5">
                     <CheckCircle className="w-3.5 h-3.5 text-accent-green" /> Ingestion Health
                   </span>
 
-                  <div className="space-y-1.5 text-[10px] text-slate-650 dark:text-text-secondary font-semibold">
+                  <div className="space-y-1.5 text-[10px] text-slate-600 dark:text-text-secondary font-semibold">
                     <div className="flex justify-between border-b border-slate-100 dark:border-border-subtle/50 pb-1">
                       <span className="text-slate-400 dark:text-text-muted">Docs Quality:</span>
                       <span className="font-bold text-accent-cyan">{healthIndicators.readme}</span>
@@ -587,11 +587,11 @@ const ProjectPrep = () => {
                   {Object.entries(categoryStats).map(([cat, count]) => (
                     <span
                       key={cat}
-                      className="px-3 py-1 text-[11px] font-bold rounded-xl bg-slate-50 dark:bg-bg-tertiary border border-slate-200/60 dark:border-border-subtle text-slate-655 dark:text-text-secondary flex items-center gap-2 hover:scale-[1.02] hover:bg-slate-100 dark:hover:bg-bg-tertiary/80 transition-all"
+                      className="px-3 py-1 text-[11px] font-bold rounded-xl bg-slate-50 dark:bg-bg-tertiary border border-slate-200/60 dark:border-border-subtle text-slate-600 dark:text-text-secondary flex items-center gap-2 hover:scale-[1.02] hover:bg-slate-100 dark:hover:bg-bg-tertiary/80 transition-all"
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan shadow-[0_0_6px_#22D3EE]" />
                       <span>{cat}</span>
-                      <span className="px-1.5 py-0.2 text-[9px] bg-slate-200 dark:bg-bg-primary rounded text-slate-800 dark:text-text-primary font-black">{count}</span>
+                      <span className="px-1.5 py-0.5 text-[9px] bg-slate-200 dark:bg-bg-primary rounded text-slate-800 dark:text-text-primary font-black">{count}</span>
                     </span>
                   ))}
                   {Object.keys(categoryStats).length === 0 && (
@@ -677,7 +677,7 @@ const ProjectPrep = () => {
                               className={`mt-1 flex-shrink-0 p-0.5 rounded-full transition-all border cursor-pointer hover:scale-105 ${
                                 isMastered 
                                   ? 'bg-accent-green/10 text-accent-green border-accent-green/30' 
-                                  : 'text-slate-350 dark:text-slate-600 border-slate-250 dark:border-slate-700 hover:text-accent-green hover:border-accent-green/40'
+                                  : 'text-slate-300 dark:text-slate-600 border-slate-200 dark:border-slate-700 hover:text-accent-green hover:border-accent-green/40'
                               }`}
                               title={isMastered ? 'Mark incomplete' : 'Mark mastered'}
                             >
@@ -786,7 +786,7 @@ const ProjectPrep = () => {
                     reverse-engineer your preparation.
                   </span>
                 </h2>
-                <p className="text-sm text-slate-550 dark:text-text-secondary max-w-2xl leading-relaxed font-medium">
+                <p className="text-sm text-slate-500 dark:text-text-secondary max-w-2xl leading-relaxed font-medium">
                   Provide any public or private GitHub repository URL. Our system maps the architecture, profiles files, crawls documentation, and synthesizes target system design & architecture questions.
                 </p>
               </div>
@@ -820,7 +820,7 @@ const ProjectPrep = () => {
                     <button
                       type="button"
                       onClick={() => setShowTokenInput(!showTokenInput)}
-                      className="flex items-center gap-2 text-xs font-bold text-slate-550 dark:text-text-muted hover:text-accent-cyan transition-colors cursor-pointer select-none"
+                      className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-text-muted hover:text-accent-cyan transition-colors cursor-pointer select-none"
                     >
                       <Key className="w-3.5 h-3.5 text-accent-cyan" />
                       <span>{showTokenInput ? 'Hide GitHub Access Token' : 'Add GitHub Access Token (for Private Repos)'}</span>
@@ -919,7 +919,7 @@ const ProjectPrep = () => {
                     <div className="p-1.5 bg-accent-cyan/10 rounded-lg">
                       <Github className="w-4 h-4 text-accent-cyan" />
                     </div>
-                    <span className="text-[10px] font-bold text-slate-450 dark:text-text-muted uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-text-muted uppercase tracking-wider">
                       Active Repository
                     </span>
                   </div>
@@ -948,12 +948,12 @@ const ProjectPrep = () => {
                 {/* GitHub Languages bar */}
                 {activeSession.languages.length > 0 && (
                   <div className="space-y-2">
-                    <span className="text-[9px] uppercase font-bold text-slate-450 dark:text-text-muted flex items-center gap-1.5">
+                    <span className="text-[9px] uppercase font-bold text-slate-400 dark:text-text-muted flex items-center gap-1.5">
                       <Code className="w-3.5 h-3.5 text-accent-cyan" /> Stack composition
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {activeSession.languages.map((lang) => (
-                        <span key={lang} className="px-2.5 py-1 text-[10px] rounded-lg bg-slate-55 dark:bg-bg-tertiary border border-slate-200/60 dark:border-border-subtle text-slate-650 dark:text-text-secondary font-bold">
+                        <span key={lang} className="px-2.5 py-1 text-[10px] rounded-lg bg-slate-50 dark:bg-bg-tertiary border border-slate-200/60 dark:border-border-subtle text-slate-600 dark:text-text-secondary font-bold">
                           {lang}
                         </span>
                       ))}
@@ -964,7 +964,7 @@ const ProjectPrep = () => {
                 {/* Topics section */}
                 {activeSession.topics.length > 0 && (
                   <div className="space-y-2">
-                    <span className="text-[9px] uppercase font-bold text-slate-450 dark:text-text-muted flex items-center gap-1.5">
+                    <span className="text-[9px] uppercase font-bold text-slate-400 dark:text-text-muted flex items-center gap-1.5">
                       <BookOpen className="w-3.5 h-3.5 text-accent-pink" /> Primary Topics
                     </span>
                     <div className="flex flex-wrap gap-1.5">
@@ -981,11 +981,11 @@ const ProjectPrep = () => {
                 <div className="p-4 bg-slate-50 dark:bg-bg-primary/40 rounded-xl border border-slate-200/60 dark:border-border-subtle/50 text-[10px] text-slate-400 dark:text-text-muted space-y-1.5 font-bold">
                   <div className="flex justify-between">
                     <span>README footprint:</span>
-                    <span className="text-slate-750 dark:text-text-secondary">{(readmeLength / 1024).toFixed(2)} KB</span>
+                    <span className="text-slate-700 dark:text-text-secondary">{(readmeLength / 1024).toFixed(2)} KB</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Repository complexity metrics:</span>
-                    <span className="text-slate-750 dark:text-text-secondary">{languageCount} Langs / {topicCount} Tags</span>
+                    <span className="text-slate-700 dark:text-text-secondary">{languageCount} Langs / {topicCount} Tags</span>
                   </div>
                 </div>
 
@@ -1023,12 +1023,12 @@ const ProjectPrep = () => {
 
                 {/* Language list filters */}
                 {allLanguagesInHistory.length > 0 && (
-                  <div className="flex items-center justify-between text-xs text-slate-450 dark:text-text-muted font-bold">
+                  <div className="flex items-center justify-between text-xs text-slate-400 dark:text-text-muted font-bold">
                     <span className="flex items-center gap-1.5"><Filter className="w-3.5 h-3.5 text-accent-cyan" /> Filter by:</span>
                     <select
                       value={historyLangFilter}
                       onChange={(e) => setHistoryLangFilter(e.target.value)}
-                      className="bg-slate-50 dark:bg-bg-tertiary border border-slate-200 dark:border-border-subtle rounded-lg px-2.5 py-1 text-[11px] focus:outline-none focus:border-accent-cyan text-slate-655 dark:text-text-secondary font-bold cursor-pointer"
+                      className="bg-slate-50 dark:bg-bg-tertiary border border-slate-200 dark:border-border-subtle rounded-lg px-2.5 py-1 text-[11px] focus:outline-none focus:border-accent-cyan text-slate-600 dark:text-text-secondary font-bold cursor-pointer"
                     >
                       <option value="All">All Languages</option>
                       {allLanguagesInHistory.map((lang) => (
@@ -1044,7 +1044,7 @@ const ProjectPrep = () => {
             {isLoadingHistory ? (
               <div className="flex flex-col items-center py-8 gap-2">
                 <div className="w-6 h-6 border-2 border-accent-cyan/30 border-t-accent-cyan rounded-full animate-spin" />
-                <span className="text-[10px] text-slate-450 dark:text-text-muted font-medium">Syncing database history...</span>
+                <span className="text-[10px] text-slate-400 dark:text-text-muted font-medium">Syncing database history...</span>
               </div>
             ) : filteredHistory.length > 0 ? (
               <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1 scrollbar-thin">
@@ -1056,11 +1056,11 @@ const ProjectPrep = () => {
                       onClick={() => handleSelectHistory(item._id)}
                       className={`group flex items-center justify-between p-3.5 rounded-xl cursor-pointer transition-all border text-left ${isActive
                           ? 'bg-accent-cyan/5 dark:bg-accent-cyan/5 border-accent-cyan/50 dark:border-accent-cyan/45 text-accent-cyan shadow-[0_2px_12px_rgba(34,211,238,0.04)] font-bold'
-                          : 'bg-slate-50/50 dark:bg-bg-tertiary/30 border-slate-200/80 dark:border-border-subtle text-slate-600 dark:text-text-secondary hover:bg-slate-100 dark:hover:bg-bg-tertiary hover:border-slate-350 dark:hover:border-text-muted'
+                          : 'bg-slate-50/50 dark:bg-bg-tertiary/30 border-slate-200/80 dark:border-border-subtle text-slate-600 dark:text-text-secondary hover:bg-slate-100 dark:hover:bg-bg-tertiary hover:border-slate-300 dark:hover:border-text-muted'
                         }`}
                     >
                       <div className="flex flex-col min-w-0 mr-2 space-y-1">
-                        <span className="font-extrabold text-xs truncate text-slate-800 dark:text-text-secondary group-hover:text-slate-955 dark:group-hover:text-text-primary transition-colors">
+                        <span className="font-extrabold text-xs truncate text-slate-800 dark:text-text-secondary group-hover:text-slate-950 dark:group-hover:text-text-primary transition-colors">
                           {item.repoName}
                         </span>
 
@@ -1071,7 +1071,7 @@ const ProjectPrep = () => {
 
                           {/* Mini language circles */}
                           {item.languages.slice(0, 2).map((lang) => (
-                            <span key={lang} className="text-[8px] bg-white dark:bg-bg-primary border border-slate-250 dark:border-slate-700 px-1 rounded text-slate-550 dark:text-text-muted font-bold uppercase">
+                            <span key={lang} className="text-[8px] bg-white dark:bg-bg-primary border border-slate-200 dark:border-slate-700 px-1 rounded text-slate-500 dark:text-text-muted font-bold uppercase">
                               {lang}
                             </span>
                           ))}
@@ -1090,7 +1090,7 @@ const ProjectPrep = () => {
                 })}
               </div>
             ) : (
-              <div className="text-center py-10 text-xs text-slate-450 dark:text-text-muted border border-dashed border-slate-200/80 dark:border-border-subtle rounded-xl font-semibold">
+              <div className="text-center py-10 text-xs text-slate-400 dark:text-text-muted border border-dashed border-slate-200/80 dark:border-border-subtle rounded-xl font-semibold">
                 No past run histories found.
               </div>
             )}
