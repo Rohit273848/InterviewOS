@@ -1,4 +1,4 @@
-# <div align="center">⚡ InterviewOS - Frontend Placement Co-Pilot ⚡</div>
+# <div align="center">⚡ InterviewOS - Frontend Placement Co-Pilot⚡</div>
 
 <div align="center">
   <p>A production-grade, highly interactive, and visually stunning web workspace built for final-year CS students and placement aspirants. It coordinates AI-driven resume optimization, real-time mock interviews, GitHub repository analyzers, and community review networks into a unified dashboard experience.</p>
