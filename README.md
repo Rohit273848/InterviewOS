@@ -3,7 +3,6 @@
 > **Your AI-Powered Placement Co-Pilot** – An advanced, full-stack application designed to help final-year CS students and placement aspirants master interview preparation. It parses PDF resumes, runs mock interview chat sessions, parses GitHub repositories to generate project-specific technical questions, and tracks preparation progress using rich data visualization.
 
 ---
-
 ## Features
 
 ### 📄 AI Resume X-Ray
