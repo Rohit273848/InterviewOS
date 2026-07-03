@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useSelector } from 'react-redux'
 import { RootState } from '../context'
@@ -30,10 +32,12 @@ import {
 } from 'recharts'
 
 const Dashboard = () => {
+  const navigate = useNavigate()
   const { name } = useSelector((state: RootState) => state.user)
+  const [selectedWeek, setSelectedWeek] = useState('This Week')
 
   // Chart Data
-  const weeklyProgressData = [
+  const thisWeekData = [
     { day: 'Mon', score: 45 },
     { day: 'Tue', score: 52 },
     { day: 'Wed', score: 48 },
@@ -42,6 +46,18 @@ const Dashboard = () => {
     { day: 'Sat', score: 58 },
     { day: 'Sun', score: 72 },
   ]
+
+  const lastWeekData = [
+    { day: 'Mon', score: 38 },
+    { day: 'Tue', score: 40 },
+    { day: 'Wed', score: 42 },
+    { day: 'Thu', score: 45 },
+    { day: 'Fri', score: 50 },
+    { day: 'Sat', score: 48 },
+    { day: 'Sun', score: 55 },
+  ]
+
+  const weeklyProgressData = selectedWeek === 'This Week' ? thisWeekData : lastWeekData
 
   const mockInterviewData = [
     { name: '1', score: 60 },
@@ -143,7 +159,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <button className="w-full py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:shadow-teal-500/20 transition-all flex items-center justify-center gap-2 group/btn">
+          <button 
+            onClick={() => navigate('/resume-xray')}
+            className="w-full py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:shadow-teal-500/20 transition-all flex items-center justify-center gap-2 group/btn"
+          >
             Improve Resume <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
           </button>
         </motion.div>
@@ -222,7 +241,27 @@ const Dashboard = () => {
           <div className="mt-auto h-16 w-full">
              <ResponsiveContainer width="100%" height="100%">
                <LineChart data={mockInterviewData}>
-                 <Line type="monotone" dataKey="score" stroke="#3B82F6" strokeWidth={3} dot={false} />
+                 <Tooltip 
+                   contentStyle={{ 
+                     backgroundColor: 'rgba(30, 41, 59, 0.9)', 
+                     border: '1px solid rgba(255, 255, 255, 0.1)',
+                     borderRadius: '12px',
+                     boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                     color: '#fff',
+                     fontSize: '11px',
+                     padding: '4px 8px'
+                   }}
+                   itemStyle={{ color: '#fff' }}
+                   labelFormatter={(label) => `Attempt ${parseInt(label) + 1}`}
+                 />
+                 <Line 
+                   type="monotone" 
+                   dataKey="score" 
+                   stroke="#3B82F6" 
+                   strokeWidth={3} 
+                   dot={{ r: 3, fill: '#3B82F6', strokeWidth: 0 }} 
+                   activeDot={{ r: 5, fill: '#3B82F6', stroke: '#fff', strokeWidth: 2 }} 
+                 />
                </LineChart>
              </ResponsiveContainer>
           </div>
@@ -280,9 +319,13 @@ const Dashboard = () => {
               <h3 className="font-bold text-slate-800 dark:text-slate-100 transition-colors duration-500">Weekly Analytics</h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-500">Time spent on preparation</p>
             </div>
-            <select className="bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-600 text-slate-600 dark:text-slate-300 text-sm rounded-lg px-3 py-1.5 focus:outline-none transition-colors duration-500">
-              <option>This Week</option>
-              <option>Last Week</option>
+            <select 
+              value={selectedWeek}
+              onChange={(e) => setSelectedWeek(e.target.value)}
+              className="bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-600 text-slate-600 dark:text-slate-300 text-sm rounded-lg px-3 py-1.5 focus:outline-none transition-colors duration-500 cursor-pointer"
+            >
+              <option value="This Week">This Week</option>
+              <option value="Last Week">Last Week</option>
             </select>
           </div>
           
@@ -349,7 +392,10 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <button className="w-full py-2 bg-slate-100 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-semibold text-sm transition-colors mt-auto">
+          <button 
+            onClick={() => navigate('/project-prep')}
+            className="w-full py-2 bg-slate-100 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-semibold text-sm transition-colors mt-auto"
+          >
             Review Project
           </button>
         </motion.div>
@@ -365,11 +411,15 @@ const Dashboard = () => {
           
           <div className="space-y-3">
             {[
-              { text: "Improve resume impact words in experience section", icon: "📄" },
-              { text: "Practice system design for scalable architectures", icon: "🏗️" },
-              { text: "Revise DBMS indexing and normalization concepts", icon: "🗄️" },
+              { text: "Improve resume impact words in experience section", icon: "📄", path: "/resume-xray" },
+              { text: "Practice system design for scalable architectures", icon: "🏗️", path: "/mock-interview" },
+              { text: "Revise DBMS indexing and normalization concepts", icon: "🗄️", path: "/question-bank" },
             ].map((suggestion, idx) => (
-              <div key={idx} className="bg-white/70 dark:bg-slate-700/40 border border-white dark:border-slate-600/30 p-3 rounded-xl flex items-start gap-3 hover:shadow-sm transition-all cursor-pointer group">
+              <div 
+                key={idx} 
+                onClick={() => navigate(suggestion.path)}
+                className="bg-white/70 dark:bg-slate-700/40 border border-white dark:border-slate-600/30 p-3 rounded-xl flex items-start gap-3 hover:shadow-sm transition-all cursor-pointer group"
+              >
                 <span className="text-lg">{suggestion.icon}</span>
                 <span className="text-sm text-slate-700 dark:text-slate-300 font-medium group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">{suggestion.text}</span>
               </div>
@@ -381,17 +431,26 @@ const Dashboard = () => {
         <motion.div variants={itemVariants} className="xl:col-span-2 bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl border border-white/40 dark:border-slate-700/50 rounded-[24px] p-6 shadow-sm hover:shadow-md dark:shadow-none transition-all duration-500">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-bold text-slate-800 dark:text-slate-100 transition-colors duration-500">Upcoming Tasks</h3>
-            <button className="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-colors duration-500">View All</button>
+            <button 
+              onClick={() => navigate('/mock-interview')}
+              className="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-colors duration-500"
+            >
+              View All
+            </button>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { title: "Resume Review", time: "Today, 4:00 PM", type: "Urgent", color: "text-red-500 dark:text-red-400", bg: "bg-red-50 dark:bg-red-500/10" },
-              { title: "Mock Interview: React", time: "Tomorrow, 10:00 AM", type: "Prep", color: "text-blue-500 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-500/10" },
-              { title: "DSA Revision: Graphs", time: "Thu, 6:00 PM", type: "Study", color: "text-purple-500 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-500/10" },
-              { title: "HR Behavioral Prep", time: "Fri, 2:00 PM", type: "Study", color: "text-orange-500 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-500/10" },
+              { title: "Resume Review", time: "Today, 4:00 PM", type: "Urgent", color: "text-red-500 dark:text-red-400", bg: "bg-red-50 dark:bg-red-500/10", path: "/resume-xray" },
+              { title: "Mock Interview: React", time: "Tomorrow, 10:00 AM", type: "Prep", color: "text-blue-500 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-500/10", path: "/mock-interview" },
+              { title: "DSA Revision: Graphs", time: "Thu, 6:00 PM", type: "Study", color: "text-purple-500 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-500/10", path: "/question-bank" },
+              { title: "HR Behavioral Prep", time: "Fri, 2:00 PM", type: "Study", color: "text-orange-500 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-500/10", path: "/mock-interview" },
             ].map((task, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 bg-white/50 dark:bg-slate-700/40 border border-slate-100 dark:border-slate-600/50 rounded-xl hover:bg-white/80 dark:hover:bg-slate-700 transition-colors cursor-pointer group duration-500">
+              <div 
+                key={idx} 
+                onClick={() => navigate(task.path)}
+                className="flex items-center justify-between p-4 bg-white/50 dark:bg-slate-700/40 border border-slate-100 dark:border-slate-600/50 rounded-xl hover:bg-white/80 dark:hover:bg-slate-700 transition-colors cursor-pointer group duration-500"
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 group-hover:bg-teal-50 dark:group-hover:bg-teal-500/20 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-500">
                     <CheckCircle2 className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-teal-500 dark:group-hover:text-teal-400 transition-colors duration-500" />
