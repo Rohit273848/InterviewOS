@@ -99,8 +99,6 @@ interview-project/
     │   ├── App.tsx          # Root React component (restores user sessions)
     │   └── main.tsx         # Application entry point
     └── package.json
-```
----
 
 ## Environment Variables
 
