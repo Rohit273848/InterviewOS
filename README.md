@@ -100,7 +100,6 @@ interview-project/
     │   └── main.tsx         # Application entry point
     └── package.json
 ```
-
 ---
 
 ## Environment Variables
