@@ -35,6 +35,7 @@
 - [🚨 Troubleshooting & FAQ](#-troubleshooting--faq)
 - [Project Structure](#-project-structure)
 - [License](#-license)
+- [Author](#-author)
 
 ---
 
@@ -590,6 +591,15 @@ See the `Backend/package.json` for license declaration.
 
 ---
 
+## 👨‍💻 Author
+
+**Rohit Mahajan**
+- 🌐 **Portfolio**: [rohit-mahajan-ai.vercel.app](https://rohit-mahajan-ai.vercel.app/)
+- 🐙 **GitHub**: [@Rohit273848](https://github.com/Rohit273848)
+- 💼 **LinkedIn**: [Rohit Mahajan](https://www.linkedin.com/feed/)
+
+---
+
 <p align="center">
-  Built with ❤️ for tech students and placement aspirants worldwide.
+  Built with ❤️ by <a href="https://rohit-mahajan-ai.vercel.app/">Rohit Mahajan</a> for tech students and placement aspirants worldwide.
 </p>

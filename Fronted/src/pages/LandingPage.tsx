@@ -9,7 +9,7 @@ import {
   ArrowRight,
   Github,
   Linkedin,
-  Twitter,
+  Globe,
   ChevronRight,
   Star,
   FileSearch,
@@ -1085,12 +1085,22 @@ const LandingPage = () => {
               </ul>
             </div>
 
-            {/* Version Statement */}
+            {/* About / Creator */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">About Project</h4>
-              <p className="text-xs text-gray-550 leading-relaxed">
-                Version: <span className="text-gray-300 font-mono">1.0.0</span><br />
-                Built with React, Express, MongoDB, and Gemini.
+              <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">About</h4>
+              <p className="text-xs text-gray-400 leading-relaxed mb-2">
+                Built by{' '}
+                <a
+                  href="https://rohit-mahajan-ai.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-[#B1F82A] transition-colors font-medium underline underline-offset-2"
+                >
+                  Rohit Mahajan
+                </a>
+              </p>
+              <p className="text-xs text-gray-500 font-mono">
+                v1.0.0 • AI Placement Co-Pilot
               </p>
             </div>
           </div>
@@ -1098,15 +1108,36 @@ const LandingPage = () => {
           <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-semibold">
             <p>© 2026 InterviewOS. All rights reserved.</p>
             
-            <div className="flex items-center gap-4">
-              <a href="https://github.com/Rohit273848/InterviewOS" aria-label="GitHub" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-405 hover:text-[#B1F82A] hover:bg-[#B1F82A]/10 hover:border-[#B1F82A]/30 transition-all duration-300">
+            <div className="flex items-center gap-3">
+              <a
+                href="https://rohit-mahajan-ai.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Portfolio"
+                title="Portfolio"
+                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#B1F82A] hover:bg-[#B1F82A]/10 hover:border-[#B1F82A]/30 transition-all duration-300"
+              >
+                <Globe className="w-4 h-4" />
+              </a>
+              <a
+                href="https://github.com/Rohit273848"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                title="GitHub"
+                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-405 hover:text-[#B1F82A] hover:bg-[#B1F82A]/10 hover:border-[#B1F82A]/30 transition-all duration-300"
+              >
                 <Github className="w-4 h-4" />
               </a>
-              <a href="#" aria-label="LinkedIn" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-405 hover:text-[#B1F82A] hover:bg-[#B1F82A]/10 hover:border-[#B1F82A]/30 transition-all duration-300">
+              <a
+                href="https://www.linkedin.com/feed/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+                className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-405 hover:text-[#B1F82A] hover:bg-[#B1F82A]/10 hover:border-[#B1F82A]/30 transition-all duration-300"
+              >
                 <Linkedin className="w-4 h-4" />
-              </a>
-              <a href="#" aria-label="Twitter" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-405 hover:text-[#B1F82A] hover:bg-[#B1F82A]/10 hover:border-[#B1F82A]/30 transition-all duration-300">
-                <Twitter className="w-4 h-4" />
               </a>
             </div>
           </div>
