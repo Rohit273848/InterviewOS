@@ -1,0 +1,23 @@
+{
+  "name": "interviewos",
+  "version": "1.0.0",
+  "description": "InterviewOS - AI-Powered Placement Co-Pilot",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix Backend && npm install --prefix Fronted",
+    "dev:backend": "npm run dev --prefix Backend",
+    "dev:frontend": "npm run dev --prefix Fronted",
+    "build": "npm run build --prefix Fronted"
+  },
+  "keywords": [
+    "interview-preparation",
+    "ai-mock-interview",
+    "resume-analysis",
+    "gemini-ai",
+    "langchain",
+    "react",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC"
+}
